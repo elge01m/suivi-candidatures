@@ -1,0 +1,149 @@
+LOT 6 — TESTS DE BOUT EN BOUT DANS CHROME
+
+Dispositif
+React/Vite et Django réels, PostgreSQL 18 dans un nouveau cluster local dédié,
+Chrome installé en mode headless avec un profil vierge. Le pilote utilise le
+protocole DevTools et WebSocket intégré à Node 24 : aucune dépendance ajoutée,
+aucun téléchargement de navigateur. Les interactions déclenchent le vrai code
+React et les vrais endpoints Django ; aucune réponse HTTP applicative simulée.
+Seules les frontières fournisseurs Gmail/Gemini sont remplacées par des doubles.
+
+Exécution depuis la racine, dans PowerShell :
+  & backend/.venv/Scripts/python.exe -B -X utf8 tests/e2e/run.py --temp-root D:/INF4173-SJ-tests
+
+Prérequis : PostgreSQL 18, Chrome et Node déjà installés, backend/.venv existant,
+dépendances npm déjà installées. Au moins 1 Gio libre sur D:.
+Ports réservés et vérifiés libres : PostgreSQL 55484, Django 18000, Vite 15173,
+DevTools 19222. Un port occupé interrompt le lancement ; aucun serveur existant
+n'est arrêté. Le proxy E2E ne contacte jamais le backend principal sur 8000.
+
+Le cluster est créé dans un nouveau sous-dossier daté aléatoire sur D:, avec
+authentification trust limitée à 127.0.0.1 et compte exclusivement fictif.
+Il est arrêté en fin d'exécution. Les processus Chrome, Vite et Django du test
+sont arrêtés par leur PID ; aucun fichier ni sauvegarde n'est supprimé.
+Les paramètres E2E refusent une base sans préfixe dédié, un port principal ou
+un hôte distant. Les clés publiques de test ne servent jamais en production.
+Le lanceur Python des fixtures refuse les connexions réseau non locales.
+GmailClient et l'extraction Gemini sont remplacés uniquement dans ce lanceur ;
+aucune route HTTP de contrôle ni dépendance de test n'est ajoutée au produit.
+
+La base principale est uniquement consultée dans une transaction SQL READ ONLY
+avant/après : effectifs et empreintes SHA-256 des lignes, sans exporter les
+valeurs. Une différence fait échouer le bilan (y compris si une modification
+concurrente a été effectuée manuellement pendant le test).
+
+Scénarios
+- Session réelle, cookie CSRF et refus d'une écriture sans CSRF.
+- Création À préparer sans date ni accusé inventé ; modification vers les huit
+  états ; confirmation de réception indépendante ; champs conservés.
+- Recherche employeur/poste insensible à la casse, filtre combiné, zéro résultat,
+  remise à zéro ; suppression avec annulation puis confirmation.
+- Propositions simulées : cible vide, acceptation impossible sans choix explicite,
+  correction enregistrée sans changement de candidature, acceptation confirmée,
+  répétition idempotente, rejet, historique et persistance après rechargement.
+- Erreur d'analyse et relance depuis React avec consentement explicite.
+- Deux sessions utilisateur distinctes : interdiction de consulter/modifier la
+  candidature, son historique ou la proposition de l'autre utilisateur.
+- Affichage à 390 px sans débordement horizontal.
+- Import initial inclusif via React, HTTP 202, deux pages Gmail simulées,
+  lots de dix, fermeture de la page, deux processus worker successifs pour la
+  reprise, contenus chiffrés et déchiffrables.
+- Synchronisation manuelle, indisponibilité Gmail simulée, échéance de reprise
+  simulée dans les fixtures puis relance contrôlée depuis React, déduplication.
+- Consentement IA automatique fictif : seuls les nouveaux messages sont mis en
+  analyse, production d'une proposition simulée sans application ; révocation.
+  Une minute de quota écoulée est simulée dans les fixtures ; les totaux
+  journaliers restent conservés. Ce n'est pas une mesure des quotas Google.
+- Planification cinq minutes : configuration fictive uniquement, échéance rendue
+  passée dans la fixture, commande process_sync_jobs exécutée sans navigateur,
+  résultats persistants ; aucun timer ni service systemd installé ou activé.
+
+La commande de production process_sync_jobs est utilisée, avec une invocation
+bornée par lot, dans des processus distincts. Le scénario prouve la persistance
+et la reprise entre deux invocations ; il ne simule pas une panne électrique
+pendant une transaction. Les verrous concurrents et baux expirés sont couverts
+en complément par les tests backend sur PostgreSQL.
+
+Traces
+Chaque dossier temporaire conserve run-report.json, browser-report.json et les
+journaux. Les traces de navigateur enregistrent uniquement chemins/status HTTP,
+résultats d'assertions et nombre de confirmations ; aucun cookie, jeton, contenu
+de message personnel ou corps de requête n'est exporté.
+--skip-backend-tests sert uniquement à déboguer le lanceur après une suite
+backend déjà réussie sans changement du code fonctionnel ; exécution complète
+par défaut pour reproduire la validation.
+--frontend-only relance uniquement les vérifications frontend après une correction
+de leur infrastructure, sans démarrer PostgreSQL ni Chrome.
+Les cinq suites de rendu partagent tests/render-server.mjs : compilation SSR
+réelle conservée, optimiseur de dépendances client désactivé et cache distinct
+par processus dans E2E_TEMP. Les assertions existantes restent inchangées.
+Les caches TypeScript et le build de vérification sont également écrits sur D:.
+
+Limites
+Fournisseurs simulés : aucune validation réelle Gmail, Gemini ou de leurs quotas.
+Chrome seulement, aucun certificat HTTPS ni déploiement Linux/systemd validé.
+Aucun traitement réel activé, aucune donnée principale créée/modifiée/supprimée.
+Le lot 7 reste soumis à une autorisation distincte.
+
+Référence du pilote : protocole Chrome DevTools officiel, domaines Runtime,
+Input, Page, Network, Emulation : https://chromedevtools.github.io/devtools-protocol/
+Configuration de l'optimiseur SSR de test :
+https://vite.dev/config/dep-optimization-options#optimizedeps-nodiscovery
+
+BILAN EFFECTIVEMENT OBTENU — 19 OCTOBRE 2026
+
+Chrome 155.0.8059.84 (installé), Node 24.22.0, Django 5.2.18, PostgreSQL 18.6.
+- 271 tests backend réussis sur PostgreSQL isolé, dont 8 tests de concurrence.
+- 15 scénarios réels dans Chrome réussis, 7 dialogues de confirmation exercés,
+  aucune exception JavaScript non interceptée ni réponse HTTP 5xx inattendue.
+- 128 tests frontend réussis ; TypeScript application, configuration Node et
+  configuration E2E, lint et build Vite réussis.
+- manage.py check : aucune erreur ; makemigrations --check --dry-run : aucun écart.
+- Import simulé de 12 messages, deux pages et deux invocations serveur : premier
+  lot de 10 puis reprise des 2 restants, page fermée.
+- Nouvelle synchronisation : 12 doublons évités, aucun message ajouté.
+- 12 nouveaux messages fictifs après consentement : 12 analyses mises en attente,
+  une exécutée avec fournisseur simulé ; aucune proposition appliquée, aucun
+  ancien message mis en analyse automatique ; consentement ensuite révoqué.
+- Travail planifié simulé terminé sans page ouverte. Aucun timer réel lancé.
+- Chiffrement Fernet et déchiffrement vérifiés sans exporter les contenus.
+- Toutes les empreintes des tables principales identiques avant/après, y compris
+  lors de la vérification finale en lecture seule ; plan PDF inchangé.
+- Base principale conservée : 2 candidatures, 2 propositions acceptées, 5 messages,
+  2 analyses, 1 import, 1 travail de synchronisation et 0 historique rétroactif.
+  Synchronisation planifiée et analyse automatique toujours désactivées.
+- Ports de test 55484, 18000, 15173 et 19222 libérés ; fichiers temporaires et
+  traces conservés sur D:. Aucune sauvegarde ni fichier utilisateur supprimé.
+- Zéro installation, zéro appel réel Gmail/Gemini et aucune migration principale.
+
+Incidents de préparation corrigés
+Les premières exécutions ont révélé des attentes incorrectes du pilote : nombre
+de fixtures, HTTP 204 de déconnexion, rattachement d'un nouvel onglet, attente des
+fieldset désactivés/rendus React et décompte de confirmations (7, pas 8).
+Aucun correctif métier n'a été nécessaire.
+La dernière exécution complète a réussi les 271 tests backend et les 15 scénarios
+Chrome, puis un optimiseur des anciens tests de rendu a manqué d'espace sur C:.
+Après correction de l'infrastructure SSR et déplacement des caches, les 128 tests
+frontend, TypeScript, lint et build ont réussi dans une exécution frontend séparée.
+Le bilan combine ces traces explicites ; il ne présente pas l'exécution complète
+qui avait rencontré le manque d'espace comme ayant eu un code de sortie zéro.
+
+Fichiers ajoutés
+backend/config/e2e_settings.py
+frontend/vite.e2e.config.ts
+tests/e2e/run.py
+tests/e2e/backend_control.py
+tests/e2e/browser.mjs
+frontend/tests/render-server.mjs
+docs/tests_e2e_INF4173.txt
+docs/resultats_e2e_INF4173.json
+
+Fichiers modifiés (infrastructure de test uniquement)
+frontend/tests/candidature-form.test.mjs
+frontend/tests/proposal-form.test.mjs
+frontend/tests/sync-form.test.mjs
+frontend/tests/initial-import-form.test.mjs
+frontend/tests/history-tracking-ui.test.mjs
+
+Résultats structurés et chemins des traces : docs/resultats_e2e_INF4173.json.
+Les fonctionnalités des lots 1 à 5 restent inchangées. Lot 7 non commencé.

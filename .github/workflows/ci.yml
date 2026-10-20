@@ -1,0 +1,86 @@
+name: Isolated tests (no remote deployment)
+# Manual until the repository's included Actions allowance is reviewed. No cloud credentials.
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:18.6
+        env:
+          POSTGRES_USER: sync_test_ci
+          POSTGRES_PASSWORD: public-ephemeral-ci-password
+          POSTGRES_DB: suivi_sync_test_ci
+        ports:
+          - '127.0.0.1:55485:5432'
+        options: >-
+          --health-cmd "pg_isready -U sync_test_ci -d suivi_sync_test_ci"
+          --health-interval 5s --health-timeout 5s --health-retries 12
+    env:
+      DJANGO_LOAD_DOTENV: '0'
+      DB_HOST: 127.0.0.1
+      DB_PORT: '5432'
+      DB_NAME: unused_public_fixture
+      DB_USER: unused_public_fixture
+      DB_PASSWORD: unused_public_fixture
+      SYNC_TEST_DB_HOST: 127.0.0.1
+      SYNC_TEST_DB_PORT: '55485'
+      SYNC_TEST_DB_NAME: suivi_sync_test_ci
+      SYNC_TEST_DB_USER: sync_test_ci
+      SYNC_TEST_DB_PASSWORD: public-ephemeral-ci-password
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - name: Temporary test files outside the checkout
+        run: printf 'E2E_TEMP=%s\n' "$RUNNER_TEMP" >> "$GITHUB_ENV"
+      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        with:
+          python-version: '3.13'
+      - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
+        with:
+          node-version: '24.22.0'
+          package-manager-cache: false
+      - name: Install isolated backend environment (Linux)
+        run: |
+          python -m venv backend/.venv
+          backend/.venv/bin/python -m pip install -r backend/requirements-production.txt
+          backend/.venv/bin/python -m pip check
+      - name: Matching PostgreSQL 18 client tools on disposable runner
+        run: |
+          sudo install -d /usr/share/postgresql-common/pgdg
+          sudo curl --fail --silent --show-error -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc https://www.postgresql.org/media/keys/ACCC4CF8.asc
+          echo 'deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt noble-pgdg main' | sudo tee /etc/apt/sources.list.d/pgdg.list >/dev/null
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends postgresql-client-18
+          echo '/usr/lib/postgresql/18/bin' >> "$GITHUB_PATH"
+      - name: PostgreSQL tests and schema drift
+        working-directory: backend
+        run: |
+          .venv/bin/python manage.py test --settings=config.test_postgres_settings --noinput
+          .venv/bin/python manage.py makemigrations --check --dry-run --settings=config.test_postgres_settings
+      - name: Production configuration and static files (fictional secrets)
+        run: backend/.venv/bin/python tests/security/check_deploy.py
+      - name: Gunicorn configuration (not a service)
+        working-directory: backend
+        env:
+          DJANGO_SETTINGS_MODULE: config.test_postgres_settings
+        run: .venv/bin/gunicorn --check-config --config ../deploy/gunicorn.conf.py config.wsgi:application
+      - name: Frontend checks
+        working-directory: frontend
+        run: |
+          npm ci
+          npm test
+          npm exec tsc -- -b
+          npm run lint
+          npm run build
+# PostgreSQL container is ephemeral CI infrastructure only. No Docker required in production.
+# No deployment, SSH, cloud identity, Gmail/Gemini call or worker execution exists here.

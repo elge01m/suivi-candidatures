@@ -1,0 +1,151 @@
+{
+  "lot": 6,
+  "date": "2026-10-19",
+  "status": "passed_across_recorded_executions",
+  "browser": "Chrome/155.0.8059.84",
+  "node": "24.22.0",
+  "django": "5.2.18",
+  "postgresql": "18.6",
+  "providers": "simulated",
+  "real_gmail_calls": 0,
+  "real_gemini_calls": 0,
+  "dependencies_installed": 0,
+  "backend_tests": {
+    "passed": 271,
+    "failed": 0,
+    "database": "isolated_postgresql",
+    "concurrency_tests": 8
+  },
+  "browser_tests": {
+    "passed": 15,
+    "failed": 0,
+    "confirmations": 7,
+    "uncaught_errors": 0,
+    "unexpected_http_5xx": 0,
+    "checks": [
+      {
+        "name": "Session login, CSRF and authenticated API",
+        "passed": true
+      },
+      {
+        "name": "Create preparation without date or invented receipt",
+        "passed": true
+      },
+      {
+        "name": "Edit through all eight states and independent receipt",
+        "passed": true
+      },
+      {
+        "name": "Search, state combination, empty result and reset",
+        "passed": true
+      },
+      {
+        "name": "Proposal correction, explicit target and confirmed acceptance",
+        "passed": true
+      },
+      {
+        "name": "Proposal rejection, history and persistence",
+        "passed": true
+      },
+      {
+        "name": "Analysis error and explicitly consented simulated retry",
+        "passed": true
+      },
+      {
+        "name": "Two-user isolation through real authenticated HTTP requests",
+        "passed": true
+      },
+      {
+        "name": "Mobile viewport without horizontal overflow",
+        "passed": true
+      },
+      {
+        "name": "Initial import HTTP 202 and queued server work",
+        "passed": true
+      },
+      {
+        "name": "Browser closed: pagination, bounded batches and restart resume",
+        "passed": true
+      },
+      {
+        "name": "Manual synchronization, errors and controlled UI retry",
+        "passed": true
+      },
+      {
+        "name": "Explicit automatic AI consent, new messages only, no automatic application",
+        "passed": true
+      },
+      {
+        "name": "Schedule with fake providers, browser independence and disabled AI",
+        "passed": true
+      },
+      {
+        "name": "Delete with confirmation and logout",
+        "passed": true
+      }
+    ]
+  },
+  "frontend_tests": {
+    "passed": 128,
+    "failed": 0
+  },
+  "typescript_app": true,
+  "typescript_node": true,
+  "typescript_e2e_config": true,
+  "lint": true,
+  "build": true,
+  "django_check": true,
+  "migration_drift": false,
+  "primary_database": {
+    "all_table_fingerprints_unchanged": true,
+    "automatic_gmail_enabled": false,
+    "automatic_gemini_enabled": false,
+    "counts": {
+      "candidatures_candidature": 2,
+      "candidatures_candidaturechange": 0,
+      "email_analysis_analysisbudget": 1,
+      "email_analysis_candidatureproposal": 2,
+      "email_analysis_emailanalysis": 2,
+      "gmail_integration_gmailconnection": 1,
+      "gmail_integration_gmailimport": 1,
+      "gmail_integration_gmailmessage": 5,
+      "gmail_sync_syncconfiguration": 1,
+      "gmail_sync_syncrun": 1
+    }
+  },
+  "isolated_ports_released": {
+    "55484": true,
+    "18000": true,
+    "15173": true,
+    "19222": true
+  },
+  "plan_pdf_unchanged": true,
+  "evidence": {
+    "backend_and_browser_directory": "D:\\INF4173-SJ-tests\\lot6-20261019-213604-338328b3",
+    "frontend_recheck_directory": "D:\\INF4173-SJ-tests\\lot6-20261019-214207-b0740c04"
+  },
+  "initial_failures": [
+    "Harness fixture count, logout HTTP 204, renderer attachment, disabled fieldset/render waits, expected confirmation count: corrected in test harness.",
+    "The full run passed backend/browser then frontend rendering optimization hit disk full on C:. Shared SSR test configuration and D: caches corrected this; the 128 tests, typechecks, lint and build passed in a separate recheck. No functional application code was changed."
+  ],
+  "limitations": [
+    "Chrome headless on Windows only.",
+    "Gmail/Gemini providers simulated; no real provider or quota validation.",
+    "Server processing verified with page closed and distinct worker processes, not a power failure or Linux systemd deployment.",
+    "Historical backoff/schedule and minute quota passage simulated on disposable fixtures.",
+    "No lot 7 work."
+  ],
+  "source_sha256": {
+    "backend/config/e2e_settings.py": "6c1e8a353f0428d7c41ab5bc776d895069333a047a097f7b738361dabcf7e10c",
+    "frontend/vite.e2e.config.ts": "f2c85aede58b51ecf44aa2bccca908c4d31578b623aa64b6e2b44a80d269d5f9",
+    "tests/e2e/run.py": "2d1536448824f194b229db66eb3da5e034861aead2836496116e7ea4b4a6e8a6",
+    "tests/e2e/backend_control.py": "4c16ef6862386cc4eb674d6240e28b81c4c193cfc282d417b635868f64d46eed",
+    "tests/e2e/browser.mjs": "aac2ef0486d9561b8633af107c5fa526520c4f82001330cab973b3b8e66687a1",
+    "frontend/tests/render-server.mjs": "d6da50ad7a4f47abc8be9b69f5d2644e9679bf0af26d4e76b4440b71d76affe6",
+    "frontend/tests/candidature-form.test.mjs": "3345d6e3c5fda4d50bc44030fcb37fd9c695462a102e8b33e3ee681ad7b66657",
+    "frontend/tests/proposal-form.test.mjs": "cbd6b8e2f03b81a72f2b60218106d5854b06d36320f080b86dc43ffa99cf819c",
+    "frontend/tests/sync-form.test.mjs": "6af0491bcd28eba9aa9e48622251b5690647d6c466e09f9397b35d7b2a197895",
+    "frontend/tests/initial-import-form.test.mjs": "d3ff6327e932892d26a46d5eb29363bb316eb7d57af954883bdcea1eb561422b",
+    "frontend/tests/history-tracking-ui.test.mjs": "11ecaf29cfdeef121fd81389fb1102fe73e197456554ae4f830f44edbb72e738"
+  }
+}

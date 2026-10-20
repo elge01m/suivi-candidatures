@@ -1,0 +1,106 @@
+INF4173-SJ — Protocole d’évaluation technique, lot 5
+Date : 19 octobre 2026. Version du corpus : 1.0.
+
+STATUT
+Seule une simulation a été exécutée. Aucun appel réel Gemini ou Gmail.
+Les résultats simulés ne sont ni une estimation ni une preuve de performance de Gemini.
+Aucune candidature personnelle, message réel ou donnée de la base principale n’est utilisé.
+
+CORPUS
+backend/email_analysis/evaluation/corpus_v1.json contient 40 courriels inventés,
+leurs dates et sens, les faits attendus et des associations de référence explicitement annotées.
+Quatre candidatures de contexte sont également fictives.
+Couverture : envois sans accusé, entrevues, refus, offres et réponses aux offres,
+retraits, préparation, confirmations distinctes, messages hors sujet, valeurs inconnues,
+plusieurs postes chez un employeur, dates d’entrevue distinctes et doublons de contenu.
+Les 40 identifiants de cas sont distincts. F031/F032 réutilisent du contenu fictif :
+une répétition de texte avec un identifiant différent n’est pas un doublon Gmail.
+Deux relectures d’identifiants identiques vérifient séparément le cache et le budget.
+Les cas F001, F003, F013, F015 et F028 sont analysés trois fois chacun.
+Cela représente 40 analyses initiales + 10 répétitions supplémentaires = 50 essais,
+et non 55. Les répétitions sont réservées à la variabilité et ne gonflent pas
+les dénominateurs des scores de base.
+
+MÉTRIQUES
+- Pertinence : exactitude, précision, rappel, F1 et matrice de confusion.
+- Action et état : exactitude et matrices de confusion, état nul inclus.
+- Extraction : exactitude par champ, sous-ensemble attendu non nul, conservation
+  des inconnues et nombre de valeurs inventées lorsque l’annotation attend null.
+- Informations manquantes : égalité de l’ensemble des champs signalés.
+- Associations : égalité de l’ensemble des candidats, précision/rappel/F1 micro,
+  ambiguïté et niveau d’association, absence de cible automatiquement choisie.
+  Les ensembles attendus sont des annotations indépendantes du matching serveur.
+- Corrections : nombre de champs modifiables différents de l’annotation et part
+  des propositions concernées. Il ne s’agit pas de corrections réellement effectuées
+  par une personne ni d’une mesure de temps. Le choix humain obligatoire de cible
+  est compté séparément ; il n’est pas considéré comme une erreur du modèle.
+- Variabilité : sorties distinctes et accord entre les trois paires de répétitions,
+  sur pertinence/action/champs, avec détails par champ. Les justifications libres
+  ne sont pas comparées. Un seul essai ne permet pas d’affirmer la stabilité.
+- Couverture et erreurs : nombres évalués, échoués et restant à traiter. Un échec
+  terminal compte comme incorrect, pas comme une observation ignorée. Les scores
+  d’une campagne partielle ne sont pas des résultats finaux sur les 40 messages.
+Les noms d’employeur et de poste sont comparés après NFC, normalisation des espaces
+et casefold. Dates, états, valeurs nulles et booléens restent stricts.
+
+SIMULATION
+Le fournisseur simulé part explicitement des annotations : il teste le protocole,
+pas l’intelligence du modèle. Trois erreurs connues sont injectées : état de F004,
+poste inconnu inventé pour F015, date d’entrevue utilisée pour F021.
+La troisième répétition de F003 omet volontairement son état pour tester la variabilité.
+Le matching des candidatures est réellement celui du service Django, sur données
+fictives. Ses résultats avec extraction simulée ne sont pas des mesures Gemini.
+L’horloge est virtuelle (cinq tentatives par jour virtuel, espacées de 61 secondes),
+avec les limites locales inchangées dans la seule base isolée. Les tokens réels ne
+sont pas simulés : zéro usage réel est revendiqué. Aucun quota principal n’est touché.
+
+EXÉCUTION LOCALE ISOLÉE
+La commande refuse config.settings et exige config.evaluation_settings, un serveur
+PostgreSQL loopback distinct, un rôle sync_test_* et une base dédiée
+suivi_sync_test_evaluation*. Ne jamais désigner la base applicative.
+La base doit exister et recevoir les migrations standard dans ce seul environnement.
+Exemple de variables PowerShell pour le cluster de tests déjà préparé :
+  $env:SYNC_TEST_DB_HOST='127.0.0.1'
+  $env:SYNC_TEST_DB_PORT='55483'
+  $env:SYNC_TEST_DB_USER='sync_test_owner'
+  $env:SYNC_TEST_DB_NAME='suivi_sync_test_evaluation_lot5_final'
+Depuis backend, avec une base isolée préalablement créée :
+  .\.venv\Scripts\python.exe -B -X utf8 manage.py migrate --settings=config.evaluation_settings --noinput
+  .\.venv\Scripts\python.exe -B -X utf8 manage.py evaluate_email_corpus --settings=config.evaluation_settings --mode simulated --run-id protocol-v1 --output ../docs/evaluation_simulee_INF4173.json
+Les clés Fernet publiques de cette configuration servent uniquement aux données
+inventées. Elles ne remplacent aucune clé de backend/.env ni de config.settings.
+
+CAMPAGNE RÉELLE ULTÉRIEURE — NON AUTORISÉE À CE STADE
+Après autorisation explicite, la même commande possède --mode real,
+--allow-real-gemini et --max-calls 1. Utiliser un autre run-id et un autre fichier
+de sortie. Aucune commande réelle n’est lancée pendant le lot 5.
+La campagne est persistée par les EmailAnalysis existantes de la base isolée ;
+une nouvelle invocation réutilise les succès au lieu de les réanalyser. Les
+répétitions utilisent des copies fictives distinctes uniquement dans cette base.
+Arrêt à la limite de l’invocation, au quota local ou à une erreur API : aucune
+attente en boucle, aucun réessai API caché et aucune relance automatique d’échec.
+Les échecs sont conservés ; une invocation ultérieure peut traiter les cas restants.
+Le service conserve ses réservations conservatrices et ses limites locales actuelles :
+20 demandes/jour, 100 000 tokens réservés/jour, 1 demande/minute et 30 000/minute.
+Le quota journalier utilise America/Los_Angeles. Cinquante appels nécessitent au
+minimum trois journées de quota de demandes, potentiellement davantage selon les
+réservations de tokens et les quotas réels du projet Google. Ces limites locales
+ne garantissent ni disponibilité du modèle ni gratuité : vérifier la console Google
+et les conditions de l’offre avant d’autoriser la campagne. D’autres clients du
+même projet Google peuvent consommer son quota ; les erreurs 429 arrêtent l’essai.
+Aucun modèle de secours, hausse de quota ou activation payante n’est effectué.
+Le modèle est celui configuré dans Django : gemini-3.5-flash-lite.
+
+TRACES ET LIMITES
+Le JSON exporte mode, indicateur de mesure réelle, empreintes corpus/code/prompt,
+version SDK, configuration des quotas, observations, métriques et variabilité.
+Les campagnes/modes différents ne peuvent pas écraser le même rapport par erreur.
+Aucune proposition n’est acceptée et les quatre candidatures fictives restent
+inchangées ; aucun historique de validation n’est inventé.
+Les annotations ont été préparées avec l’assistant ; leur validation humaine reste
+à faire avant la campagne réelle. Elles ne constituent pas un corpus expert validé.
+Le petit corpus et cinq répétitions ne suffisent pas à établir une performance
+généralisable à toutes les boîtes Gmail. Les résultats réels restent à collecter.
+Le matching actuel par employeur OU poste est conservateur : il peut proposer trop
+de candidats et signaler une ambiguïté là où l’annotation désigne un poste précis.
+Le lot 5 mesure cette limite sans modifier le comportement des lots précédents.

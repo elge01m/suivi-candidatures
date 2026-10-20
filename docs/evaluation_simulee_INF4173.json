@@ -1,0 +1,2034 @@
+{
+  "protocol_version": "1.0",
+  "mode": "simulated",
+  "real_gemini_measurement": false,
+  "warning": "SIMULATION: annotation-derived responses and injected errors; not measured Gemini quality.",
+  "run_id": "protocol-v1",
+  "corpus_sha256": "efd901d92ce776bdf8c34d4181c518a9831769af8b7f50f01ad4845d0f202752",
+  "code_sha256": "5fd86a909975aac4e219779bb13541f405a69a66c577755f21842bfa6d1b8d3f",
+  "prompt_sha256": "1ab9ae77006c43cbf63dcfa2efffb216de620ed9c6999e5ee97b2ed535396467",
+  "model": "gemini-3.5-flash-lite",
+  "schema_version": "1",
+  "sdk_version": "2.31.0",
+  "quota_limits": {
+    "requests_per_day": 20,
+    "reserved_tokens_per_day": 100000,
+    "requests_per_minute": 1
+  },
+  "clock": "virtual, five calls per virtual day",
+  "simulation_faults": {
+    "F004": {
+      "etat": "envoyee"
+    },
+    "F015": {
+      "poste": "Poste inventé"
+    },
+    "F021": {
+      "date_candidature": "2026-10-22"
+    }
+  },
+  "completed": true,
+  "all_trials_attempted": true,
+  "planned_calls": 50,
+  "new_attempts_this_invocation": 50,
+  "stop_reason": null,
+  "real_api_calls_this_invocation": 0,
+  "gmail_api_calls": 0,
+  "proposal_applications": 0,
+  "gmail_id_replay_verified": true,
+  "metrics": {
+    "schema_valid": {
+      "correct": 40,
+      "total": 40,
+      "rate": 1.0
+    },
+    "missing_fields_annotation": {
+      "correct": 40,
+      "total": 40,
+      "rate": 1.0
+    },
+    "errors": {},
+    "coverage": {
+      "corpus_size": 40,
+      "attempted": 40,
+      "completed": 40,
+      "failed": 0,
+      "pending": 0
+    },
+    "classification": {
+      "pertinent": {
+        "correct": 40,
+        "total": 40,
+        "rate": 1.0,
+        "confusion": [
+          {
+            "expected": "False",
+            "predicted": "False",
+            "count": 6
+          },
+          {
+            "expected": "True",
+            "predicted": "True",
+            "count": 34
+          }
+        ],
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      },
+      "action": {
+        "correct": 40,
+        "total": 40,
+        "rate": 1.0,
+        "confusion": [
+          {
+            "expected": "aucune",
+            "predicted": "aucune",
+            "count": 9
+          },
+          {
+            "expected": "changement_etat",
+            "predicted": "changement_etat",
+            "count": 18
+          },
+          {
+            "expected": "confirmation_reception",
+            "predicted": "confirmation_reception",
+            "count": 3
+          },
+          {
+            "expected": "creation",
+            "predicted": "creation",
+            "count": 10
+          }
+        ]
+      },
+      "etat": {
+        "correct": 39,
+        "total": 40,
+        "rate": 0.975,
+        "confusion": [
+          {
+            "expected": "None",
+            "predicted": "None",
+            "count": 12
+          },
+          {
+            "expected": "a_preparer",
+            "predicted": "a_preparer",
+            "count": 3
+          },
+          {
+            "expected": "entrevue",
+            "predicted": "entrevue",
+            "count": 6
+          },
+          {
+            "expected": "entrevue",
+            "predicted": "envoyee",
+            "count": 1
+          },
+          {
+            "expected": "envoyee",
+            "predicted": "envoyee",
+            "count": 7
+          },
+          {
+            "expected": "offre_acceptee",
+            "predicted": "offre_acceptee",
+            "count": 2
+          },
+          {
+            "expected": "offre_declinee",
+            "predicted": "offre_declinee",
+            "count": 2
+          },
+          {
+            "expected": "offre_recue",
+            "predicted": "offre_recue",
+            "count": 2
+          },
+          {
+            "expected": "refusee",
+            "predicted": "refusee",
+            "count": 3
+          },
+          {
+            "expected": "retiree",
+            "predicted": "retiree",
+            "count": 2
+          }
+        ]
+      }
+    },
+    "extraction": {
+      "employeur": {
+        "all_attempted": {
+          "correct": 40,
+          "total": 40,
+          "rate": 1.0
+        },
+        "expected_non_null": {
+          "correct": 32,
+          "total": 32,
+          "rate": 1.0
+        },
+        "unknown_preserved": {
+          "correct": 8,
+          "total": 8,
+          "rate": 1.0
+        },
+        "invented_when_unknown": 0
+      },
+      "poste": {
+        "all_attempted": {
+          "correct": 39,
+          "total": 40,
+          "rate": 0.975
+        },
+        "expected_non_null": {
+          "correct": 31,
+          "total": 31,
+          "rate": 1.0
+        },
+        "unknown_preserved": {
+          "correct": 8,
+          "total": 9,
+          "rate": 0.8888888888888888
+        },
+        "invented_when_unknown": 1
+      },
+      "date_candidature": {
+        "all_attempted": {
+          "correct": 39,
+          "total": 40,
+          "rate": 0.975
+        },
+        "expected_non_null": {
+          "correct": 7,
+          "total": 8,
+          "rate": 0.875
+        },
+        "unknown_preserved": {
+          "correct": 32,
+          "total": 32,
+          "rate": 1.0
+        },
+        "invented_when_unknown": 0
+      },
+      "etat": {
+        "all_attempted": {
+          "correct": 39,
+          "total": 40,
+          "rate": 0.975
+        },
+        "expected_non_null": {
+          "correct": 27,
+          "total": 28,
+          "rate": 0.9642857142857143
+        },
+        "unknown_preserved": {
+          "correct": 12,
+          "total": 12,
+          "rate": 1.0
+        },
+        "invented_when_unknown": 0
+      },
+      "confirmation_reception": {
+        "all_attempted": {
+          "correct": 40,
+          "total": 40,
+          "rate": 1.0
+        },
+        "expected_non_null": {
+          "correct": 3,
+          "total": 3,
+          "rate": 1.0
+        },
+        "unknown_preserved": {
+          "correct": 37,
+          "total": 37,
+          "rate": 1.0
+        },
+        "invented_when_unknown": 0
+      }
+    },
+    "association": {
+      "exact_set": {
+        "correct": 30,
+        "total": 40,
+        "rate": 0.75
+      },
+      "precision_micro": 0.6829268292682927,
+      "recall_micro": 1.0,
+      "f1_micro": 0.8115942028985507,
+      "ambiguity": {
+        "correct": 30,
+        "total": 40,
+        "rate": 0.75
+      },
+      "level": {
+        "correct": 30,
+        "total": 40,
+        "rate": 0.75
+      },
+      "automatic_target_violations": 0
+    },
+    "corrections": {
+      "interpretation": "Field differences from gold labels, not measured human time or observed user edits.",
+      "proposals_with_field_differences": {
+        "correct": 3,
+        "total": 40,
+        "rate": 0.075
+      },
+      "field_differences": 3,
+      "per_case": [
+        {
+          "case_id": "F001",
+          "fields": [],
+          "count": 0
+        },
+        {
+          "case_id": "F002",
+          "fields": [],
+          "count": 0
+        },
+        {
+          "case_id": "F003",
+          "fields": [],
+          "count": 0
+        },
+        {
+          "case_id": "F004",
+          "fields": [
+            "etat"
+          ],
+          "count": 1
+        },
+        {
+          "case_id": "F005",
+          "fields": [],
+          "count": 0
+        },
+        {
+          "case_id": "F006",
+          "fields": [],
+          "count": 0
+        },
+        {
+          "case_id": "F007",
+          "fields": [],
+          "count": 0
+        },
+        {
+          "case_id": "F008",
+          "fields": [],
+          "count": 0
+        },
+        {
+          "case_id": "F009",
+          "fields": [],
+          "count": 0
+        },
+        {
+          "case_id": "F010",
+          "fields": [],
+          "count": 0
+        },
+        {
+          "case_id": "F011",
+          "fields": [],
+          "count": 0
+        },
+        {
+          "case_id": "F012",
+          "fields": [],
+          "count": 0
+        },
+        {
+          "case_id": "F013",
+          "fields": [],
+          "count": 0
+        },
+        {
+          "case_id": "F014",
+          "fields": [],
+          "count": 0
+        },
+        {
+          "case_id": "F015",
+          "fields": [
+            "poste"
+          ],
+          "count": 1
+        },
+        {
+          "case_id": "F016",
+          "fields": [],
+          "count": 0
+        },
+        {
+          "case_id": "F017",
+          "fields": [],
+          "count": 0
+        },
+        {
+          "case_id": "F018",
+          "fields": [],
+          "count": 0
+        },
+        {
+          "case_id": "F019",
+          "fields": [],
+          "count": 0
+        },
+        {
+          "case_id": "F020",
+          "fields": [],
+          "count": 0
+        },
+        {
+          "case_id": "F021",
+          "fields": [
+            "date_candidature"
+          ],
+          "count": 1
+        },
+        {
+          "case_id": "F022",
+          "fields": [],
+          "count": 0
+        },
+        {
+          "case_id": "F023",
+          "fields": [],
+          "count": 0
+        },
+        {
+          "case_id": "F024",
+          "fields": [],
+          "count": 0
+        },
+        {
+          "case_id": "F025",
+          "fields": [],
+          "count": 0
+        },
+        {
+          "case_id": "F026",
+          "fields": [],
+          "count": 0
+        },
+        {
+          "case_id": "F027",
+          "fields": [],
+          "count": 0
+        },
+        {
+          "case_id": "F028",
+          "fields": [],
+          "count": 0
+        },
+        {
+          "case_id": "F029",
+          "fields": [],
+          "count": 0
+        },
+        {
+          "case_id": "F030",
+          "fields": [],
+          "count": 0
+        },
+        {
+          "case_id": "F031",
+          "fields": [],
+          "count": 0
+        },
+        {
+          "case_id": "F032",
+          "fields": [],
+          "count": 0
+        },
+        {
+          "case_id": "F033",
+          "fields": [],
+          "count": 0
+        },
+        {
+          "case_id": "F034",
+          "fields": [],
+          "count": 0
+        },
+        {
+          "case_id": "F035",
+          "fields": [],
+          "count": 0
+        },
+        {
+          "case_id": "F036",
+          "fields": [],
+          "count": 0
+        },
+        {
+          "case_id": "F037",
+          "fields": [],
+          "count": 0
+        },
+        {
+          "case_id": "F038",
+          "fields": [],
+          "count": 0
+        },
+        {
+          "case_id": "F039",
+          "fields": [],
+          "count": 0
+        },
+        {
+          "case_id": "F040",
+          "fields": [],
+          "count": 0
+        }
+      ],
+      "explicit_target_choices_required": 21
+    }
+  },
+  "variability": [
+    {
+      "case_id": "F001",
+      "completed_repetitions": 3,
+      "expected_repetitions": 3,
+      "distinct_outputs": 1,
+      "pairwise_agreement": {
+        "correct": 3,
+        "total": 3,
+        "rate": 1.0
+      },
+      "per_field_agreement": {
+        "pertinent": {
+          "correct": 3,
+          "total": 3,
+          "rate": 1.0
+        },
+        "action": {
+          "correct": 3,
+          "total": 3,
+          "rate": 1.0
+        },
+        "employeur": {
+          "correct": 3,
+          "total": 3,
+          "rate": 1.0
+        },
+        "poste": {
+          "correct": 3,
+          "total": 3,
+          "rate": 1.0
+        },
+        "date_candidature": {
+          "correct": 3,
+          "total": 3,
+          "rate": 1.0
+        },
+        "etat": {
+          "correct": 3,
+          "total": 3,
+          "rate": 1.0
+        },
+        "confirmation_reception": {
+          "correct": 3,
+          "total": 3,
+          "rate": 1.0
+        }
+      }
+    },
+    {
+      "case_id": "F003",
+      "completed_repetitions": 3,
+      "expected_repetitions": 3,
+      "distinct_outputs": 2,
+      "pairwise_agreement": {
+        "correct": 1,
+        "total": 3,
+        "rate": 0.3333333333333333
+      },
+      "per_field_agreement": {
+        "pertinent": {
+          "correct": 3,
+          "total": 3,
+          "rate": 1.0
+        },
+        "action": {
+          "correct": 3,
+          "total": 3,
+          "rate": 1.0
+        },
+        "employeur": {
+          "correct": 3,
+          "total": 3,
+          "rate": 1.0
+        },
+        "poste": {
+          "correct": 3,
+          "total": 3,
+          "rate": 1.0
+        },
+        "date_candidature": {
+          "correct": 3,
+          "total": 3,
+          "rate": 1.0
+        },
+        "etat": {
+          "correct": 1,
+          "total": 3,
+          "rate": 0.3333333333333333
+        },
+        "confirmation_reception": {
+          "correct": 3,
+          "total": 3,
+          "rate": 1.0
+        }
+      }
+    },
+    {
+      "case_id": "F013",
+      "completed_repetitions": 3,
+      "expected_repetitions": 3,
+      "distinct_outputs": 1,
+      "pairwise_agreement": {
+        "correct": 3,
+        "total": 3,
+        "rate": 1.0
+      },
+      "per_field_agreement": {
+        "pertinent": {
+          "correct": 3,
+          "total": 3,
+          "rate": 1.0
+        },
+        "action": {
+          "correct": 3,
+          "total": 3,
+          "rate": 1.0
+        },
+        "employeur": {
+          "correct": 3,
+          "total": 3,
+          "rate": 1.0
+        },
+        "poste": {
+          "correct": 3,
+          "total": 3,
+          "rate": 1.0
+        },
+        "date_candidature": {
+          "correct": 3,
+          "total": 3,
+          "rate": 1.0
+        },
+        "etat": {
+          "correct": 3,
+          "total": 3,
+          "rate": 1.0
+        },
+        "confirmation_reception": {
+          "correct": 3,
+          "total": 3,
+          "rate": 1.0
+        }
+      }
+    },
+    {
+      "case_id": "F015",
+      "completed_repetitions": 3,
+      "expected_repetitions": 3,
+      "distinct_outputs": 1,
+      "pairwise_agreement": {
+        "correct": 3,
+        "total": 3,
+        "rate": 1.0
+      },
+      "per_field_agreement": {
+        "pertinent": {
+          "correct": 3,
+          "total": 3,
+          "rate": 1.0
+        },
+        "action": {
+          "correct": 3,
+          "total": 3,
+          "rate": 1.0
+        },
+        "employeur": {
+          "correct": 3,
+          "total": 3,
+          "rate": 1.0
+        },
+        "poste": {
+          "correct": 3,
+          "total": 3,
+          "rate": 1.0
+        },
+        "date_candidature": {
+          "correct": 3,
+          "total": 3,
+          "rate": 1.0
+        },
+        "etat": {
+          "correct": 3,
+          "total": 3,
+          "rate": 1.0
+        },
+        "confirmation_reception": {
+          "correct": 3,
+          "total": 3,
+          "rate": 1.0
+        }
+      }
+    },
+    {
+      "case_id": "F028",
+      "completed_repetitions": 3,
+      "expected_repetitions": 3,
+      "distinct_outputs": 1,
+      "pairwise_agreement": {
+        "correct": 3,
+        "total": 3,
+        "rate": 1.0
+      },
+      "per_field_agreement": {
+        "pertinent": {
+          "correct": 3,
+          "total": 3,
+          "rate": 1.0
+        },
+        "action": {
+          "correct": 3,
+          "total": 3,
+          "rate": 1.0
+        },
+        "employeur": {
+          "correct": 3,
+          "total": 3,
+          "rate": 1.0
+        },
+        "poste": {
+          "correct": 3,
+          "total": 3,
+          "rate": 1.0
+        },
+        "date_candidature": {
+          "correct": 3,
+          "total": 3,
+          "rate": 1.0
+        },
+        "etat": {
+          "correct": 3,
+          "total": 3,
+          "rate": 1.0
+        },
+        "confirmation_reception": {
+          "correct": 3,
+          "total": 3,
+          "rate": 1.0
+        }
+      }
+    }
+  ],
+  "observations": [
+    {
+      "case_id": "F001",
+      "repetition": 1,
+      "status": "completed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "error_code": "",
+      "prediction": {
+        "pertinent": true,
+        "action": "creation",
+        "employeur": "Lanterne Fictive",
+        "poste": "Stagiaire backend",
+        "date_candidature": "2026-10-19",
+        "etat": "envoyee",
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "association": {
+        "candidates": [],
+        "level": "aucune",
+        "ambiguous": false,
+        "target": null
+      }
+    },
+    {
+      "case_id": "F002",
+      "repetition": 1,
+      "status": "completed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "error_code": "",
+      "prediction": {
+        "pertinent": true,
+        "action": "creation",
+        "employeur": "Delta Fictif",
+        "poste": "Technicien informatique",
+        "date_candidature": "2026-10-19",
+        "etat": "envoyee",
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "association": {
+        "candidates": [],
+        "level": "aucune",
+        "ambiguous": false,
+        "target": null
+      }
+    },
+    {
+      "case_id": "F003",
+      "repetition": 1,
+      "status": "completed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "error_code": "",
+      "prediction": {
+        "pertinent": true,
+        "action": "changement_etat",
+        "employeur": "Cobalt Fictif",
+        "poste": "Testeur logiciel",
+        "date_candidature": null,
+        "etat": "entrevue",
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "association": {
+        "candidates": [
+          "cobalt-qa"
+        ],
+        "level": "probable",
+        "ambiguous": false,
+        "target": null
+      }
+    },
+    {
+      "case_id": "F004",
+      "repetition": 1,
+      "status": "completed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "error_code": "",
+      "prediction": {
+        "pertinent": true,
+        "action": "changement_etat",
+        "employeur": "Aurore Fictive",
+        "poste": "Développeur logiciel",
+        "date_candidature": null,
+        "etat": "envoyee",
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "association": {
+        "candidates": [
+          "aurore-data",
+          "aurore-dev",
+          "boreal-dev"
+        ],
+        "level": "ambigu",
+        "ambiguous": true,
+        "target": null
+      }
+    },
+    {
+      "case_id": "F005",
+      "repetition": 1,
+      "status": "completed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "error_code": "",
+      "prediction": {
+        "pertinent": true,
+        "action": "changement_etat",
+        "employeur": "Boréal Fictif",
+        "poste": "Développeur logiciel",
+        "date_candidature": null,
+        "etat": "refusee",
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "association": {
+        "candidates": [
+          "aurore-dev",
+          "boreal-dev"
+        ],
+        "level": "ambigu",
+        "ambiguous": true,
+        "target": null
+      }
+    },
+    {
+      "case_id": "F006",
+      "repetition": 1,
+      "status": "completed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "error_code": "",
+      "prediction": {
+        "pertinent": true,
+        "action": "changement_etat",
+        "employeur": "Cobalt Fictif",
+        "poste": "Testeur logiciel",
+        "date_candidature": null,
+        "etat": "offre_recue",
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "association": {
+        "candidates": [
+          "cobalt-qa"
+        ],
+        "level": "probable",
+        "ambiguous": false,
+        "target": null
+      }
+    },
+    {
+      "case_id": "F007",
+      "repetition": 1,
+      "status": "completed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "error_code": "",
+      "prediction": {
+        "pertinent": true,
+        "action": "changement_etat",
+        "employeur": "Cobalt Fictif",
+        "poste": "Testeur logiciel",
+        "date_candidature": null,
+        "etat": "offre_acceptee",
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "association": {
+        "candidates": [
+          "cobalt-qa"
+        ],
+        "level": "probable",
+        "ambiguous": false,
+        "target": null
+      }
+    },
+    {
+      "case_id": "F008",
+      "repetition": 1,
+      "status": "completed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "error_code": "",
+      "prediction": {
+        "pertinent": true,
+        "action": "changement_etat",
+        "employeur": "Boréal Fictif",
+        "poste": "Développeur logiciel",
+        "date_candidature": null,
+        "etat": "offre_declinee",
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "association": {
+        "candidates": [
+          "aurore-dev",
+          "boreal-dev"
+        ],
+        "level": "ambigu",
+        "ambiguous": true,
+        "target": null
+      }
+    },
+    {
+      "case_id": "F009",
+      "repetition": 1,
+      "status": "completed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "error_code": "",
+      "prediction": {
+        "pertinent": true,
+        "action": "changement_etat",
+        "employeur": "Aurore Fictive",
+        "poste": "Développeur logiciel",
+        "date_candidature": null,
+        "etat": "retiree",
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "association": {
+        "candidates": [
+          "aurore-data",
+          "aurore-dev",
+          "boreal-dev"
+        ],
+        "level": "ambigu",
+        "ambiguous": true,
+        "target": null
+      }
+    },
+    {
+      "case_id": "F010",
+      "repetition": 1,
+      "status": "completed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "error_code": "",
+      "prediction": {
+        "pertinent": true,
+        "action": "creation",
+        "employeur": "Prisme Fictif",
+        "poste": "Designer",
+        "date_candidature": null,
+        "etat": "a_preparer",
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "association": {
+        "candidates": [],
+        "level": "aucune",
+        "ambiguous": false,
+        "target": null
+      }
+    },
+    {
+      "case_id": "F011",
+      "repetition": 1,
+      "status": "completed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "error_code": "",
+      "prediction": {
+        "pertinent": true,
+        "action": "confirmation_reception",
+        "employeur": "Cobalt Fictif",
+        "poste": "Testeur logiciel",
+        "date_candidature": null,
+        "etat": null,
+        "confirmation_reception": true,
+        "informations_manquantes": []
+      },
+      "association": {
+        "candidates": [
+          "cobalt-qa"
+        ],
+        "level": "probable",
+        "ambiguous": false,
+        "target": null
+      }
+    },
+    {
+      "case_id": "F012",
+      "repetition": 1,
+      "status": "completed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "error_code": "",
+      "prediction": {
+        "pertinent": false,
+        "action": "aucune",
+        "employeur": null,
+        "poste": null,
+        "date_candidature": null,
+        "etat": null,
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "association": {
+        "candidates": [],
+        "level": "aucune",
+        "ambiguous": false,
+        "target": null
+      }
+    },
+    {
+      "case_id": "F013",
+      "repetition": 1,
+      "status": "completed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "error_code": "",
+      "prediction": {
+        "pertinent": false,
+        "action": "aucune",
+        "employeur": null,
+        "poste": null,
+        "date_candidature": null,
+        "etat": null,
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "association": {
+        "candidates": [],
+        "level": "aucune",
+        "ambiguous": false,
+        "target": null
+      }
+    },
+    {
+      "case_id": "F014",
+      "repetition": 1,
+      "status": "completed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "error_code": "",
+      "prediction": {
+        "pertinent": false,
+        "action": "aucune",
+        "employeur": null,
+        "poste": null,
+        "date_candidature": null,
+        "etat": null,
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "association": {
+        "candidates": [],
+        "level": "aucune",
+        "ambiguous": false,
+        "target": null
+      }
+    },
+    {
+      "case_id": "F015",
+      "repetition": 1,
+      "status": "completed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "error_code": "",
+      "prediction": {
+        "pertinent": true,
+        "action": "changement_etat",
+        "employeur": "Aurore Fictive",
+        "poste": "Poste inventé",
+        "date_candidature": null,
+        "etat": "entrevue",
+        "confirmation_reception": null,
+        "informations_manquantes": [
+          "poste"
+        ]
+      },
+      "association": {
+        "candidates": [
+          "aurore-data",
+          "aurore-dev"
+        ],
+        "level": "ambigu",
+        "ambiguous": true,
+        "target": null
+      }
+    },
+    {
+      "case_id": "F016",
+      "repetition": 1,
+      "status": "completed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "error_code": "",
+      "prediction": {
+        "pertinent": true,
+        "action": "changement_etat",
+        "employeur": null,
+        "poste": "Testeur logiciel",
+        "date_candidature": null,
+        "etat": "entrevue",
+        "confirmation_reception": null,
+        "informations_manquantes": [
+          "employeur"
+        ]
+      },
+      "association": {
+        "candidates": [
+          "cobalt-qa"
+        ],
+        "level": "a_confirmer",
+        "ambiguous": false,
+        "target": null
+      }
+    },
+    {
+      "case_id": "F017",
+      "repetition": 1,
+      "status": "completed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "error_code": "",
+      "prediction": {
+        "pertinent": true,
+        "action": "changement_etat",
+        "employeur": "Aurore Fictive",
+        "poste": "Analyste de données",
+        "date_candidature": null,
+        "etat": "entrevue",
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "association": {
+        "candidates": [
+          "aurore-data",
+          "aurore-dev"
+        ],
+        "level": "ambigu",
+        "ambiguous": true,
+        "target": null
+      }
+    },
+    {
+      "case_id": "F018",
+      "repetition": 1,
+      "status": "completed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "error_code": "",
+      "prediction": {
+        "pertinent": true,
+        "action": "changement_etat",
+        "employeur": "Aurore Fictive",
+        "poste": "Analyste de données",
+        "date_candidature": null,
+        "etat": "refusee",
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "association": {
+        "candidates": [
+          "aurore-data",
+          "aurore-dev"
+        ],
+        "level": "ambigu",
+        "ambiguous": true,
+        "target": null
+      }
+    },
+    {
+      "case_id": "F019",
+      "repetition": 1,
+      "status": "completed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "error_code": "",
+      "prediction": {
+        "pertinent": true,
+        "action": "aucune",
+        "employeur": "Cobalt Fictif",
+        "poste": "Testeur logiciel",
+        "date_candidature": null,
+        "etat": null,
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "association": {
+        "candidates": [
+          "cobalt-qa"
+        ],
+        "level": "probable",
+        "ambiguous": false,
+        "target": null
+      }
+    },
+    {
+      "case_id": "F020",
+      "repetition": 1,
+      "status": "completed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "error_code": "",
+      "prediction": {
+        "pertinent": true,
+        "action": "aucune",
+        "employeur": "Aurore Fictive",
+        "poste": "Développeur logiciel",
+        "date_candidature": null,
+        "etat": null,
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "association": {
+        "candidates": [
+          "aurore-data",
+          "aurore-dev",
+          "boreal-dev"
+        ],
+        "level": "ambigu",
+        "ambiguous": true,
+        "target": null
+      }
+    },
+    {
+      "case_id": "F021",
+      "repetition": 1,
+      "status": "completed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "error_code": "",
+      "prediction": {
+        "pertinent": true,
+        "action": "changement_etat",
+        "employeur": "Cobalt Fictif",
+        "poste": "Testeur logiciel",
+        "date_candidature": "2026-10-22",
+        "etat": "entrevue",
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "association": {
+        "candidates": [
+          "cobalt-qa"
+        ],
+        "level": "probable",
+        "ambiguous": false,
+        "target": null
+      }
+    },
+    {
+      "case_id": "F022",
+      "repetition": 1,
+      "status": "completed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "error_code": "",
+      "prediction": {
+        "pertinent": true,
+        "action": "confirmation_reception",
+        "employeur": "Cobalt Fictif",
+        "poste": "Testeur logiciel",
+        "date_candidature": null,
+        "etat": null,
+        "confirmation_reception": true,
+        "informations_manquantes": []
+      },
+      "association": {
+        "candidates": [
+          "cobalt-qa"
+        ],
+        "level": "probable",
+        "ambiguous": false,
+        "target": null
+      }
+    },
+    {
+      "case_id": "F023",
+      "repetition": 1,
+      "status": "completed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "error_code": "",
+      "prediction": {
+        "pertinent": true,
+        "action": "creation",
+        "employeur": "Mosaïque Fictive",
+        "poste": null,
+        "date_candidature": "2026-10-19",
+        "etat": "envoyee",
+        "confirmation_reception": null,
+        "informations_manquantes": [
+          "poste"
+        ]
+      },
+      "association": {
+        "candidates": [],
+        "level": "aucune",
+        "ambiguous": false,
+        "target": null
+      }
+    },
+    {
+      "case_id": "F024",
+      "repetition": 1,
+      "status": "completed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "error_code": "",
+      "prediction": {
+        "pertinent": true,
+        "action": "creation",
+        "employeur": null,
+        "poste": "Développeur logiciel",
+        "date_candidature": "2026-10-19",
+        "etat": "envoyee",
+        "confirmation_reception": null,
+        "informations_manquantes": [
+          "employeur"
+        ]
+      },
+      "association": {
+        "candidates": [
+          "aurore-dev",
+          "boreal-dev"
+        ],
+        "level": "ambigu",
+        "ambiguous": true,
+        "target": null
+      }
+    },
+    {
+      "case_id": "F025",
+      "repetition": 1,
+      "status": "completed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "error_code": "",
+      "prediction": {
+        "pertinent": true,
+        "action": "creation",
+        "employeur": "Nacre Fictive",
+        "poste": "Stagiaire réseau",
+        "date_candidature": null,
+        "etat": "a_preparer",
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "association": {
+        "candidates": [],
+        "level": "aucune",
+        "ambiguous": false,
+        "target": null
+      }
+    },
+    {
+      "case_id": "F026",
+      "repetition": 1,
+      "status": "completed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "error_code": "",
+      "prediction": {
+        "pertinent": true,
+        "action": "changement_etat",
+        "employeur": "Aurore Fictive",
+        "poste": "Analyste de données",
+        "date_candidature": null,
+        "etat": "offre_recue",
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "association": {
+        "candidates": [
+          "aurore-data",
+          "aurore-dev"
+        ],
+        "level": "ambigu",
+        "ambiguous": true,
+        "target": null
+      }
+    },
+    {
+      "case_id": "F027",
+      "repetition": 1,
+      "status": "completed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "error_code": "",
+      "prediction": {
+        "pertinent": true,
+        "action": "changement_etat",
+        "employeur": "Aurore Fictive",
+        "poste": "Analyste de données",
+        "date_candidature": null,
+        "etat": "offre_acceptee",
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "association": {
+        "candidates": [
+          "aurore-data",
+          "aurore-dev"
+        ],
+        "level": "ambigu",
+        "ambiguous": true,
+        "target": null
+      }
+    },
+    {
+      "case_id": "F028",
+      "repetition": 1,
+      "status": "completed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "error_code": "",
+      "prediction": {
+        "pertinent": true,
+        "action": "changement_etat",
+        "employeur": "Cobalt Fictif",
+        "poste": "Testeur logiciel",
+        "date_candidature": null,
+        "etat": "offre_declinee",
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "association": {
+        "candidates": [
+          "cobalt-qa"
+        ],
+        "level": "probable",
+        "ambiguous": false,
+        "target": null
+      }
+    },
+    {
+      "case_id": "F029",
+      "repetition": 1,
+      "status": "completed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "error_code": "",
+      "prediction": {
+        "pertinent": true,
+        "action": "changement_etat",
+        "employeur": "Aurore Fictive",
+        "poste": "Analyste de données",
+        "date_candidature": null,
+        "etat": "retiree",
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "association": {
+        "candidates": [
+          "aurore-data",
+          "aurore-dev"
+        ],
+        "level": "ambigu",
+        "ambiguous": true,
+        "target": null
+      }
+    },
+    {
+      "case_id": "F030",
+      "repetition": 1,
+      "status": "completed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "error_code": "",
+      "prediction": {
+        "pertinent": true,
+        "action": "changement_etat",
+        "employeur": "Cobalt Fictif",
+        "poste": "Testeur logiciel",
+        "date_candidature": null,
+        "etat": "refusee",
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "association": {
+        "candidates": [
+          "cobalt-qa"
+        ],
+        "level": "probable",
+        "ambiguous": false,
+        "target": null
+      }
+    },
+    {
+      "case_id": "F031",
+      "repetition": 1,
+      "status": "completed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "error_code": "",
+      "prediction": {
+        "pertinent": true,
+        "action": "creation",
+        "employeur": "Lanterne Fictive",
+        "poste": "Stagiaire backend",
+        "date_candidature": "2026-10-19",
+        "etat": "envoyee",
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "association": {
+        "candidates": [],
+        "level": "aucune",
+        "ambiguous": false,
+        "target": null
+      }
+    },
+    {
+      "case_id": "F032",
+      "repetition": 1,
+      "status": "completed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "error_code": "",
+      "prediction": {
+        "pertinent": true,
+        "action": "changement_etat",
+        "employeur": "Cobalt Fictif",
+        "poste": "Testeur logiciel",
+        "date_candidature": null,
+        "etat": "entrevue",
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "association": {
+        "candidates": [
+          "cobalt-qa"
+        ],
+        "level": "probable",
+        "ambiguous": false,
+        "target": null
+      }
+    },
+    {
+      "case_id": "F033",
+      "repetition": 1,
+      "status": "completed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "error_code": "",
+      "prediction": {
+        "pertinent": true,
+        "action": "creation",
+        "employeur": "Sillage Fictif",
+        "poste": "Testeur logiciel",
+        "date_candidature": null,
+        "etat": "a_preparer",
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "association": {
+        "candidates": [
+          "cobalt-qa"
+        ],
+        "level": "a_confirmer",
+        "ambiguous": false,
+        "target": null
+      }
+    },
+    {
+      "case_id": "F034",
+      "repetition": 1,
+      "status": "completed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "error_code": "",
+      "prediction": {
+        "pertinent": true,
+        "action": "creation",
+        "employeur": "Liseron Fictif",
+        "poste": "Administrateur système",
+        "date_candidature": "2026-10-19",
+        "etat": "envoyee",
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "association": {
+        "candidates": [],
+        "level": "aucune",
+        "ambiguous": false,
+        "target": null
+      }
+    },
+    {
+      "case_id": "F035",
+      "repetition": 1,
+      "status": "completed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "error_code": "",
+      "prediction": {
+        "pertinent": true,
+        "action": "confirmation_reception",
+        "employeur": "Aurore Fictive",
+        "poste": null,
+        "date_candidature": null,
+        "etat": null,
+        "confirmation_reception": true,
+        "informations_manquantes": [
+          "poste"
+        ]
+      },
+      "association": {
+        "candidates": [
+          "aurore-data",
+          "aurore-dev"
+        ],
+        "level": "ambigu",
+        "ambiguous": true,
+        "target": null
+      }
+    },
+    {
+      "case_id": "F036",
+      "repetition": 1,
+      "status": "completed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "error_code": "",
+      "prediction": {
+        "pertinent": false,
+        "action": "aucune",
+        "employeur": null,
+        "poste": null,
+        "date_candidature": null,
+        "etat": null,
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "association": {
+        "candidates": [],
+        "level": "aucune",
+        "ambiguous": false,
+        "target": null
+      }
+    },
+    {
+      "case_id": "F037",
+      "repetition": 1,
+      "status": "completed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "error_code": "",
+      "prediction": {
+        "pertinent": false,
+        "action": "aucune",
+        "employeur": null,
+        "poste": null,
+        "date_candidature": null,
+        "etat": null,
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "association": {
+        "candidates": [],
+        "level": "aucune",
+        "ambiguous": false,
+        "target": null
+      }
+    },
+    {
+      "case_id": "F038",
+      "repetition": 1,
+      "status": "completed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "error_code": "",
+      "prediction": {
+        "pertinent": true,
+        "action": "aucune",
+        "employeur": "Atelier Nuage Fictif",
+        "poste": "Stagiaire UX",
+        "date_candidature": null,
+        "etat": null,
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "association": {
+        "candidates": [],
+        "level": "aucune",
+        "ambiguous": false,
+        "target": null
+      }
+    },
+    {
+      "case_id": "F039",
+      "repetition": 1,
+      "status": "completed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "error_code": "",
+      "prediction": {
+        "pertinent": false,
+        "action": "aucune",
+        "employeur": null,
+        "poste": null,
+        "date_candidature": null,
+        "etat": null,
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "association": {
+        "candidates": [],
+        "level": "aucune",
+        "ambiguous": false,
+        "target": null
+      }
+    },
+    {
+      "case_id": "F040",
+      "repetition": 1,
+      "status": "completed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "error_code": "",
+      "prediction": {
+        "pertinent": true,
+        "action": "creation",
+        "employeur": "Galet Fictif",
+        "poste": "Stagiaire mobile",
+        "date_candidature": "2026-10-18",
+        "etat": "envoyee",
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "association": {
+        "candidates": [],
+        "level": "aucune",
+        "ambiguous": false,
+        "target": null
+      }
+    },
+    {
+      "case_id": "F001",
+      "repetition": 2,
+      "status": "completed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "error_code": "",
+      "prediction": {
+        "pertinent": true,
+        "action": "creation",
+        "employeur": "Lanterne Fictive",
+        "poste": "Stagiaire backend",
+        "date_candidature": "2026-10-19",
+        "etat": "envoyee",
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "association": {
+        "candidates": [],
+        "level": "aucune",
+        "ambiguous": false,
+        "target": null
+      }
+    },
+    {
+      "case_id": "F001",
+      "repetition": 3,
+      "status": "completed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "error_code": "",
+      "prediction": {
+        "pertinent": true,
+        "action": "creation",
+        "employeur": "Lanterne Fictive",
+        "poste": "Stagiaire backend",
+        "date_candidature": "2026-10-19",
+        "etat": "envoyee",
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "association": {
+        "candidates": [],
+        "level": "aucune",
+        "ambiguous": false,
+        "target": null
+      }
+    },
+    {
+      "case_id": "F003",
+      "repetition": 2,
+      "status": "completed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "error_code": "",
+      "prediction": {
+        "pertinent": true,
+        "action": "changement_etat",
+        "employeur": "Cobalt Fictif",
+        "poste": "Testeur logiciel",
+        "date_candidature": null,
+        "etat": "entrevue",
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "association": {
+        "candidates": [
+          "cobalt-qa"
+        ],
+        "level": "probable",
+        "ambiguous": false,
+        "target": null
+      }
+    },
+    {
+      "case_id": "F003",
+      "repetition": 3,
+      "status": "completed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "error_code": "",
+      "prediction": {
+        "pertinent": true,
+        "action": "changement_etat",
+        "employeur": "Cobalt Fictif",
+        "poste": "Testeur logiciel",
+        "date_candidature": null,
+        "etat": null,
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "association": {
+        "candidates": [
+          "cobalt-qa"
+        ],
+        "level": "probable",
+        "ambiguous": false,
+        "target": null
+      }
+    },
+    {
+      "case_id": "F013",
+      "repetition": 2,
+      "status": "completed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "error_code": "",
+      "prediction": {
+        "pertinent": false,
+        "action": "aucune",
+        "employeur": null,
+        "poste": null,
+        "date_candidature": null,
+        "etat": null,
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "association": {
+        "candidates": [],
+        "level": "aucune",
+        "ambiguous": false,
+        "target": null
+      }
+    },
+    {
+      "case_id": "F013",
+      "repetition": 3,
+      "status": "completed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "error_code": "",
+      "prediction": {
+        "pertinent": false,
+        "action": "aucune",
+        "employeur": null,
+        "poste": null,
+        "date_candidature": null,
+        "etat": null,
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "association": {
+        "candidates": [],
+        "level": "aucune",
+        "ambiguous": false,
+        "target": null
+      }
+    },
+    {
+      "case_id": "F015",
+      "repetition": 2,
+      "status": "completed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "error_code": "",
+      "prediction": {
+        "pertinent": true,
+        "action": "changement_etat",
+        "employeur": "Aurore Fictive",
+        "poste": "Poste inventé",
+        "date_candidature": null,
+        "etat": "entrevue",
+        "confirmation_reception": null,
+        "informations_manquantes": [
+          "poste"
+        ]
+      },
+      "association": {
+        "candidates": [
+          "aurore-data",
+          "aurore-dev"
+        ],
+        "level": "ambigu",
+        "ambiguous": true,
+        "target": null
+      }
+    },
+    {
+      "case_id": "F015",
+      "repetition": 3,
+      "status": "completed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "error_code": "",
+      "prediction": {
+        "pertinent": true,
+        "action": "changement_etat",
+        "employeur": "Aurore Fictive",
+        "poste": "Poste inventé",
+        "date_candidature": null,
+        "etat": "entrevue",
+        "confirmation_reception": null,
+        "informations_manquantes": [
+          "poste"
+        ]
+      },
+      "association": {
+        "candidates": [
+          "aurore-data",
+          "aurore-dev"
+        ],
+        "level": "ambigu",
+        "ambiguous": true,
+        "target": null
+      }
+    },
+    {
+      "case_id": "F028",
+      "repetition": 2,
+      "status": "completed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "error_code": "",
+      "prediction": {
+        "pertinent": true,
+        "action": "changement_etat",
+        "employeur": "Cobalt Fictif",
+        "poste": "Testeur logiciel",
+        "date_candidature": null,
+        "etat": "offre_declinee",
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "association": {
+        "candidates": [
+          "cobalt-qa"
+        ],
+        "level": "probable",
+        "ambiguous": false,
+        "target": null
+      }
+    },
+    {
+      "case_id": "F028",
+      "repetition": 3,
+      "status": "completed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "error_code": "",
+      "prediction": {
+        "pertinent": true,
+        "action": "changement_etat",
+        "employeur": "Cobalt Fictif",
+        "poste": "Testeur logiciel",
+        "date_candidature": null,
+        "etat": "offre_declinee",
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "association": {
+        "candidates": [
+          "cobalt-qa"
+        ],
+        "level": "probable",
+        "ambiguous": false,
+        "target": null
+      }
+    }
+  ]
+}

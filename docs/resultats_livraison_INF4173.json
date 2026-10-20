@@ -1,0 +1,140 @@
+{
+  "lot": 8,
+  "work_session_date": "2026-10-19",
+  "status": "verified_pending_explicit_local_commit_authorization",
+  "current_checks": {
+    "django_check": "passed",
+    "makemigrations_check_dry_run": "no_changes",
+    "all_main_migrations_applied": true,
+    "pip_check": "passed",
+    "python_syntax": "passed",
+    "ci_yaml_and_safety_assertions": "passed",
+    "repository_targeted_secret_scan": "passed",
+    "both_local_env_files_ignored_and_untracked": true,
+    "private_original_plan_ignored_and_preserved": true,
+    "full_test_rerun": "passed_complete_single_run_operator_local_terminal"
+  },
+  "main_database": {
+    "comparison": "READ ONLY fingerprints: before/after full lot 8 run and final independent verification",
+    "tables_compared": 20,
+    "all_fingerprints_identical": true,
+    "candidatures": 2,
+    "accepted_proposals": 2,
+    "gmail_messages": 5,
+    "analyses": 2,
+    "imports": 1,
+    "sync_runs": 1,
+    "candidature_history": 0,
+    "scheduled_sync_enabled_count": 0,
+    "automatic_analysis_enabled_count": 0,
+    "final_independent_verification": true
+  },
+  "previous_lot_7_evidence_not_a_new_execution": {
+    "backend_postgresql_tests": 290,
+    "frontend_tests": 128,
+    "chrome_scenarios": 15,
+    "external_providers": "simulated",
+    "source": "docs/resultats_securite_deploiement_INF4173.json"
+  },
+  "execution_limitation": {
+    "escalated_attempts": 2,
+    "result": "automatic approval review deadline expired before process launch",
+    "sandbox_attempt": "D: directory creation denied before any cluster or database was created",
+    "operator_procedure": "README.md: Tests reproductibles",
+    "fresh_test_success_claimed": true,
+    "resolved_by": "Operator executed the unchanged runner in local PowerShell; artifacts inspected directly."
+  },
+  "git": {
+    "already_initialized": true,
+    "commits_created": 0,
+    "remotes": 0,
+    "publication": false,
+    "first_commit_requires_explicit_authorization": true,
+    "proposed_content": "docs/fichiers_livraison_INF4173.txt"
+  },
+  "safety": {
+    "main_database_writes": 0,
+    "real_gmail_calls": 0,
+    "real_gemini_calls": 0,
+    "workers_or_timers_activated": 0,
+    "cloud_resources_created": 0,
+    "existing_backup_files_preserved": 3,
+    "original_plan_sha256": "595280291a3d5a1a25fddc017743a8393ef0cdc3c3b93f74a0993379c6193512"
+  },
+  "remaining_validation": [
+    "Explicit approval of the first local commit; no remote or publication.",
+    "Real Gemini corpus evaluation and human review of annotations.",
+    "Linux deployment, HTTPS, systemd, operational restore and remote CI.",
+    "Django security.W005/W021 remain intentional pending domain validation.",
+    "Targeted repository audit is not a comprehensive secret/CVE audit or pentest."
+  ],
+  "full_test_run": {
+    "artifacts_directory": "D:\\INF4173-SJ-tests\\lot6-20261019-225750-49225a39",
+    "backend_postgresql": {
+      "passed": 290,
+      "failed": 0
+    },
+    "frontend": {
+      "passed": 128,
+      "failed": 0
+    },
+    "browser": {
+      "passed": 15,
+      "failed": 0,
+      "name": "Chrome/155.0.8059.84",
+      "real_browser": true,
+      "providers": "simulated",
+      "confirmation_dialogs": 7,
+      "uncaught_errors": 0
+    },
+    "all_runner_checks_passed": true,
+    "test_ports_released": true,
+    "production_warnings": [
+      "security.W005",
+      "security.W021"
+    ],
+    "main_before_after_identical": true,
+    "final_main_verification_identical": true,
+    "artifact_sha256": {
+      "run-report.json": "89933c215b8fefb2bfff0c1a75d63c689616b00d54e9671135b7502e07cbaecf",
+      "browser-report.json": "38677a9459e9a26076d39eb0ec81763cf77e7f9d58e4e5a148fd59bc717b101f",
+      "backend-tests.log": "c2db59fc2dfd057418fa17c36c1030b4226ee35a8af367e899a6c49bb18f1303",
+      "frontend-tests.log": "f7fe74e2775689be885aa24161a365f82c3bae7691150806c0788cb89d747b38",
+      "django-check.log": "f87ceb15410bde28ff826ce26228e0576558258fa64d145847921a593a61ee63",
+      "migration-drift.log": "93e6e2d5be3c054add80c0f19101608803f7ca8a7df1fa41f76bbb9a1f570f4a",
+      "production-security.log": "3a92e9cf63994d052386f5ed14653a3531e3715246d490cfcd4580c9a7170d0b",
+      "typescript-app.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "typescript-node.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "typescript-e2e.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lint.log": "fe72158bc66bcae8edcec83da70b163a2e53b236ec862b1f95550710c1a19e76",
+      "build.log": "d2a56333771fd692adc77297885e8715119971fc1539da5c209bbfd7d0a912fb",
+      "postgres-stop.log": "fbd64ac77ed7cfc1533581fdc76667bb81f6f16778b82a91bf911794c0efc3b0"
+    }
+  },
+  "repository_review": {
+    "proposed_files": 170,
+    "tracked_files": 0,
+    "staged_files": 0,
+    "findings": 0,
+    "scope": "Exact local secret comparison and targeted token/private-key/personal-email patterns; filename and ignore review. Not exhaustive.",
+    "groups": {
+      "root": 3,
+      ".github": 1,
+      "backend": 96,
+      "deploy": 9,
+      "docs": 9,
+      "frontend": 47,
+      "tests": 5
+    },
+    "ignored_checks": {
+      "backend/.env": true,
+      "backend/backend/.env": true,
+      "backend/.venv/": true,
+      "frontend/node_modules/": true,
+      "frontend/dist/": true,
+      "docs/plan_de_travail_INF4173.pdf": true
+    },
+    "manifest": "docs/fichiers_livraison_INF4173.txt",
+    "raw_logs_and_database_rows_included": false
+  }
+}

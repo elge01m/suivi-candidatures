@@ -1,0 +1,35 @@
+# Template; install/start only after an explicitly authorized deployment.
+[Unit]
+Description=INF4173 Django Gunicorn
+After=network-online.target postgresql.service
+Wants=network-online.target
+StartLimitIntervalSec=300
+StartLimitBurst=5
+
+[Service]
+Type=simple
+User=suivi
+Group=suivi
+WorkingDirectory=/srv/suivi-candidatures/current/backend
+EnvironmentFile=/etc/suivi-candidatures/backend.env
+Environment=DJANGO_SETTINGS_MODULE=config.production_settings DJANGO_LOAD_DOTENV=0 PYTHONDONTWRITEBYTECODE=1 PYTHONUTF8=1
+RuntimeDirectory=suivi-web
+RuntimeDirectoryMode=0700
+ExecStart=/usr/bin/env DJANGO_SETTINGS_MODULE=config.production_settings DJANGO_LOAD_DOTENV=0 /srv/suivi-candidatures/current/backend/.venv/bin/gunicorn --config ../deploy/gunicorn.conf.py config.wsgi:application
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=40
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateDevices=true
+RestrictSUIDSGID=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+LimitCORE=0
+StandardOutput=null
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

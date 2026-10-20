@@ -1,0 +1,32 @@
+# Template only: no unit is installed or enabled by this repository.
+# Apply reviewed migrations and configure explicit user consent before enabling.
+# Requires production Django settings (DEBUG=False, external SECRET_KEY, HTTPS).
+# Create the suivi service account; adjust /srv paths for your deployment.
+# Keep /etc/suivi-candidatures/backend.env readable only by the service account.
+[Unit]
+Description=Process Gmail synchronization and analysis jobs
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=suivi
+Group=suivi
+WorkingDirectory=/srv/suivi-candidatures/current/backend
+EnvironmentFile=/etc/suivi-candidatures/backend.env
+Environment=PYTHONDONTWRITEBYTECODE=1
+Environment=PYTHONUTF8=1
+Environment=DJANGO_SETTINGS_MODULE=config.production_settings DJANGO_LOAD_DOTENV=0
+ExecStart=/usr/bin/env DJANGO_SETTINGS_MODULE=config.production_settings DJANGO_LOAD_DOTENV=0 /srv/suivi-candidatures/current/backend/.venv/bin/python manage.py process_sync_jobs --settings=config.production_settings --max-seconds 45 --max-accounts 10
+TimeoutStartSec=100
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+PrivateDevices=true
+RestrictSUIDSGID=true
+LimitCORE=0
+StandardOutput=journal
+StandardError=journal

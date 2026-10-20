@@ -1,0 +1,105 @@
+LOT 8 — PRÉPARATION DE LA LIVRAISON TECHNIQUE
+Session de travail du 19 octobre 2026, fuseau America/Toronto.
+
+Référence immuable
+Plan officiel du 30 septembre 2026, conservé localement sans modification :
+docs/plan_de_travail_INF4173.pdf
+SHA-256 : 595280291a3d5a1a25fddc017743a8393ef0cdc3c3b93f74a0993379c6193512
+Le PDF contient une identité et un identifiant étudiant : exclusion Git pour
+éviter de les inclure dans une future publication. Aucune suppression du PDF.
+
+Engagements du plan et preuves techniques
+
+Accès et suivi manuel — Implémenté : session personnelle protégée, CRUD,
+recherche et filtre ; huit états et confirmation indépendante. Backend :
+candidatures, config/auth_views.py ; interface : CandidaturesPanel.tsx.
+Tests PostgreSQL et scénarios navigateur isolés couvrent les droits, dates,
+huit états, confirmation, recherche, filtres et persistance.
+
+Collecte — Implémenté : fournisseur Gmail unique, période inclusive choisie,
+messages reçus/envoyés/archivés, actualisation manuelle et cadence de cinq
+minutes. gmail_integration/import_service.py et gmail_sync/services.py :
+pagination, lots, verrous, reprises et unicité par connexion Gmail.
+Validation navigateur avec fournisseurs simulés : fermeture de la page,
+deux invocations worker distinctes, reprise des lots et prévention des doublons.
+Le fonctionnement permanent sur Linux/systemd reste à valider sur serveur.
+
+Analyse et propositions — Implémenté : sortie structurée validée, contexte
+envoyé/reçu, inconnues nulles, suggestions probables/ambiguës et absence de
+cible présélectionnée. email_analysis/schemas.py, gemini.py et services.py.
+Corrections, association explicite et acceptation/rejet dans ProposalsPanel.tsx.
+Les tests simulent Gemini ; ils ne prouvent pas son exactitude réelle.
+
+Validation manuelle — Implémenté : correction préalable, consentement explicite,
+confirmation des décisions, déduplication et validation répétée idempotente.
+Aucune proposition appliquée automatiquement. La création depuis un message
+envoyé ne nécessite pas d'accusé de réception. La saisie manuelle reste possible
+sans message source. Tests des routes et des interactions React réelles.
+
+Historique et contrôle — Implémenté : changements validés avant/après,
+date/origine/référence au message sans conservation supplémentaire de son texte.
+Référence conservée lors de la suppression du message. Aucun passé inventé.
+Erreurs assainies, consultation et relances contrôlées ; quotas et consentement
+conservés. candidatures/history.py, HistoryPanel.tsx, TrackingPanel.tsx.
+
+Évaluation expérimentale — Préparée, pas encore validée réellement sur corpus.
+40 messages entièrement fictifs annotés couvrent les scénarios du plan.
+Évaluateur reproductible : classification, champs, associations et corrections
+nécessaires estimées par écarts aux annotations. Cinq cas répétés trois fois.
+docs/evaluation_simulee_INF4173.json contient UNIQUEMENT des résultats simulés,
+avec fautes injectées déclarées. Les corrections mesurées sont un indicateur,
+pas des observations de corrections effectuées par une personne.
+Une campagne réelle Gemini, après revue des annotations et autorisation,
+reste nécessaire à la mesure de qualité et de variabilité prévue par le plan.
+L'essai réel antérieur sur un unique message fictif n'équivaut pas à ce corpus.
+
+Sécurité et confidentialité — Préparation locale vérifiée : secrets côté
+serveur, chiffrement Fernet avec clés distinctes, sessions/CSRF/isolation,
+HTTPS et cookies de production, journalisation limitée, sauvegardes chiffrées
+et restauration sur une base jetable. Pièces jointes et HTML brut exclus.
+Les paramètres ne constituent pas une validation HTTPS réelle. Les conditions
+des fournisseurs et la configuration du compte devront être revues avant
+traitement personnel en production. Aucun pentest ni audit CVE exhaustif.
+
+Déploiement — Préparé, non déployé. Gunicorn/Nginx/systemd, environnement
+externe, sauvegarde/restauration et retour arrière : deploy/ et
+docs/deploiement_linux_INF4173.txt. Aucun service, timer ou cloud activé.
+GitHub Actions manuel, actions figées par SHA, PostgreSQL jetable et valeurs
+fictives. Aucune exécution distante ni CI verte revendiquée.
+
+Hors de cette livraison technique
+Rapports universitaires, étude documentaire à intégrer aux rapports et vidéo.
+Perspectives facultatives du plan non ajoutées : statistiques, rappels,
+application automatique des propositions, autres fournisseurs, comptes publics.
+
+État des vérifications finales
+Les résultats du lot 7 restent disponibles dans
+docs/resultats_securite_deploiement_INF4173.json : 290 tests backend,
+128 frontend et 15 scénarios Chrome (fournisseurs simulés).
+Ces preuves antérieures ne seront pas présentées comme une nouvelle exécution.
+Nouvelle campagne complète, exécutée dans le terminal PowerShell local :
+D:/INF4173-SJ-tests/lot6-20261019-225750-49225a39
+Traces consultées directement : 290 tests backend PostgreSQL, 128 frontend et
+15 scénarios dans Chrome 155 réussis en une exécution complète. TypeScript
+application/Node/E2E, lint, build, check Django, absence de dérive des migrations,
+collectstatic et contrôles de production réussis. Fournisseurs Gmail/Gemini
+simulés uniquement. Deux avertissements HSTS attendus : W005 et W021.
+Les empreintes des 20 tables principales sont identiques avant/après et lors
+du contrôle final indépendant en lecture seule ; automatismes toujours désactivés.
+Ports de test libérés, plan original intact. Les rapports et journaux de cette
+exécution sont référencés par SHA-256 dans docs/resultats_livraison_INF4173.json.
+Le contrôle automatique d'autorisation avait expiré deux fois pour l'agent ;
+l'exécution locale par l'utilisateur a levé ce blocage sans changement du lanceur.
+
+Versionnement
+Git existait déjà, sans commit ni remote. Aucun dépôt réinitialisé.
+Le manifeste docs/fichiers_livraison_INF4173.txt décrit le contenu proposé et
+les exclusions. Le premier commit attend une autorisation explicite distincte.
+Aucune publication, aucun remote, aucune ressource payante.
+
+Limites de sécurité connues
+check --deploy conserve security.W005 et security.W021 : HSTS initial de 3600 s,
+sans includeSubDomains ni preload avant validation réelle du domaine.
+La sauvegarde Fernet en mémoire est limitée à 64 Mio non chiffrés.
+Chrome Windows uniquement ; panne électrique en pleine transaction non testée.
+Tests de concurrence PostgreSQL distincts des reprises simulées du navigateur.

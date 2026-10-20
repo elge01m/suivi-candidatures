@@ -1,0 +1,1181 @@
+{
+  "version": "1.0",
+  "entirely_fictitious": true,
+  "timezone": "America/Toronto",
+  "annotation_policy": "Facts explicit in the synthetic message; unknowns null; candidate IDs are never chosen automatically. Expected association sets are human gold labels, not generated from server matching.",
+  "candidate_fixtures": [
+    {
+      "key": "aurore-dev",
+      "employeur": "Aurore Fictive",
+      "poste": "Développeur logiciel",
+      "date_candidature": "2026-10-13",
+      "etat": "envoyee"
+    },
+    {
+      "key": "aurore-data",
+      "employeur": "Aurore Fictive",
+      "poste": "Analyste de données",
+      "date_candidature": "2026-10-13",
+      "etat": "envoyee"
+    },
+    {
+      "key": "boreal-dev",
+      "employeur": "Boréal Fictif",
+      "poste": "Développeur logiciel",
+      "date_candidature": "2026-10-12",
+      "etat": "envoyee"
+    },
+    {
+      "key": "cobalt-qa",
+      "employeur": "Cobalt Fictif",
+      "poste": "Testeur logiciel",
+      "date_candidature": "2026-10-10",
+      "etat": "envoyee"
+    }
+  ],
+  "cases": [
+    {
+      "id": "F001",
+      "subject": "Candidature au stage backend",
+      "text": "Bonjour, je soumets ma candidature au poste de Stagiaire backend chez Lanterne Fictive. Merci.",
+      "sent": true,
+      "date_message": "2026-10-19T16:00:00+00:00",
+      "tags": [
+        "envoye_sans_confirmation"
+      ],
+      "expected": {
+        "pertinent": true,
+        "action": "creation",
+        "employeur": "Lanterne Fictive",
+        "poste": "Stagiaire backend",
+        "date_candidature": "2026-10-19",
+        "etat": "envoyee",
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "expected_association": {
+        "candidates": [],
+        "level": "aucune",
+        "ambiguous": false
+      },
+      "annotation_reason": "Bonjour, je soumets ma candidature au poste de Stagiaire backend chez Lanterne Fictive. Merci."
+    },
+    {
+      "id": "F002",
+      "subject": "Candidature spontanée",
+      "text": "Je vous adresse ma candidature chez Delta Fictif au poste de Technicien informatique.",
+      "sent": true,
+      "date_message": "2026-10-19T16:00:00+00:00",
+      "tags": [
+        "envoye_sans_confirmation"
+      ],
+      "expected": {
+        "pertinent": true,
+        "action": "creation",
+        "employeur": "Delta Fictif",
+        "poste": "Technicien informatique",
+        "date_candidature": "2026-10-19",
+        "etat": "envoyee",
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "expected_association": {
+        "candidates": [],
+        "level": "aucune",
+        "ambiguous": false
+      },
+      "annotation_reason": "Je vous adresse ma candidature chez Delta Fictif au poste de Technicien informatique."
+    },
+    {
+      "id": "F003",
+      "subject": "Invitation entrevue - Testeur logiciel",
+      "text": "Cobalt Fictif vous invite à une entrevue pour le poste de Testeur logiciel le 22 octobre 2026.",
+      "sent": false,
+      "date_message": "2026-10-19T16:00:00+00:00",
+      "tags": [
+        "entrevue",
+        "date_entrevue_distincte"
+      ],
+      "expected": {
+        "pertinent": true,
+        "action": "changement_etat",
+        "employeur": "Cobalt Fictif",
+        "poste": "Testeur logiciel",
+        "date_candidature": null,
+        "etat": "entrevue",
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "expected_association": {
+        "candidates": [
+          "cobalt-qa"
+        ],
+        "level": "probable",
+        "ambiguous": false
+      },
+      "annotation_reason": "Cobalt Fictif vous invite à une entrevue pour le poste de Testeur logiciel le 22 octobre 2026."
+    },
+    {
+      "id": "F004",
+      "subject": "Entrevue développement",
+      "text": "Aurore Fictive vous propose une entrevue le 23 octobre pour le poste de Développeur logiciel.",
+      "sent": false,
+      "date_message": "2026-10-19T16:00:00+00:00",
+      "tags": [
+        "entrevue",
+        "plusieurs_postes"
+      ],
+      "expected": {
+        "pertinent": true,
+        "action": "changement_etat",
+        "employeur": "Aurore Fictive",
+        "poste": "Développeur logiciel",
+        "date_candidature": null,
+        "etat": "entrevue",
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "expected_association": {
+        "candidates": [
+          "aurore-dev"
+        ],
+        "level": "probable",
+        "ambiguous": false
+      },
+      "annotation_reason": "Aurore Fictive vous propose une entrevue le 23 octobre pour le poste de Développeur logiciel."
+    },
+    {
+      "id": "F005",
+      "subject": "Réponse à votre candidature",
+      "text": "Boréal Fictif ne retient pas votre candidature au poste de Développeur logiciel.",
+      "sent": false,
+      "date_message": "2026-10-19T16:00:00+00:00",
+      "tags": [
+        "refus"
+      ],
+      "expected": {
+        "pertinent": true,
+        "action": "changement_etat",
+        "employeur": "Boréal Fictif",
+        "poste": "Développeur logiciel",
+        "date_candidature": null,
+        "etat": "refusee",
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "expected_association": {
+        "candidates": [
+          "boreal-dev"
+        ],
+        "level": "probable",
+        "ambiguous": false
+      },
+      "annotation_reason": "Boréal Fictif ne retient pas votre candidature au poste de Développeur logiciel."
+    },
+    {
+      "id": "F006",
+      "subject": "Offre de stage",
+      "text": "Cobalt Fictif vous offre le poste de Testeur logiciel. Merci de nous répondre avant le 28 octobre.",
+      "sent": false,
+      "date_message": "2026-10-19T16:00:00+00:00",
+      "tags": [
+        "offre"
+      ],
+      "expected": {
+        "pertinent": true,
+        "action": "changement_etat",
+        "employeur": "Cobalt Fictif",
+        "poste": "Testeur logiciel",
+        "date_candidature": null,
+        "etat": "offre_recue",
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "expected_association": {
+        "candidates": [
+          "cobalt-qa"
+        ],
+        "level": "probable",
+        "ambiguous": false
+      },
+      "annotation_reason": "Cobalt Fictif vous offre le poste de Testeur logiciel. Merci de nous répondre avant le 28 octobre."
+    },
+    {
+      "id": "F007",
+      "subject": "Acceptation offre",
+      "text": "Bonjour Cobalt Fictif, j’accepte votre offre pour le poste de Testeur logiciel.",
+      "sent": true,
+      "date_message": "2026-10-19T16:00:00+00:00",
+      "tags": [
+        "offre_acceptee"
+      ],
+      "expected": {
+        "pertinent": true,
+        "action": "changement_etat",
+        "employeur": "Cobalt Fictif",
+        "poste": "Testeur logiciel",
+        "date_candidature": null,
+        "etat": "offre_acceptee",
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "expected_association": {
+        "candidates": [
+          "cobalt-qa"
+        ],
+        "level": "probable",
+        "ambiguous": false
+      },
+      "annotation_reason": "Bonjour Cobalt Fictif, j’accepte votre offre pour le poste de Testeur logiciel."
+    },
+    {
+      "id": "F008",
+      "subject": "Refus de votre offre",
+      "text": "Bonjour Boréal Fictif, je décline votre offre pour le poste de Développeur logiciel.",
+      "sent": true,
+      "date_message": "2026-10-19T16:00:00+00:00",
+      "tags": [
+        "offre_declinee"
+      ],
+      "expected": {
+        "pertinent": true,
+        "action": "changement_etat",
+        "employeur": "Boréal Fictif",
+        "poste": "Développeur logiciel",
+        "date_candidature": null,
+        "etat": "offre_declinee",
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "expected_association": {
+        "candidates": [
+          "boreal-dev"
+        ],
+        "level": "probable",
+        "ambiguous": false
+      },
+      "annotation_reason": "Bonjour Boréal Fictif, je décline votre offre pour le poste de Développeur logiciel."
+    },
+    {
+      "id": "F009",
+      "subject": "Retrait de candidature",
+      "text": "Bonjour Aurore Fictive, je retire ma candidature au poste de Développeur logiciel.",
+      "sent": true,
+      "date_message": "2026-10-19T16:00:00+00:00",
+      "tags": [
+        "retrait"
+      ],
+      "expected": {
+        "pertinent": true,
+        "action": "changement_etat",
+        "employeur": "Aurore Fictive",
+        "poste": "Développeur logiciel",
+        "date_candidature": null,
+        "etat": "retiree",
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "expected_association": {
+        "candidates": [
+          "aurore-dev"
+        ],
+        "level": "probable",
+        "ambiguous": false
+      },
+      "annotation_reason": "Bonjour Aurore Fictive, je retire ma candidature au poste de Développeur logiciel."
+    },
+    {
+      "id": "F010",
+      "subject": "Préparer ma candidature",
+      "text": "Je souhaite préparer une candidature au poste de Designer chez Prisme Fictif. Rien n’est encore envoyé.",
+      "sent": true,
+      "date_message": "2026-10-19T16:00:00+00:00",
+      "tags": [
+        "a_preparer"
+      ],
+      "expected": {
+        "pertinent": true,
+        "action": "creation",
+        "employeur": "Prisme Fictif",
+        "poste": "Designer",
+        "date_candidature": null,
+        "etat": "a_preparer",
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "expected_association": {
+        "candidates": [],
+        "level": "aucune",
+        "ambiguous": false
+      },
+      "annotation_reason": "Je souhaite préparer une candidature au poste de Designer chez Prisme Fictif. Rien n’est encore envoyé."
+    },
+    {
+      "id": "F011",
+      "subject": "Accusé de réception",
+      "text": "Cobalt Fictif confirme avoir reçu votre candidature au poste de Testeur logiciel.",
+      "sent": false,
+      "date_message": "2026-10-19T16:00:00+00:00",
+      "tags": [
+        "confirmation_distincte"
+      ],
+      "expected": {
+        "pertinent": true,
+        "action": "confirmation_reception",
+        "employeur": "Cobalt Fictif",
+        "poste": "Testeur logiciel",
+        "date_candidature": null,
+        "etat": null,
+        "confirmation_reception": true,
+        "informations_manquantes": []
+      },
+      "expected_association": {
+        "candidates": [
+          "cobalt-qa"
+        ],
+        "level": "probable",
+        "ambiguous": false
+      },
+      "annotation_reason": "Cobalt Fictif confirme avoir reçu votre candidature au poste de Testeur logiciel."
+    },
+    {
+      "id": "F012",
+      "subject": "Bulletin hebdomadaire",
+      "text": "Voici les nouvelles de notre club de lecture fictif. La rencontre aura lieu samedi.",
+      "sent": false,
+      "date_message": "2026-10-19T16:00:00+00:00",
+      "tags": [
+        "non_pertinent"
+      ],
+      "expected": {
+        "pertinent": false,
+        "action": "aucune",
+        "employeur": null,
+        "poste": null,
+        "date_candidature": null,
+        "etat": null,
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "expected_association": {
+        "candidates": [],
+        "level": "aucune",
+        "ambiguous": false
+      },
+      "annotation_reason": "Voici les nouvelles de notre club de lecture fictif. La rencontre aura lieu samedi."
+    },
+    {
+      "id": "F013",
+      "subject": "Facture de librairie",
+      "text": "Votre commande de livres fictive a été expédiée. Aucun recrutement ne concerne ce message.",
+      "sent": false,
+      "date_message": "2026-10-19T16:00:00+00:00",
+      "tags": [
+        "non_pertinent"
+      ],
+      "expected": {
+        "pertinent": false,
+        "action": "aucune",
+        "employeur": null,
+        "poste": null,
+        "date_candidature": null,
+        "etat": null,
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "expected_association": {
+        "candidates": [],
+        "level": "aucune",
+        "ambiguous": false
+      },
+      "annotation_reason": "Votre commande de livres fictive a été expédiée. Aucun recrutement ne concerne ce message."
+    },
+    {
+      "id": "F014",
+      "subject": "Publicité formation",
+      "text": "Découvrez notre cours sur la recherche de stage. Ce message est une publicité.",
+      "sent": false,
+      "date_message": "2026-10-19T16:00:00+00:00",
+      "tags": [
+        "non_pertinent",
+        "mot_candidature_hors_contexte"
+      ],
+      "expected": {
+        "pertinent": false,
+        "action": "aucune",
+        "employeur": null,
+        "poste": null,
+        "date_candidature": null,
+        "etat": null,
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "expected_association": {
+        "candidates": [],
+        "level": "aucune",
+        "ambiguous": false
+      },
+      "annotation_reason": "Découvrez notre cours sur la recherche de stage. Ce message est une publicité."
+    },
+    {
+      "id": "F015",
+      "subject": "Invitation sans poste",
+      "text": "Aurore Fictive vous invite à une entrevue. Le poste concerné n’est pas précisé.",
+      "sent": false,
+      "date_message": "2026-10-19T16:00:00+00:00",
+      "tags": [
+        "ambigu",
+        "inconnu_null"
+      ],
+      "expected": {
+        "pertinent": true,
+        "action": "changement_etat",
+        "employeur": "Aurore Fictive",
+        "poste": null,
+        "date_candidature": null,
+        "etat": "entrevue",
+        "confirmation_reception": null,
+        "informations_manquantes": [
+          "poste"
+        ]
+      },
+      "expected_association": {
+        "candidates": [
+          "aurore-dev",
+          "aurore-data"
+        ],
+        "level": "ambigu",
+        "ambiguous": true
+      },
+      "annotation_reason": "Aurore Fictive vous invite à une entrevue. Le poste concerné n’est pas précisé."
+    },
+    {
+      "id": "F016",
+      "subject": "Entrevue sans employeur",
+      "text": "Votre candidature au poste de Testeur logiciel est retenue pour une entrevue. Aucun nom d’employeur ne figure dans ce message.",
+      "sent": false,
+      "date_message": "2026-10-19T16:00:00+00:00",
+      "tags": [
+        "inconnu_null",
+        "partiel"
+      ],
+      "expected": {
+        "pertinent": true,
+        "action": "changement_etat",
+        "employeur": null,
+        "poste": "Testeur logiciel",
+        "date_candidature": null,
+        "etat": "entrevue",
+        "confirmation_reception": null,
+        "informations_manquantes": [
+          "employeur"
+        ]
+      },
+      "expected_association": {
+        "candidates": [
+          "cobalt-qa"
+        ],
+        "level": "a_confirmer",
+        "ambiguous": false
+      },
+      "annotation_reason": "Votre candidature au poste de Testeur logiciel est retenue pour une entrevue. Aucun nom d’employeur ne figure dans ce message."
+    },
+    {
+      "id": "F017",
+      "subject": "Invitation analyse de données",
+      "text": "Aurore Fictive vous invite à une entrevue au poste d’Analyste de données.",
+      "sent": false,
+      "date_message": "2026-10-19T16:00:00+00:00",
+      "tags": [
+        "plusieurs_postes"
+      ],
+      "expected": {
+        "pertinent": true,
+        "action": "changement_etat",
+        "employeur": "Aurore Fictive",
+        "poste": "Analyste de données",
+        "date_candidature": null,
+        "etat": "entrevue",
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "expected_association": {
+        "candidates": [
+          "aurore-data"
+        ],
+        "level": "probable",
+        "ambiguous": false
+      },
+      "annotation_reason": "Aurore Fictive vous invite à une entrevue au poste d’Analyste de données."
+    },
+    {
+      "id": "F018",
+      "subject": "Décision analyse de données",
+      "text": "Aurore Fictive refuse votre candidature au poste d’Analyste de données.",
+      "sent": false,
+      "date_message": "2026-10-19T16:00:00+00:00",
+      "tags": [
+        "refus",
+        "plusieurs_postes"
+      ],
+      "expected": {
+        "pertinent": true,
+        "action": "changement_etat",
+        "employeur": "Aurore Fictive",
+        "poste": "Analyste de données",
+        "date_candidature": null,
+        "etat": "refusee",
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "expected_association": {
+        "candidates": [
+          "aurore-data"
+        ],
+        "level": "probable",
+        "ambiguous": false
+      },
+      "annotation_reason": "Aurore Fictive refuse votre candidature au poste d’Analyste de données."
+    },
+    {
+      "id": "F019",
+      "subject": "Suivi après envoi",
+      "text": "Bonjour Cobalt Fictif, avez-vous une mise à jour concernant ma candidature au poste de Testeur logiciel ? Aucun nouveau dépôt.",
+      "sent": true,
+      "date_message": "2026-10-19T16:00:00+00:00",
+      "tags": [
+        "suivi_pas_creation"
+      ],
+      "expected": {
+        "pertinent": true,
+        "action": "aucune",
+        "employeur": "Cobalt Fictif",
+        "poste": "Testeur logiciel",
+        "date_candidature": null,
+        "etat": null,
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "expected_association": {
+        "candidates": [
+          "cobalt-qa"
+        ],
+        "level": "probable",
+        "ambiguous": false
+      },
+      "annotation_reason": "Bonjour Cobalt Fictif, avez-vous une mise à jour concernant ma candidature au poste de Testeur logiciel ? Aucun nouveau dépôt."
+    },
+    {
+      "id": "F020",
+      "subject": "Merci pour notre échange",
+      "text": "Merci Aurore Fictive pour notre échange au sujet du poste de Développeur logiciel. Aucun nouvel événement ou changement d’état n’est annoncé.",
+      "sent": true,
+      "date_message": "2026-10-19T16:00:00+00:00",
+      "tags": [
+        "remerciement_pas_creation"
+      ],
+      "expected": {
+        "pertinent": true,
+        "action": "aucune",
+        "employeur": "Aurore Fictive",
+        "poste": "Développeur logiciel",
+        "date_candidature": null,
+        "etat": null,
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "expected_association": {
+        "candidates": [
+          "aurore-dev"
+        ],
+        "level": "probable",
+        "ambiguous": false
+      },
+      "annotation_reason": "Merci Aurore Fictive pour notre échange au sujet du poste de Développeur logiciel. Aucun nouvel événement ou changement d’état n’est annoncé."
+    },
+    {
+      "id": "F021",
+      "subject": "Entrevue avec date explicite",
+      "text": "Cobalt Fictif vous invite à une entrevue le 22 octobre 2026 pour le poste de Testeur logiciel. Votre candidature a été envoyée le 10 octobre 2026.",
+      "sent": false,
+      "date_message": "2026-10-19T16:00:00+00:00",
+      "tags": [
+        "date_entrevue_distincte"
+      ],
+      "expected": {
+        "pertinent": true,
+        "action": "changement_etat",
+        "employeur": "Cobalt Fictif",
+        "poste": "Testeur logiciel",
+        "date_candidature": "2026-10-10",
+        "etat": "entrevue",
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "expected_association": {
+        "candidates": [
+          "cobalt-qa"
+        ],
+        "level": "probable",
+        "ambiguous": false
+      },
+      "annotation_reason": "Cobalt Fictif vous invite à une entrevue le 22 octobre 2026 pour le poste de Testeur logiciel. Votre candidature a été envoyée le 10 octobre 2026."
+    },
+    {
+      "id": "F022",
+      "subject": "Candidature reçue aujourd’hui",
+      "text": "Nous avons reçu aujourd’hui votre candidature pour le poste de Testeur logiciel chez Cobalt Fictif. La date d’envoi n’est pas indiquée.",
+      "sent": false,
+      "date_message": "2026-10-19T16:00:00+00:00",
+      "tags": [
+        "confirmation_distincte",
+        "date_reception_pas_candidature"
+      ],
+      "expected": {
+        "pertinent": true,
+        "action": "confirmation_reception",
+        "employeur": "Cobalt Fictif",
+        "poste": "Testeur logiciel",
+        "date_candidature": null,
+        "etat": null,
+        "confirmation_reception": true,
+        "informations_manquantes": []
+      },
+      "expected_association": {
+        "candidates": [
+          "cobalt-qa"
+        ],
+        "level": "probable",
+        "ambiguous": false
+      },
+      "annotation_reason": "Nous avons reçu aujourd’hui votre candidature pour le poste de Testeur logiciel chez Cobalt Fictif. La date d’envoi n’est pas indiquée."
+    },
+    {
+      "id": "F023",
+      "subject": "CV sans intitulé",
+      "text": "Bonjour, je présente ma candidature chez Mosaïque Fictive. Le poste n’est pas indiqué.",
+      "sent": true,
+      "date_message": "2026-10-19T16:00:00+00:00",
+      "tags": [
+        "envoye_sans_confirmation",
+        "inconnu_null"
+      ],
+      "expected": {
+        "pertinent": true,
+        "action": "creation",
+        "employeur": "Mosaïque Fictive",
+        "poste": null,
+        "date_candidature": "2026-10-19",
+        "etat": "envoyee",
+        "confirmation_reception": null,
+        "informations_manquantes": [
+          "poste"
+        ]
+      },
+      "expected_association": {
+        "candidates": [],
+        "level": "aucune",
+        "ambiguous": false
+      },
+      "annotation_reason": "Bonjour, je présente ma candidature chez Mosaïque Fictive. Le poste n’est pas indiqué."
+    },
+    {
+      "id": "F024",
+      "subject": "Précisions manquantes",
+      "text": "Je soumets ma candidature au poste de Développeur logiciel. L’organisation destinataire n’est pas nommée.",
+      "sent": true,
+      "date_message": "2026-10-19T16:00:00+00:00",
+      "tags": [
+        "inconnu_null",
+        "ambigu"
+      ],
+      "expected": {
+        "pertinent": true,
+        "action": "creation",
+        "employeur": null,
+        "poste": "Développeur logiciel",
+        "date_candidature": "2026-10-19",
+        "etat": "envoyee",
+        "confirmation_reception": null,
+        "informations_manquantes": [
+          "employeur"
+        ]
+      },
+      "expected_association": {
+        "candidates": [
+          "aurore-dev",
+          "boreal-dev"
+        ],
+        "level": "ambigu",
+        "ambiguous": true
+      },
+      "annotation_reason": "Je soumets ma candidature au poste de Développeur logiciel. L’organisation destinataire n’est pas nommée."
+    },
+    {
+      "id": "F025",
+      "subject": "Brouillon de candidature",
+      "text": "Brouillon pour une future candidature chez Nacre Fictive au poste de Stagiaire réseau ; aucun envoi de candidature n’a eu lieu.",
+      "sent": true,
+      "date_message": "2026-10-19T16:00:00+00:00",
+      "tags": [
+        "a_preparer"
+      ],
+      "expected": {
+        "pertinent": true,
+        "action": "creation",
+        "employeur": "Nacre Fictive",
+        "poste": "Stagiaire réseau",
+        "date_candidature": null,
+        "etat": "a_preparer",
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "expected_association": {
+        "candidates": [],
+        "level": "aucune",
+        "ambiguous": false
+      },
+      "annotation_reason": "Brouillon pour une future candidature chez Nacre Fictive au poste de Stagiaire réseau ; aucun envoi de candidature n’a eu lieu."
+    },
+    {
+      "id": "F026",
+      "subject": "Offre analyse de données",
+      "text": "Aurore Fictive vous propose le poste d’Analyste de données.",
+      "sent": false,
+      "date_message": "2026-10-19T16:00:00+00:00",
+      "tags": [
+        "offre",
+        "plusieurs_postes"
+      ],
+      "expected": {
+        "pertinent": true,
+        "action": "changement_etat",
+        "employeur": "Aurore Fictive",
+        "poste": "Analyste de données",
+        "date_candidature": null,
+        "etat": "offre_recue",
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "expected_association": {
+        "candidates": [
+          "aurore-data"
+        ],
+        "level": "probable",
+        "ambiguous": false
+      },
+      "annotation_reason": "Aurore Fictive vous propose le poste d’Analyste de données."
+    },
+    {
+      "id": "F027",
+      "subject": "J’accepte votre proposition",
+      "text": "Bonjour Aurore Fictive, j’accepte votre offre pour le poste d’Analyste de données.",
+      "sent": true,
+      "date_message": "2026-10-19T16:00:00+00:00",
+      "tags": [
+        "offre_acceptee"
+      ],
+      "expected": {
+        "pertinent": true,
+        "action": "changement_etat",
+        "employeur": "Aurore Fictive",
+        "poste": "Analyste de données",
+        "date_candidature": null,
+        "etat": "offre_acceptee",
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "expected_association": {
+        "candidates": [
+          "aurore-data"
+        ],
+        "level": "probable",
+        "ambiguous": false
+      },
+      "annotation_reason": "Bonjour Aurore Fictive, j’accepte votre offre pour le poste d’Analyste de données."
+    },
+    {
+      "id": "F028",
+      "subject": "Je décline le poste",
+      "text": "Bonjour Cobalt Fictif, je refuse votre offre pour le poste de Testeur logiciel. Il s’agit du refus de l’offre par le candidat.",
+      "sent": true,
+      "date_message": "2026-10-19T16:00:00+00:00",
+      "tags": [
+        "offre_declinee",
+        "acteur_refus"
+      ],
+      "expected": {
+        "pertinent": true,
+        "action": "changement_etat",
+        "employeur": "Cobalt Fictif",
+        "poste": "Testeur logiciel",
+        "date_candidature": null,
+        "etat": "offre_declinee",
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "expected_association": {
+        "candidates": [
+          "cobalt-qa"
+        ],
+        "level": "probable",
+        "ambiguous": false
+      },
+      "annotation_reason": "Bonjour Cobalt Fictif, je refuse votre offre pour le poste de Testeur logiciel. Il s’agit du refus de l’offre par le candidat."
+    },
+    {
+      "id": "F029",
+      "subject": "Retrait du dossier analyse",
+      "text": "Je retire ma candidature d’Analyste de données chez Aurore Fictive.",
+      "sent": true,
+      "date_message": "2026-10-19T16:00:00+00:00",
+      "tags": [
+        "retrait"
+      ],
+      "expected": {
+        "pertinent": true,
+        "action": "changement_etat",
+        "employeur": "Aurore Fictive",
+        "poste": "Analyste de données",
+        "date_candidature": null,
+        "etat": "retiree",
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "expected_association": {
+        "candidates": [
+          "aurore-data"
+        ],
+        "level": "probable",
+        "ambiguous": false
+      },
+      "annotation_reason": "Je retire ma candidature d’Analyste de données chez Aurore Fictive."
+    },
+    {
+      "id": "F030",
+      "subject": "Poste pourvu",
+      "text": "Cobalt Fictif a pourvu le poste de Testeur logiciel avec un autre candidat et refuse votre candidature.",
+      "sent": false,
+      "date_message": "2026-10-19T16:00:00+00:00",
+      "tags": [
+        "refus"
+      ],
+      "expected": {
+        "pertinent": true,
+        "action": "changement_etat",
+        "employeur": "Cobalt Fictif",
+        "poste": "Testeur logiciel",
+        "date_candidature": null,
+        "etat": "refusee",
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "expected_association": {
+        "candidates": [
+          "cobalt-qa"
+        ],
+        "level": "probable",
+        "ambiguous": false
+      },
+      "annotation_reason": "Cobalt Fictif a pourvu le poste de Testeur logiciel avec un autre candidat et refuse votre candidature."
+    },
+    {
+      "id": "F031",
+      "subject": "Candidature au stage backend",
+      "text": "Bonjour, je soumets ma candidature au poste de Stagiaire backend chez Lanterne Fictive. Merci.",
+      "sent": true,
+      "date_message": "2026-10-19T16:00:00+00:00",
+      "tags": [
+        "doublon_contenu"
+      ],
+      "expected": {
+        "pertinent": true,
+        "action": "creation",
+        "employeur": "Lanterne Fictive",
+        "poste": "Stagiaire backend",
+        "date_candidature": "2026-10-19",
+        "etat": "envoyee",
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "expected_association": {
+        "candidates": [],
+        "level": "aucune",
+        "ambiguous": false
+      },
+      "annotation_reason": "Bonjour, je soumets ma candidature au poste de Stagiaire backend chez Lanterne Fictive. Merci.",
+      "duplicate_content_of": "F001"
+    },
+    {
+      "id": "F032",
+      "subject": "Invitation entrevue - Testeur logiciel",
+      "text": "Cobalt Fictif vous invite à une entrevue pour le poste de Testeur logiciel le 22 octobre 2026.",
+      "sent": false,
+      "date_message": "2026-10-19T16:00:00+00:00",
+      "tags": [
+        "doublon_contenu"
+      ],
+      "expected": {
+        "pertinent": true,
+        "action": "changement_etat",
+        "employeur": "Cobalt Fictif",
+        "poste": "Testeur logiciel",
+        "date_candidature": null,
+        "etat": "entrevue",
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "expected_association": {
+        "candidates": [
+          "cobalt-qa"
+        ],
+        "level": "probable",
+        "ambiguous": false
+      },
+      "annotation_reason": "Cobalt Fictif vous invite à une entrevue pour le poste de Testeur logiciel le 22 octobre 2026.",
+      "duplicate_content_of": "F003"
+    },
+    {
+      "id": "F033",
+      "subject": "Préparer le dossier QA",
+      "text": "Je prépare une candidature pour un poste de Testeur logiciel chez Sillage Fictif. Elle n’est pas envoyée.",
+      "sent": true,
+      "date_message": "2026-10-19T16:00:00+00:00",
+      "tags": [
+        "a_preparer",
+        "partiel"
+      ],
+      "expected": {
+        "pertinent": true,
+        "action": "creation",
+        "employeur": "Sillage Fictif",
+        "poste": "Testeur logiciel",
+        "date_candidature": null,
+        "etat": "a_preparer",
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "expected_association": {
+        "candidates": [
+          "cobalt-qa"
+        ],
+        "level": "a_confirmer",
+        "ambiguous": false
+      },
+      "annotation_reason": "Je prépare une candidature pour un poste de Testeur logiciel chez Sillage Fictif. Elle n’est pas envoyée."
+    },
+    {
+      "id": "F034",
+      "subject": "Envoi pour une offre publiée",
+      "text": "Bonjour Liseron Fictif, voici ma candidature au poste d’Administrateur système.",
+      "sent": true,
+      "date_message": "2026-10-19T16:00:00+00:00",
+      "tags": [
+        "envoye_sans_confirmation"
+      ],
+      "expected": {
+        "pertinent": true,
+        "action": "creation",
+        "employeur": "Liseron Fictif",
+        "poste": "Administrateur système",
+        "date_candidature": "2026-10-19",
+        "etat": "envoyee",
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "expected_association": {
+        "candidates": [],
+        "level": "aucune",
+        "ambiguous": false
+      },
+      "annotation_reason": "Bonjour Liseron Fictif, voici ma candidature au poste d’Administrateur système."
+    },
+    {
+      "id": "F035",
+      "subject": "Confirmation sans intitulé",
+      "text": "Aurore Fictive confirme avoir reçu votre candidature. Le poste concerné n’est pas précisé.",
+      "sent": false,
+      "date_message": "2026-10-19T16:00:00+00:00",
+      "tags": [
+        "confirmation_distincte",
+        "ambigu"
+      ],
+      "expected": {
+        "pertinent": true,
+        "action": "confirmation_reception",
+        "employeur": "Aurore Fictive",
+        "poste": null,
+        "date_candidature": null,
+        "etat": null,
+        "confirmation_reception": true,
+        "informations_manquantes": [
+          "poste"
+        ]
+      },
+      "expected_association": {
+        "candidates": [
+          "aurore-dev",
+          "aurore-data"
+        ],
+        "level": "ambigu",
+        "ambiguous": true
+      },
+      "annotation_reason": "Aurore Fictive confirme avoir reçu votre candidature. Le poste concerné n’est pas précisé."
+    },
+    {
+      "id": "F036",
+      "subject": "Offre de formation et non d’emploi",
+      "text": "Nous vous offrons une réduction sur une formation fictive. Aucune offre d’emploi n’est formulée.",
+      "sent": false,
+      "date_message": "2026-10-19T16:00:00+00:00",
+      "tags": [
+        "non_pertinent",
+        "offre_hors_contexte"
+      ],
+      "expected": {
+        "pertinent": false,
+        "action": "aucune",
+        "employeur": null,
+        "poste": null,
+        "date_candidature": null,
+        "etat": null,
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "expected_association": {
+        "candidates": [],
+        "level": "aucune",
+        "ambiguous": false
+      },
+      "annotation_reason": "Nous vous offrons une réduction sur une formation fictive. Aucune offre d’emploi n’est formulée."
+    },
+    {
+      "id": "F037",
+      "subject": "Invitation calendrier personnel",
+      "text": "Invitation fictive à une soirée jeux. Cette rencontre est personnelle et sans lien avec une candidature.",
+      "sent": false,
+      "date_message": "2026-10-19T16:00:00+00:00",
+      "tags": [
+        "non_pertinent"
+      ],
+      "expected": {
+        "pertinent": false,
+        "action": "aucune",
+        "employeur": null,
+        "poste": null,
+        "date_candidature": null,
+        "etat": null,
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "expected_association": {
+        "candidates": [],
+        "level": "aucune",
+        "ambiguous": false
+      },
+      "annotation_reason": "Invitation fictive à une soirée jeux. Cette rencontre est personnelle et sans lien avec une candidature."
+    },
+    {
+      "id": "F038",
+      "subject": "Question avant candidature",
+      "text": "Bonjour Atelier Nuage Fictif, pouvez-vous préciser les horaires du poste de Stagiaire UX ? Je n’ai pas encore postulé.",
+      "sent": true,
+      "date_message": "2026-10-19T16:00:00+00:00",
+      "tags": [
+        "question_pas_creation"
+      ],
+      "expected": {
+        "pertinent": true,
+        "action": "aucune",
+        "employeur": "Atelier Nuage Fictif",
+        "poste": "Stagiaire UX",
+        "date_candidature": null,
+        "etat": null,
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "expected_association": {
+        "candidates": [],
+        "level": "aucune",
+        "ambiguous": false
+      },
+      "annotation_reason": "Bonjour Atelier Nuage Fictif, pouvez-vous préciser les horaires du poste de Stagiaire UX ? Je n’ai pas encore postulé."
+    },
+    {
+      "id": "F039",
+      "subject": "Annonce de stage seulement",
+      "text": "Annonce publique : Vecteur Fictif recherche un Stagiaire sécurité. Ce message publicitaire ne correspond à aucune candidature personnelle.",
+      "sent": false,
+      "date_message": "2026-10-19T16:00:00+00:00",
+      "tags": [
+        "non_pertinent",
+        "annonce_pas_candidature"
+      ],
+      "expected": {
+        "pertinent": false,
+        "action": "aucune",
+        "employeur": null,
+        "poste": null,
+        "date_candidature": null,
+        "etat": null,
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "expected_association": {
+        "candidates": [],
+        "level": "aucune",
+        "ambiguous": false
+      },
+      "annotation_reason": "Annonce publique : Vecteur Fictif recherche un Stagiaire sécurité. Ce message publicitaire ne correspond à aucune candidature personnelle."
+    },
+    {
+      "id": "F040",
+      "subject": "Candidature datée explicitement",
+      "text": "Je soumets ma candidature au poste de Stagiaire mobile chez Galet Fictif. Date de candidature explicitement indiquée : 18 octobre 2026.",
+      "sent": true,
+      "date_message": "2026-10-19T16:00:00+00:00",
+      "tags": [
+        "envoye_sans_confirmation",
+        "date_explicite"
+      ],
+      "expected": {
+        "pertinent": true,
+        "action": "creation",
+        "employeur": "Galet Fictif",
+        "poste": "Stagiaire mobile",
+        "date_candidature": "2026-10-18",
+        "etat": "envoyee",
+        "confirmation_reception": null,
+        "informations_manquantes": []
+      },
+      "expected_association": {
+        "candidates": [],
+        "level": "aucune",
+        "ambiguous": false
+      },
+      "annotation_reason": "Je soumets ma candidature au poste de Stagiaire mobile chez Galet Fictif. Date de candidature explicitement indiquée : 18 octobre 2026."
+    }
+  ],
+  "variability_cases": [
+    "F001",
+    "F003",
+    "F013",
+    "F015",
+    "F028"
+  ],
+  "gmail_id_replays": [
+    "F001",
+    "F003"
+  ],
+  "simulation_faults": {
+    "F004": {
+      "etat": "envoyee"
+    },
+    "F015": {
+      "poste": "Poste inventé"
+    },
+    "F021": {
+      "date_candidature": "2026-10-22"
+    }
+  }
+}

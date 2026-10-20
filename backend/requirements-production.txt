@@ -1,0 +1,4 @@
+# Linux only. The local Windows virtual environment is not changed.
+-r requirements.txt
+gunicorn==26.2.0
+packaging==26.0

@@ -1,0 +1,315 @@
+LOT 7 — SÉCURITÉ ET PRÉPARATION DU DÉPLOIEMENT LINUX
+
+Ce document décrit des opérations futures. Aucune ressource cloud, installation
+Linux, migration principale ou activation de service n'est exécutée par ce lot.
+Les noms example.invalid sont des exemples publics non utilisables sur Internet.
+
+Architecture et prérequis
+Un serveur Linux maintenu (Ubuntu 24.04 LTS convient), Python 3.13, PostgreSQL 18,
+Nginx, systemd et Node 24.22 pour construire React. Pas de Celery, Redis ni Docker
+en production. Viser 2 Gio RAM, 1 vCPU, espace libre pour releases et sauvegardes ;
+1 Gio peut être trop juste lors d'une sauvegarde ou d'un build. Construire React
+avant la mise en service évite sa consommation mémoire pendant les requêtes.
+Le serveur doit rester allumé ; le navigateur personnel n'héberge aucun worker.
+Ne créer ni acheter de serveur, domaine ou autre ressource pendant ce lot.
+
+Une origine HTTPS unique sert React et /api. Nginx -> Gunicorn 127.0.0.1:8001 ;
+PostgreSQL 127.0.0.1:5432. Seuls 80/443 et SSH restreint à l'administrateur sont
+exposés ; 5432, 8001 et les ports de développement restent fermés publiquement.
+Pour une base distante : TLS verify-full + DB_SSLROOTCERT, jamais une vérification
+désactivée. Les adresses et certificats réels restent à choisir et à vérifier.
+
+Organisation des fichiers
+/srv/suivi-candidatures/releases/<commit>/ : release immuable, propriété root,
+  code lisible mais non modifiable par le compte système suivi.
+/srv/suivi-candidatures/current : lien vers la release active.
+/etc/suivi-candidatures/backend.env : root:suivi, mode 0640, dossier 0750.
+/etc/suivi-candidatures/backup.key et backup.pgpass : opérateur seul, mode 0600.
+/var/backups/suivi-candidatures : opérateur seul, mode 0700, hors racine web/code.
+Le compte suivi n'a ni shell interactif, ni sudo, ni droit d'écriture sur le code.
+www-data lit seulement le build React et les fichiers statiques nécessaires.
+Ne copier aucun .env, .venv Windows, node_modules, archive, clé privée ou journal
+depuis le dossier de travail dans une release. Utiliser un commit revu et un
+export des fichiers suivis ; vérifier séparément les fichiers suivis sensibles.
+
+Paramètres de production
+Copier deploy/production.env.example vers le fichier externe et le compléter
+dans un éditeur local privé. Le modèle ne contient aucun vrai secret.
+DJANGO_SETTINGS_MODULE=config.production_settings et DJANGO_LOAD_DOTENV=0 sont
+obligatoires. Ce mode ne charge jamais implicitement backend/.env.
+DJANGO_SECRET_KEY doit être une clé aléatoire indépendante, au moins 50 caractères.
+APP_ORIGIN est l'origine HTTPS sans chemin. DJANGO_ALLOWED_HOSTS contient des hôtes
+exacts, séparés par des virgules, sans wildcard ni espace. Les origines CSRF sont
+HTTPS et appartiennent à ces hôtes. GOOGLE_REDIRECT_URI doit être exactement
+APP_ORIGIN + /api/gmail/callback/. OAUTH_SUCCESS_REDIRECT_URL est / ou la racine de
+la même origine HTTPS. Aucun paramètre next fourni par le navigateur n'est suivi.
+STATIC_ROOT est un chemin absolu externe aux sources publiques React.
+
+Lors du transfert de données existantes, conserver EXACTEMENT les deux clés
+Fernet existantes, distinctes : jetons OAuth d'une part, messages/analyses et
+propositions d'autre part. Ne pas les régénérer : les données seraient illisibles.
+Les sauvegarder séparément de la base dans un coffre chiffré hors ligne. La clé
+de sauvegarde est une troisième clé indépendante. Ne jamais placer une clé dans
+VITE_*, le navigateur, GitHub Actions, un argument de commande, une capture ou un
+journal. Ne pas activer set -x ; ne pas afficher env, settings ou --print-config.
+Les valeurs de tests publics sont fictives et ne doivent jamais être réutilisées.
+La clé locale de développement anciennement écrite dans settings.py a été retirée.
+Sans DJANGO_SECRET_KEY local stable, une reconnexion locale peut être nécessaire.
+Les valeurs réelles de backend/.env n'ont pas été modifiées par ce lot.
+
+Google Cloud, à effectuer seulement lors d'un déploiement autorisé
+Enregistrer l'URI HTTPS exacte du callback pour le client OAuth Web ; conserver
+les identifiants côté serveur. La session Lax est compatible avec le retour GET
+OAuth ; CSRF reste imposé sur connect/login/logout et les écritures.
+Ne pas désactiver CSRF, TLS ou les contrôles state pour contourner une erreur.
+Le mode Testing Google peut limiter la durée des refresh tokens (notamment 7 jours
+pour une application externe Testing avec gmail.readonly). Ce fonctionnement et
+les éventuelles exigences de vérification Google restent à examiner avant un
+usage durable. Aucun consentement ni appel Google n'est lancé dans ce lot.
+
+Installation future d'une release (après autorisation distincte)
+1. Configurer Linux, les comptes et le pare-feu sans interrompre l'accès SSH.
+   PostgreSQL écoute seulement en local. Le rôle applicatif est propriétaire de
+   sa base, LOGIN, NOSUPERUSER, NOCREATEDB, NOCREATEROLE, NOREPLICATION.
+   Créer/saisir son mot de passe avec \password dans psql interactif local.
+   Ne pas mettre le mot de passe dans CREATE ROLE, l'historique shell ou Codex.
+   Révoquer les accès PUBLIC inutiles à la base/schéma, conserver les droits
+   nécessaires aux migrations du propriétaire applicatif. Ne pas utiliser postgres
+   comme rôle de l'application. Tester ces permissions sur le serveur cible.
+2. Déposer le commit revu dans son dossier releases/<commit>, sans secrets.
+   Dans backend, avec le Python Linux 3.13 :
+     python3.13 -m venv .venv
+     .venv/bin/python -m pip install -r requirements-production.txt
+     .venv/bin/python -m pip check
+   Gunicorn 26.2.0 et packaging sont épinglés dans le fichier de production ;
+   ils ne sont pas installés dans le Python Windows par ce lot.
+   Créer la venv directement à son chemin final : ne pas la déplacer ensuite.
+3. Dans frontend, utiliser npm ci puis npm run build. Ne jamais utiliser le serveur
+   Vite de développement en production ; ne pas incorporer de secrets au build.
+4. Préparer l'environnement externe et vérifier les droits. Pour les commandes
+   manuelles, l'opérateur peut charger ce fichier de confiance dans son shell
+   privé avec set -a ; . /etc/suivi-candidatures/backend.env ; set +a, uniquement
+   si ses valeurs respectent AUSSI la syntaxe shell (les caractères spéciaux
+   doivent être cités). Ne jamais sourcer un fichier non fiable. systemd utilise
+   sa propre syntaxe EnvironmentFile : ne pas y mettre export ou substitutions.
+   Pour éviter toute ambiguïté, un opérateur peut employer systemd-run avec
+   EnvironmentFile lors du déploiement effectif ; rien n'est exécuté ici.
+5. Sous l'environnement de production de confiance :
+     .venv/bin/python manage.py check --deploy --settings=config.production_settings
+     .venv/bin/python manage.py collectstatic --noinput --settings=config.production_settings
+     .venv/bin/gunicorn --check-config --config ../deploy/gunicorn.conf.py config.wsgi:application
+   Réaliser une sauvegarde vérifiée AVANT toute migration d'une base existante.
+   Examiner manage.py migrate --plan et obtenir l'autorisation nécessaire.
+   Seulement ensuite : manage.py migrate --noinput sous les mêmes paramètres.
+   Ce lot ne prépare AUCUNE nouvelle migration et n'en applique aucune à la base
+   principale. Si données existantes restaurées, ne pas créer un second compte.
+6. Adapter les hôtes, chemins et certificats dans deploy/nginx/suivi.conf et
+   suivi-proxy.conf. Les deux doivent utiliser le même domaine canonique.
+   Installer le proxy dans /etc/nginx/snippets/suivi-proxy.conf et le site dans
+   le contexte http de Nginx. Vérifier les conflits avec les sites par défaut.
+   Obtenir/configurer un certificat valide sans désactiver la vérification TLS.
+   Contrôler nginx -t, chaîne TLS, renouvellement et droits de la clé privée.
+   Le modèle HTTPS ne peut démarrer avant l'existence des certificats.
+7. Après revue Linux seulement, installer suivi-web.service et les modèles
+   suivi-sync.service/timer dans /etc/systemd/system/. Vérifier avec :
+     systemd-analyze verify /etc/systemd/system/suivi-web.service /etc/systemd/system/suivi-sync.service /etc/systemd/system/suivi-sync.timer
+   Démontrer d'abord Gunicorn/Nginx sur des données fictives. Après autorisation,
+   daemon-reload puis démarrer uniquement suivi-web. Tester le HTTPS réel,
+   login/actualisation/logout, CSRF/Origin, CRUD et validation humaine.
+   Ne pas installer/activer d'unité pendant la présente préparation.
+8. Le timer Gmail reste NON activé. Les réglages Gmail/Gemini restent désactivés
+   dans la base. Une autorisation distincte est requise pour les activer.
+   Lorsqu'il sera autorisé : le timer appelle la commande chaque minute pour
+   drainer les lots ; les travaux Gmail planifiés se créent toutes les 5 minutes.
+   La commande est bornée à 45 secondes/10 comptes et n'utilise aucune session
+   navigateur. Consentement Gemini explicite et révocable toujours obligatoire.
+
+Journaux et confidentialité
+Nginx journalise seulement date, méthode classée, catégorie fixe de route, statut
+et taille : ni IP, URI complète, code OAuth, query, cookie, referer, sujet ni corps.
+Ses erreurs HTTP sont volontairement désactivées car elles peuvent copier une URL
+de callback. Gunicorn n'a pas de journal d'accès. Les journaux Django/Gunicorn de
+production éliminent arguments, exceptions, requêtes et piles ; diagnostics moins
+détaillés, à compléter par les codes d'erreur persistants déjà disponibles dans
+l'application. Ne jamais réactiver un logging brut pour diagnostiquer une boîte
+réelle ; reproduire sur des données fictives dans un environnement isolé.
+Installer si souhaité le modèle de rotation du journal sûr (7 jours), sans
+archiver de données personnelles. Restreindre aussi l'accès au journal systemd et
+sa rétention sur le serveur ; pas d'export automatique vers un service tiers.
+PostgreSQL : vérifier log_statement=none, log_min_error_statement=panic,
+log_parameter_max_length=0, log_parameter_max_length_on_error=0 et éviter les logs
+de connexions. Restreindre les fichiers. Pour minimiser strictement les valeurs
+dans les erreurs SQL, retenir log_min_messages=fatal et log_error_verbosity=terse
+après revue opérateur (réduit les diagnostics). Ne jamais journaliser les requêtes
+ou paramètres applicatifs. Rien de cela ne modifie PostgreSQL local dans ce lot.
+
+Sauvegarde chiffrée et restauration de contrôle
+deploy/postgres_archive.py utilise pg_dump -Fc, vérifie pg_restore --list, chiffre
+l'archive Fernet en mémoire et relit le fichier chiffré avant succès. SHA-256 porte
+uniquement sur le fichier chiffré. Limite 64 Mio d'archive non chiffrée : au-delà,
+arrêt sans publier une sauvegarde tronquée ; prévoir une procédure streaming
+revue séparément pour une base plus grosse. Pas de copie SQL en clair sur disque.
+Éviter d'exécuter une sauvegarde pendant un pic mémoire ; ~plusieurs fois la taille
+de l'archive peuvent être nécessaires en RAM. Toutes les données doivent provenir
+d'une base de confiance : une restauration PostgreSQL peut exécuter du SQL.
+L'outil ne sauvegarde pas les rôles système, ni les clés, ni backend.env.
+
+Créer les dossiers privés et une nouvelle clé dédiée dans un terminal local privé
+seulement lors de la mise en place autorisée ; exemple de génération sans affichage :
+  umask 077
+  set -o noclobber
+  backend/.venv/bin/python -c 'from cryptography.fernet import Fernet; import sys; sys.stdout.buffer.write(Fernet.generate_key())' > /etc/suivi-candidatures/backup.key
+Ne jamais écraser une clé existante ; choisir un nouveau fichier si elle existe.
+Conserver cette clé séparément des archives, sauvegardée dans un coffre hors ligne.
+Configurer PGPASSFILE en 0600 ; format hôte:port:*:rôle:mot_de_passe, valeurs privées
+saisies dans l'éditeur, caractères : et \ échappés selon libpq. Ne pas utiliser
+PGPASSWORD ou un mot de passe dans la commande ; l'outil refuse PGPASSWORD et le
+retire du processus enfant. Une base distante exige PGSSLMODE=verify-full et
+PGSSLROOTCERT. Un compte de sauvegarde doit avoir les droits de lecture utiles ;
+la restauration de contrôle exige un opérateur autorisé à créer une base neuve.
+Ne pas donner CREATEDB au rôle du service web pour cette seule opération.
+
+Dans ce terminal, définir PGHOST/PGPORT/PGUSER/PGDATABASE/PGPASSFILE, BACKUP_DIR et
+BACKUP_KEY_FILE (chemins seulement, sans afficher leurs contenus), puis :
+  backend/.venv/bin/python deploy/postgres_archive.py backup --archive /var/backups/suivi-candidatures/NOUVEAU_NOM.fbackup
+  backend/.venv/bin/python deploy/postgres_archive.py verify --archive /var/backups/suivi-candidatures/NOUVEAU_NOM.fbackup
+  backend/.venv/bin/python deploy/postgres_archive.py restore-check --archive /var/backups/suivi-candidatures/NOUVEAU_NOM.fbackup --target restore_check_20261019_001
+Le nom de cible doit utiliser uniquement minuscules/chiffres/underscore après
+restore_check_. Toute cible existante est refusée ; ni DROP ni --clean n'existent.
+Pour un clone destiné à être promu, ajouter --owner suivi_candidatures_app : le
+rôle applicatif doit exister et l'opérateur doit pouvoir créer une base pour lui
+et SET ROLE vers ce rôle. La base et les objets restaurés lui appartiendront ;
+le rôle applicatif du service conserve NOCREATEDB. Sans --owner, le clone est
+possédé par l'opérateur et ne doit pas être promu avant revue de ses permissions.
+Le clone est conservé et ses configurations sont désactivées/bloquées restore_review.
+Aucun worker, migration ou appel fournisseur n'est lancé. Contrôler les effectifs,
+relations, déchiffrement avec les clés applicatives restaurées, sans les afficher.
+verify prouve lisibilité/authenticité et lecture du catalogue ; seul restore-check
+prouve la restauration complète. Conserver une copie CHIFFRÉE hors du serveur sur
+un support existant autorisé ; aucune destination cloud n'est provisionnée ici.
+Aucune politique de suppression automatique n'est ajoutée aux anciennes sauvegardes.
+
+Promotion d'une restauration / retour arrière
+Ne jamais restaurer par-dessus une base existante. Arrêter d'abord les écritures
+de l'application et le timer/worker lors d'un incident réel autorisé ; prendre une
+sauvegarde vérifiée et conserver la release et la base précédentes intactes.
+Restaurer dans une NOUVELLE base de contrôle, vérifier ses données et clés, puis
+faire approuver sa promotion. Pointer DB_NAME du fichier externe vers cette base
+vérifiée, jamais par un remplacement SQL destructif. Avant d'enlever restore_review,
+annuler les travaux hérités via reset_connection sur chaque GmailConnection sous
+transaction et verrou (service existant), en vérifiant explicitement le nom de la
+base cible. Cela conserve les jetons/messages, réinitialise consentements/baux et
+annule les travaux ouverts. Réglages automatiques toujours faux ; aucune reprise
+avant nouvelle validation opérateur et consentement humain. Cette étape reste
+manuelle et n'est pas exécutée par le script de contrôle.
+Pour une simple régression du code avec schéma compatible : arrêter suivi-web,
+repointage atomique du lien current vers la release antérieure, contrôle de config,
+puis redémarrage. Ne pas déplacer les venv ni recopier de secrets dans une release.
+Si schéma incompatible, analyser d'abord la stratégie ; pas de migrate inverse
+automatique, pas de suppression de colonne/table pour rendre le code compatible.
+Après retour arrière : vérifier HTTPS, connexion, CRUD, propositions acceptées,
+effectifs et traitements désactivés avant toute réactivation autorisée du timer.
+
+CI préparée, non exécutée sur GitHub
+.github/workflows/ci.yml utilise seulement workflow_dispatch, permissions lecture,
+actions officielles épinglées par SHA, runner GitHub Linux jetable, PostgreSQL 18.6
+et secrets UNIQUEMENT fictifs. Le conteneur PostgreSQL est propre à la CI ; Docker
+n'est pas requis en production. Les clients PostgreSQL 18 viennent du dépôt
+officiel PGDG dans ce runner éphémère. Tests backend réels PostgreSQL, sauvegarde et
+restauration fictives, sécurité, dérive de migration, configuration Gunicorn et
+frontend sont prévus. Aucun déploiement distant, SSH, clé AWS ou credential réel.
+Le pilote Chrome Windows du lot 6 reste un contrôle local, non exécuté par ce YAML.
+Avant une première exécution GitHub, vérifier les minutes incluses et le plafond
+de dépenses du dépôt. Le fichier seul n'engage aucun frais ; aucun workflow n'a
+été déclenché pendant ce lot. Adapter les déclencheurs PR/push seulement après revue.
+
+Avertissements et validation restant sur le serveur cible
+check --deploy conserve explicitement security.W005 (HSTS sans sous-domaines) et
+security.W021 (pas de preload). Choix de démarrage prudent : 3600 s, seul hôte connu,
+pas d'engagement irréversible sur tous les sous-domaines. Aucun warning n'est masqué.
+Après maîtrise du domaine et de TLS, revoir la politique HSTS avec l'opérateur.
+Linux/Gunicorn/Nginx/systemd, permissions POSIX, TLS réel et renouvellement doivent
+encore être validés sur Linux ; leur préparation ne vaut pas une mise en service.
+Pas d'audit exhaustif des CVE, de test d'intrusion ni de validation Google/Gemini
+réelle. pip check vérifie la cohérence des dépendances, pas l'absence de vulnérabilité.
+Le modèle exact Gemini, ses quotas gratuits et les politiques Google devront être
+revérifiés avant tout test fournisseur autorisé. Lot 8 non commencé.
+
+Références officielles consultées
+https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
+https://docs.djangoproject.com/en/5.2/ref/settings/#secure-proxy-ssl-header
+https://pypi.org/project/gunicorn/26.2.0/
+https://gunicorn.org/reference/settings/
+https://nginx.org/en/docs/http/ngx_http_ssl_module.html
+https://www.postgresql.org/docs/18/app-pgdump.html
+https://www.postgresql.org/docs/18/app-pgrestore.html
+https://www.postgresql.org/docs/18/runtime-config-logging.html
+https://developers.google.com/identity/protocols/oauth2#expiration
+https://docs.github.com/en/actions/tutorials/use-containerized-services/create-postgresql-service-containers
+
+BILAN LOCAL — 19 OCTOBRE 2026
+
+- 290 tests backend sur PostgreSQL 18.6 isolé, dont 19 tests de sécurité ajoutés.
+  La première exécution complète en comptait 288 ; la suite backend a été relancée
+  après les contrôles supplémentaires TLS/PGPASSWORD/propriétaire de restauration.
+  La dernière suite backend de 290 tests réussit entièrement.
+- 15 scénarios Chrome réels avec fournisseurs simulés, 128 tests frontend,
+  TypeScript (app/Node/config E2E), lint et build Vite réussis.
+- check normal et dérive de migrations : aucun écart ; collectstatic de production
+  sur valeurs fictives réussi. check --deploy : seulement W005 et W021 attendus,
+  aucun warning silencé. pip check : aucune dépendance incohérente.
+- Sauvegarde, intégrité Fernet, lecture pg_restore et restauration COMPLÈTE testées
+  réellement sur la base de tests. Un propriétaire distinct NOLOGIN, NOSUPERUSER,
+  NOCREATEDB et NOCREATEROLE est vérifié pour les objets restaurés. Le second essai
+  vers la même base est refusé. La base source reste intacte ; le clone est bloqué.
+- Corruption, mauvaise clé, cible dangereuse, écrasement d'archive, TLS distant non
+  vérifié et PGPASSWORD sont refusés par les tests. Les droits POSIX réels restent
+  à contrôler sur Linux ; le mode Windows n'est permis que sur un cluster fictif.
+- Syntaxe YAML et invariants CI contrôlés avec PyYAML 6.0.3, installé uniquement
+  dans un dossier temporaire sur D:. Aucun paquet ajouté à backend/.venv pour
+  cette vérification ; requirements-production.txt n'est pas installé sur Windows.
+  Les contextes GitHub Actions sont vérifiés contre la documentation officielle ;
+  aucune exécution GitHub ni validation Linux native n'est revendiquée.
+- Empreintes de TOUTES les tables principales identiques avant/après, également
+  identiques au bilan vérifié du lot 6. Toujours 2 candidatures, 2 propositions
+  acceptées, 5 messages, 2 analyses, 1 import, 1 travail et 0 historique rétroactif.
+  Automatisation Gmail et analyse Gemini toujours désactivées.
+- Trois sauvegardes utilisateur antérieures conservées ; empreintes de deux
+  archives comparées à leurs références enregistrées, identiques. Aucune ancienne
+  archive supprimée, réécrite ou restaurée. Aucune donnée principale modifiée.
+- Zéro ressource cloud, service système installé/activé, migration principale,
+  synchronisation réelle, appel Gmail ou Gemini. Ports de test libérés.
+
+Fichiers ajoutés
+backend/config/deployment.py
+backend/config/production_settings.py
+backend/config/production_logging.py
+backend/config/test_deployment.py
+backend/requirements-production.txt
+deploy/gunicorn.conf.py
+deploy/production.env.example
+deploy/postgres_archive.py
+deploy/systemd/suivi-web.service
+deploy/nginx/suivi.conf
+deploy/nginx/suivi-proxy.conf
+deploy/nginx/suivi-logrotate
+.github/workflows/ci.yml
+tests/security/check_deploy.py
+docs/deploiement_linux_INF4173.txt
+docs/resultats_securite_deploiement_INF4173.json
+
+Fichiers modifiés
+.gitignore
+backend/.env.example
+backend/config/settings.py
+backend/config/test_postgres_settings.py
+backend/gmail_integration/services.py
+backend/gmail_integration/views.py
+deploy/systemd/suivi-sync.service
+tests/e2e/run.py
+
+Le modèle suivi-sync.timer existant est conservé sans activation.
+Résultats, empreintes du code et chemins des traces :
+docs/resultats_securite_deploiement_INF4173.json.
+Le préfixe lot6 des dossiers temporaires provient du lanceur réutilisé ; les
+vérifications et le présent bilan correspondent bien au lot 7.

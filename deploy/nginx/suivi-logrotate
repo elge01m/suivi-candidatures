@@ -1,0 +1,12 @@
+/var/log/nginx/suivi-access.log {
+    daily
+    rotate 7
+    compress
+    missingok
+    notifempty
+    create 0640 www-data adm
+    sharedscripts
+    postrotate
+        /usr/sbin/nginx -s reopen
+    endscript
+}

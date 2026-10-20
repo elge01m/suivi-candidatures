@@ -1,0 +1,138 @@
+{
+  "lot": 7,
+  "date": "2026-10-19",
+  "status": "prepared_and_locally_verified",
+  "cloud_resources_created": 0,
+  "real_gmail_calls": 0,
+  "real_gemini_calls": 0,
+  "system_services_installed_or_enabled": 0,
+  "main_migrations_applied": 0,
+  "tests": {
+    "backend_postgresql": {
+      "passed": 290,
+      "failed": 0,
+      "added_security_tests": 19
+    },
+    "real_chrome_simulated_providers": {
+      "passed": 15,
+      "failed": 0
+    },
+    "frontend": {
+      "passed": 128,
+      "failed": 0
+    },
+    "typescript_app_node_e2e": true,
+    "lint": true,
+    "vite_build": true,
+    "django_check": true,
+    "collectstatic_production_fixtures": true,
+    "pip_check": true,
+    "ci_yaml_parse_and_safety_assertions": true
+  },
+  "deploy_check": {
+    "errors": 0,
+    "warnings": [
+      "security.W005",
+      "security.W021"
+    ],
+    "warnings_silenced": false,
+    "hsts_seconds": 3600,
+    "reason": "No subdomain/preload commitment before real domain and TLS validation."
+  },
+  "backup_validation": {
+    "fixture_only": true,
+    "encrypted_backup_verify_full_restore": true,
+    "distinct_nonsuperuser_object_owner_verified": true,
+    "existing_target_refused": true,
+    "wrong_key_and_tampering_refused": true,
+    "remote_unverified_tls_refused": true,
+    "password_environment_refused": true,
+    "source_database_preserved": true,
+    "existing_user_backups_preserved": true,
+    "prior_archive_hashes_rechecked": 2,
+    "archive_plaintext_limit_mib": 64
+  },
+  "main_database": {
+    "all_table_fingerprints_unchanged": true,
+    "also_matches_previous_lot": true,
+    "scheduled_sync_enabled": false,
+    "automatic_gemini_enabled": false,
+    "counts": {
+      "candidatures_candidature": 2,
+      "candidatures_candidaturechange": 0,
+      "email_analysis_analysisbudget": 1,
+      "email_analysis_candidatureproposal": 2,
+      "email_analysis_emailanalysis": 2,
+      "gmail_integration_gmailconnection": 1,
+      "gmail_integration_gmailimport": 1,
+      "gmail_integration_gmailmessage": 5,
+      "gmail_sync_syncconfiguration": 1,
+      "gmail_sync_syncrun": 1
+    }
+  },
+  "local_environment": {
+    "production_requirements_prepared_not_installed_on_windows": true,
+    "temporary_yaml_validator": "PyYAML 6.0.3, D: target only; backend virtual environment unchanged"
+  },
+  "evidence_directory": "D:\\INF4173-SJ-tests\\lot6-20261019-220057-6858ff42",
+  "final_backend_log": "D:\\INF4173-SJ-tests\\lot6-20261019-220057-6858ff42\\backend-security-final.log",
+  "limitations": [
+    "Linux Gunicorn/Nginx/systemd/POSIX permissions and real TLS not executed on Windows.",
+    "GitHub Actions prepared and YAML checked, not executed; manual trigger only.",
+    "No exhaustive CVE audit, penetration test, live Gmail/Gemini or quota validation.",
+    "Backup bounded to 64 MiB; independent key stored outside archives.",
+    "Embedded development key removed; local login may need renewal after restart.",
+    "Lot 8 not started."
+  ],
+  "files": [
+    ".gitignore",
+    ".github/workflows/ci.yml",
+    "backend/.env.example",
+    "backend/config/settings.py",
+    "backend/config/deployment.py",
+    "backend/config/production_settings.py",
+    "backend/config/production_logging.py",
+    "backend/config/test_deployment.py",
+    "backend/config/test_postgres_settings.py",
+    "backend/gmail_integration/services.py",
+    "backend/gmail_integration/views.py",
+    "backend/requirements-production.txt",
+    "deploy/gunicorn.conf.py",
+    "deploy/production.env.example",
+    "deploy/postgres_archive.py",
+    "deploy/nginx/suivi.conf",
+    "deploy/nginx/suivi-proxy.conf",
+    "deploy/nginx/suivi-logrotate",
+    "deploy/systemd/suivi-web.service",
+    "deploy/systemd/suivi-sync.service",
+    "tests/security/check_deploy.py",
+    "tests/e2e/run.py",
+    "docs/deploiement_linux_INF4173.txt",
+    "docs/resultats_securite_deploiement_INF4173.json"
+  ],
+  "source_sha256": {
+    ".gitignore": "0c085633e25c3a3036cc65ee47627171c1d44ac9281b992dcdd7c74ed018967b",
+    ".github/workflows/ci.yml": "6ef9f780260c16de151bab7c722152d7fddebaac22467df4250c0f3a661dd257",
+    "backend/.env.example": "7372464030d4748e67b1e8290f31cf8833eaec51d641a57df9c9dbf5de6a9421",
+    "backend/config/settings.py": "cbb102e8a0ff587548a5767be2bd0c25829681612f0083857b2aab25e00b8942",
+    "backend/config/deployment.py": "91d928d74da718460e81e9c970fc983960b4fcc4e0152b2ba5c027da4100698b",
+    "backend/config/production_settings.py": "8fa2b1f7c6f392428060f2992cf0e86ad44922dbe86456d504ff2c03d38d364e",
+    "backend/config/production_logging.py": "7a7596a89b333e263f8ab35c215538cbdb33000009d727aa571b8800f931d1b1",
+    "backend/config/test_deployment.py": "4987707d918e6fbd8b442ddd70def278e27d31feff33722b6f51c4be56295bf7",
+    "backend/config/test_postgres_settings.py": "1e1541337c77b45d2f31768b7f2381a8af183b3a8febf5b9c1c089bad1ebef8c",
+    "backend/gmail_integration/services.py": "04103d7b346dbdf023d366920486113314af1509cd5026077e1b555bbd898610",
+    "backend/gmail_integration/views.py": "100a6ecd1aa36f80a3b25f3b5d5171c8b7c0732775a36027160a9f71353af5fd",
+    "backend/requirements-production.txt": "73d1a1ee80a8c8f73a508a95a093fa7362d4dfdf392dddaf47d69c88bd6da415",
+    "deploy/gunicorn.conf.py": "6fa7c0d9ec14bc593c7fc9cb2380eb0610b6d68d8be07c9206e31974f741c302",
+    "deploy/production.env.example": "4783c53fe1dd1ac2bd2b32d7b5831a0ee7c0d08ffa19b2ceaa9ad34d3d610e4c",
+    "deploy/postgres_archive.py": "f2d1ede86821346a191ef44e6b9d0d7d01ca3d9c7db2dd67cd7c599f91f7fea2",
+    "deploy/nginx/suivi.conf": "0fd4d3f8d099a4674813e897cde275dd597f93db446c7b587e55b28cea6b4e88",
+    "deploy/nginx/suivi-proxy.conf": "b32f54af6f1541d65e8549582732d7c958bb194cf5a3cffce10d9666c1ba469a",
+    "deploy/nginx/suivi-logrotate": "73014ae7854a14482be27650c6ddff4d1da255907c3bfa743332391de74135d6",
+    "deploy/systemd/suivi-web.service": "054fd446d4b04a24a23ef4faa3ff4b59b9bb177a47ec6e9ece23581aced04bff",
+    "deploy/systemd/suivi-sync.service": "64d7249bf94ddb4766a2f3144a467ea19fd06599dcb392d3af093fad4c8079e4",
+    "tests/security/check_deploy.py": "de896a77f12f9df2505300b2c092f65a408b6621db06b675ac37b12dcdb2ad35",
+    "tests/e2e/run.py": "837478ecf98a6d1de3c7440830b007863d43919ff7da4a3ae3350b1c7aa4be18"
+  },
+  "plan_pdf_unchanged": true
+}

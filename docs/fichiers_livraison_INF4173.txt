@@ -1,0 +1,203 @@
+CONTENU PROPOSE POUR LE PREMIER COMMIT LOCAL - LOT 8
+
+Aucun fichier n'est encore suivi : depot initialise, index vide, aucun commit.
+La liste ci-dessous est la selection proposee, pas une publication.
+Le premier commit attend l'autorisation explicite apres revue de ce manifeste.
+La nouvelle suite complete est verifiee : 290 backend, 128 frontend, 15 Chrome.
+Gmail/Gemini simules ; base principale identique avant/apres et au controle final.
+
+Fichiers proposes (170)
+.gitattributes
+.github/workflows/ci.yml
+.gitignore
+README.md
+backend/.env.example
+backend/candidatures/__init__.py
+backend/candidatures/admin.py
+backend/candidatures/apps.py
+backend/candidatures/history.py
+backend/candidatures/migrations/0001_initial.py
+backend/candidatures/migrations/0002_alter_candidature_options_and_more.py
+backend/candidatures/migrations/0003_candidaturechange.py
+backend/candidatures/migrations/__init__.py
+backend/candidatures/models.py
+backend/candidatures/serializers.py
+backend/candidatures/test_history.py
+backend/candidatures/test_migrations.py
+backend/candidatures/tests.py
+backend/candidatures/urls.py
+backend/candidatures/views.py
+backend/config/__init__.py
+backend/config/asgi.py
+backend/config/auth_urls.py
+backend/config/auth_views.py
+backend/config/deployment.py
+backend/config/e2e_settings.py
+backend/config/evaluation_settings.py
+backend/config/production_logging.py
+backend/config/production_settings.py
+backend/config/settings.py
+backend/config/test_auth.py
+backend/config/test_deployment.py
+backend/config/test_postgres_settings.py
+backend/config/test_settings.py
+backend/config/urls.py
+backend/config/wsgi.py
+backend/email_analysis/__init__.py
+backend/email_analysis/apps.py
+backend/email_analysis/errors.py
+backend/email_analysis/evaluation/__init__.py
+backend/email_analysis/evaluation/corpus.py
+backend/email_analysis/evaluation/corpus_v1.json
+backend/email_analysis/evaluation/metrics.py
+backend/email_analysis/evaluation/runner.py
+backend/email_analysis/gemini.py
+backend/email_analysis/logging.py
+backend/email_analysis/management/__init__.py
+backend/email_analysis/management/commands/__init__.py
+backend/email_analysis/management/commands/evaluate_email_corpus.py
+backend/email_analysis/middleware.py
+backend/email_analysis/migrations/0001_initial.py
+backend/email_analysis/migrations/0002_emailanalysis_consent_version_emailanalysis_origin_and_more.py
+backend/email_analysis/migrations/__init__.py
+backend/email_analysis/models.py
+backend/email_analysis/schemas.py
+backend/email_analysis/services.py
+backend/email_analysis/test_evaluation.py
+backend/email_analysis/tests.py
+backend/email_analysis/urls.py
+backend/email_analysis/views.py
+backend/gmail_integration/__init__.py
+backend/gmail_integration/apps.py
+backend/gmail_integration/crypto.py
+backend/gmail_integration/gmail_client.py
+backend/gmail_integration/import_errors.py
+backend/gmail_integration/import_service.py
+backend/gmail_integration/import_views.py
+backend/gmail_integration/logging.py
+backend/gmail_integration/message_crypto.py
+backend/gmail_integration/message_parser.py
+backend/gmail_integration/middleware.py
+backend/gmail_integration/migrations/0001_initial.py
+backend/gmail_integration/migrations/0002_gmailconnection_credential_version_and_more.py
+backend/gmail_integration/migrations/__init__.py
+backend/gmail_integration/models.py
+backend/gmail_integration/services.py
+backend/gmail_integration/test_import.py
+backend/gmail_integration/tests.py
+backend/gmail_integration/urls.py
+backend/gmail_integration/views.py
+backend/gmail_sync/__init__.py
+backend/gmail_sync/apps.py
+backend/gmail_sync/errors.py
+backend/gmail_sync/management/__init__.py
+backend/gmail_sync/management/commands/__init__.py
+backend/gmail_sync/management/commands/process_sync_jobs.py
+backend/gmail_sync/migrations/0001_initial.py
+backend/gmail_sync/migrations/0002_alter_syncrun_origin.py
+backend/gmail_sync/migrations/__init__.py
+backend/gmail_sync/models.py
+backend/gmail_sync/schedule.py
+backend/gmail_sync/services.py
+backend/gmail_sync/test_concurrency.py
+backend/gmail_sync/tests.py
+backend/gmail_sync/urls.py
+backend/gmail_sync/views.py
+backend/manage.py
+backend/requirements-production.txt
+backend/requirements.txt
+backend/scripts/setup_postgresql.py
+deploy/gunicorn.conf.py
+deploy/nginx/suivi-logrotate
+deploy/nginx/suivi-proxy.conf
+deploy/nginx/suivi.conf
+deploy/postgres_archive.py
+deploy/production.env.example
+deploy/systemd/suivi-sync.service
+deploy/systemd/suivi-sync.timer
+deploy/systemd/suivi-web.service
+docs/bilan_livraison_INF4173.txt
+docs/deploiement_linux_INF4173.txt
+docs/evaluation_INF4173.txt
+docs/evaluation_simulee_INF4173.json
+docs/fichiers_livraison_INF4173.txt
+docs/resultats_e2e_INF4173.json
+docs/resultats_livraison_INF4173.json
+docs/resultats_securite_deploiement_INF4173.json
+docs/tests_e2e_INF4173.txt
+frontend/.gitignore
+frontend/.oxlintrc.json
+frontend/README.md
+frontend/index.html
+frontend/package-lock.json
+frontend/package.json
+frontend/public/favicon.svg
+frontend/public/icons.svg
+frontend/src/App.css
+frontend/src/App.tsx
+frontend/src/CandidatureFilterControls.tsx
+frontend/src/CandidaturesPanel.tsx
+frontend/src/HistoryPanel.tsx
+frontend/src/InitialImportPanel.tsx
+frontend/src/ProposalsPanel.tsx
+frontend/src/SyncPanel.tsx
+frontend/src/TrackingPanel.tsx
+frontend/src/assets/hero.png
+frontend/src/assets/react.svg
+frontend/src/assets/vite.svg
+frontend/src/auth.ts
+frontend/src/candidatureFilters.ts
+frontend/src/candidatures.ts
+frontend/src/index.css
+frontend/src/main.tsx
+frontend/src/proposals.ts
+frontend/src/sync.ts
+frontend/src/tracking.ts
+frontend/tests/auth.test.mjs
+frontend/tests/candidature-filters.test.mjs
+frontend/tests/candidature-form.test.mjs
+frontend/tests/candidatures.test.mjs
+frontend/tests/history-tracking-ui.test.mjs
+frontend/tests/initial-import-form.test.mjs
+frontend/tests/initial-import.test.mjs
+frontend/tests/proposal-fixtures.mjs
+frontend/tests/proposal-form.test.mjs
+frontend/tests/proposals.test.mjs
+frontend/tests/render-server.mjs
+frontend/tests/sync-form.test.mjs
+frontend/tests/sync.test.mjs
+frontend/tests/tracking.test.mjs
+frontend/tsconfig.app.json
+frontend/tsconfig.json
+frontend/tsconfig.node.json
+frontend/vite.config.ts
+frontend/vite.e2e.config.ts
+tests/e2e/backend_control.py
+tests/e2e/browser.mjs
+tests/e2e/run.py
+tests/security/audit_repository.py
+tests/security/check_deploy.py
+
+EXCLUS ET CONSERVES LOCALEMENT
+- backend/.env et backend/backend/.env : secrets, jamais suivis.
+- docs/plan_de_travail_INF4173.pdf : identite/identifiant etudiant ; original intact.
+- Environnements virtuels, node_modules, caches Python/Vite/TypeScript.
+- Builds dist/build, staticfiles, media, bases SQLite et couverture.
+- Sauvegardes dump/fbackup, fichiers pgpass, cles privees et certificats prives.
+- credentials.json, client_secret*.json, token.json et fichiers .env hors exemples.
+- Journaux, configurations personnelles d'editeur et dossiers private/.local/backups.
+- Archives PostgreSQL utilisateur hors depot : toutes conservees.
+- Clusters, profils navigateur, traces et snapshots de verification sur D: hors depot.
+
+A INCLURE
+Les .env.example sont des gabarits sans secrets. Le corpus et les fixtures sont
+entierement fictifs ; leurs cles et mots de passe publics servent seulement aux
+tests. Les rapports JSON distinguent simulations et mesures reelles. Les chemins
+locaux D: des anciennes preuves identifient des traces, pas des donnees exportees.
+Les images presentes sont les ressources statiques du modele frontend.
+
+REVUE AVANT COMMIT
+Lire le README et le bilan ; examiner le contenu, pas uniquement les noms.
+La selection exclut le PDF original sans modifier le plan de travail.
+Aucun remote cree, aucun push, aucune action distante, aucun commit execute.
+Message propose : "Prepare INF4173-SJ technical delivery".

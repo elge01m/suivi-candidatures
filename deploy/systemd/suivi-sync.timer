@@ -1,0 +1,14 @@
+# The command enqueues a Gmail synchronization on each five-minute UTC slot.
+# Running the worker every minute also drains batches and deferred analyses.
+# After review on Linux: install both units, daemon-reload, enable --now this timer.
+[Unit]
+Description=Check persistent synchronization jobs each minute
+
+[Timer]
+OnCalendar=*-*-* *:*:00
+Persistent=true
+AccuracySec=1s
+Unit=suivi-sync.service
+
+[Install]
+WantedBy=timers.target
