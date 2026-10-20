@@ -33,8 +33,23 @@ jobs:
         with:
           node-version: '24.22.0'
           package-manager-cache: false
+      - name: Isolated Python dependencies for portable guards
+        run: |
+          python -m venv "$RUNNER_TEMP/portable-python"
+          python - <<'PY'
+          import os
+          from pathlib import Path
+          names = {'requests', 'certifi', 'charset-normalizer', 'idna', 'urllib3'}
+          locked = [line for line in Path('backend/requirements.txt').read_text().splitlines()
+                    if line.partition('==')[0] in names]
+          assert len(locked) == len(names)
+          assert {line.partition('==')[0] for line in locked} == names
+          Path(os.environ['RUNNER_TEMP'], 'portable-requirements.txt').write_text('\n'.join(locked) + '\n')
+          PY
+          "$RUNNER_TEMP/portable-python/bin/python" -m pip install -r "$RUNNER_TEMP/portable-requirements.txt"
+          "$RUNNER_TEMP/portable-python/bin/python" -m pip check
       - name: Portable isolation and cleanup guards
-        run: python -B tests/linux_https/test_local.py
+        run: '"$RUNNER_TEMP/portable-python/bin/python" -B tests/linux_https/test_local.py'
       - name: Install disposable Linux tools
         run: |
           sudo systemctl mask nginx.service
