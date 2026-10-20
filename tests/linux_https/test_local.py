@@ -1,6 +1,8 @@
 """Portable checks: real environment guards and socket policy, no DB/provider."""
 import ast
 import importlib.util
+import contextlib
+import io
 import json
 import os
 from pathlib import Path
@@ -19,6 +21,27 @@ runner=importlib.util.module_from_spec(spec);spec.loader.exec_module(runner)
 
 
 class LocalSafetyTests(unittest.TestCase):
+    def test_prepare_reaches_site_package_loading_without_local_name_shadowing(self):
+        class StopBeforeAnyDatabaseAccess(Exception):
+            pass
+
+        packages=runner.RELEASE/'backend/.venv/lib/python3.13/site-packages'
+        with patch.object(runner.Path,'exists',return_value=False),patch.object(runner.Path,'mkdir'),patch.object(runner.Path,'glob',return_value=iter([packages])),patch.object(runner.socket,'socket'),patch.object(runner,'command',return_value=b''),patch.object(runner.shutil,'copytree'),patch.object(runner.site,'addsitedir',side_effect=StopBeforeAnyDatabaseAccess) as load:
+            with self.assertRaises(StopBeforeAnyDatabaseAccess):runner.prepare()
+        load.assert_called_once_with(str(packages))
+
+    def test_main_diagnostic_omits_exception_message_and_environment(self):
+        tree=ast.parse((HERE/'run.py').read_text(encoding='utf-8'))
+        main=next(n for n in tree.body if isinstance(n,ast.If) and ast.unparse(n.test)=="__name__ == '__main__'")
+        marker='fiction-sensitive-value-never-export'
+        def fail():raise RuntimeError(marker)
+        output=io.StringIO()
+        context={'__name__':'__main__','guard':fail,'sys':sys,'Path':Path}
+        with contextlib.redirect_stderr(output),self.assertRaises(SystemExit):
+            exec(compile(ast.Module(body=[main],type_ignores=[]),'diagnostic-test','exec'),context)
+        self.assertIn('RuntimeError',output.getvalue())
+        self.assertNotIn(marker,output.getvalue())
+
     def valid(self):
         return dict(LINUX_HTTPS_FIXTURE='1',DJANGO_SETTINGS_MODULE='config.production_settings',
             DJANGO_LOAD_DOTENV='0',DB_HOST='127.0.0.1',DB_PORT='55486',
