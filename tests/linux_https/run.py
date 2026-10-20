@@ -152,6 +152,86 @@ def prepare():
     print('OK isolated production configuration, local TLS and unit syntax',flush=True)
 
 
+def probe_http(session, url, *, headers=None, allow_redirects=True):
+    """Return only a validated status or fixed error category; never response data."""
+    import requests
+    try:
+        status=session.get(url,headers=headers,timeout=2,allow_redirects=allow_redirects).status_code
+        return {'http_status':status} if type(status) is int and 100<=status<=599 else {'error':'connection_error'}
+    except requests.exceptions.SSLError:
+        return {'error':'tls_error'}
+    except requests.exceptions.Timeout:
+        return {'error':'timeout'}
+    except requests.RequestException:
+        return {'error':'connection_error'}
+
+
+def unit_diagnostic(unit):
+    """Strict property/value allowlist, not systemctl status or a journal dump."""
+    allowed={
+        'ActiveState':{'active','inactive','failed','activating','deactivating','reloading','maintenance'},
+        'SubState':{'running','dead','failed','exited','start-pre','start','start-post',
+                    'stop','stop-sigterm','stop-sigkill','stop-post','final-sigterm',
+                    'final-sigkill','auto-restart','auto-restart-queued','condition','reload'},
+        'Result':{'success','exit-code','signal','core-dump','timeout','watchdog',
+                  'start-limit-hit','resources','protocol','oom-kill','exec-condition'},
+        'ExecMainStatus':None,'NRestarts':None,
+    }
+    result={name:'unavailable' for name in allowed}
+    if unit not in UNITS:return result
+    try:
+        response=subprocess.run(['systemctl','show',unit,*['--property='+name for name in allowed]],
+            stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,timeout=2)
+        if response.returncode:return result
+        for line in response.stdout.decode('utf-8',errors='replace').splitlines():
+            name,sep,value=line.partition('=')
+            if not sep or name not in allowed:continue
+            if allowed[name] is not None:
+                if value in allowed[name]:result[name]=value
+            elif value.isascii() and value.isdecimal() and len(value)<=10 and int(value)<=2147483647:
+                result[name]=int(value)
+    except (OSError,subprocess.SubprocessError):
+        pass
+    return result
+
+
+def local_port_listening(port):
+    if port not in (443,8001):raise ValueError('Diagnostic port refused')
+    try:
+        with socket.socket() as probe:
+            probe.settimeout(1)
+            return probe.connect_ex(('127.0.0.1',port))==0
+    except OSError:
+        return False
+
+
+def readiness_diagnostic(last_probe):
+    """Called only after failed readiness. No cookies, env, logs or exception text."""
+    import requests
+    status=last_probe.get('http_status')
+    safe_probe=({'http_status':status} if type(status) is int and 100<=status<=599
+                else {'error':last_probe.get('error') if last_probe.get('error') in
+                      ('tls_error','connection_error','timeout') else 'connection_error'})
+    with requests.Session() as direct:
+        direct.trust_env=False
+        backend=probe_http(direct,'http://127.0.0.1:8001/api/auth/csrf/',headers={
+            'Host':HOST,'X-Forwarded-Proto':'https','X-Forwarded-For':'127.0.0.1','X-Real-IP':'127.0.0.1'},allow_redirects=False)
+    report={'https_last_probe':safe_probe,
+            'units':{unit:unit_diagnostic(unit) for unit in (UNITS[0],UNITS[2])},
+            'listening':{str(port):local_port_listening(port) for port in (443,8001)},
+            'gunicorn_http_status':backend.get('http_status')}
+    print('READINESS_DIAGNOSTIC '+json.dumps(report,sort_keys=True),flush=True)
+
+
+def wait_for_https(session, url):
+    for _ in range(30):
+        last=probe_http(session,url+'/api/auth/csrf/')
+        if last.get('http_status')==200:return
+        time.sleep(1)
+    readiness_diagnostic(last)
+    raise RuntimeError('HTTPS services did not become ready')
+
+
 def test():
     import requests
     import ssl
@@ -162,12 +242,7 @@ def test():
     command(['systemctl','start','inf4173-test-web.service','inf4173-test-nginx.service'])
     session=requests.Session();session.trust_env=False;session.verify=str(STATE/'ca.crt')
     url='https://'+HOST
-    for _ in range(30):
-        try:
-            if session.get(url+'/api/auth/csrf/',timeout=2).status_code==200:break
-        except requests.RequestException:pass
-        time.sleep(1)
-    else:raise RuntimeError('HTTPS services did not become ready')
+    wait_for_https(session,url)
     ok('actual Gunicorn and Nginx ready')
     r=session.get('http://'+HOST+'/',allow_redirects=False,timeout=5)
     assert r.status_code==308 and r.headers['Location']==url+'/'

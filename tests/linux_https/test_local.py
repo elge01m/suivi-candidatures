@@ -10,7 +10,7 @@ import socket
 import subprocess
 import sys
 import unittest
-from unittest.mock import patch
+from unittest.mock import patch, Mock
 
 HERE=Path(__file__).resolve().parent
 ROOT=HERE.parents[1]
@@ -21,6 +21,81 @@ runner=importlib.util.module_from_spec(spec);spec.loader.exec_module(runner)
 
 
 class LocalSafetyTests(unittest.TestCase):
+    def test_http_probe_returns_only_status_not_body_headers_or_cookies(self):
+        class Response:
+            status_code=502
+            @property
+            def text(self):raise AssertionError('Body must not be inspected')
+            @property
+            def headers(self):raise AssertionError('Headers must not be inspected')
+            @property
+            def cookies(self):raise AssertionError('Cookies must not be inspected')
+        session=Mock();session.get.return_value=Response()
+        self.assertEqual(runner.probe_http(session,'https://fixture.invalid'),{'http_status':502})
+
+    def test_http_probe_uses_fixed_error_categories_without_exception_details(self):
+        import requests
+        for error,category in [(requests.exceptions.SSLError('fiction-secret'),'tls_error'),
+                               (requests.exceptions.Timeout('fiction-secret'),'timeout'),
+                               (requests.exceptions.ConnectionError('fiction-secret'),'connection_error')]:
+            session=Mock();session.get.side_effect=error
+            with self.subTest(category=category):
+                self.assertEqual(runner.probe_http(session,'https://fixture.invalid'),{'error':category})
+
+    def test_https_failure_keeps_original_attempts_and_emits_last_result(self):
+        import requests
+        for result in (requests.exceptions.SSLError('fiction-secret'),Mock(status_code=502)):
+            session=Mock()
+            if isinstance(result,Exception):session.get.side_effect=result;expected={'error':'tls_error'}
+            else:session.get.return_value=result;expected={'http_status':502}
+            with self.subTest(expected=expected),patch.object(runner.time,'sleep') as sleep,patch.object(runner,'readiness_diagnostic') as diagnose:
+                with self.assertRaises(RuntimeError):runner.wait_for_https(session,'https://fixture.invalid')
+                self.assertEqual(session.get.call_count,30)
+                self.assertEqual(sleep.call_count,30)
+                self.assertTrue(all(c.kwargs['timeout']==2 for c in session.get.call_args_list))
+                diagnose.assert_called_once_with(expected)
+
+    def test_successful_readiness_does_not_collect_diagnostics(self):
+        session=Mock();session.get.return_value.status_code=200
+        with patch.object(runner,'readiness_diagnostic') as diagnose,patch.object(runner.time,'sleep') as sleep:
+            runner.wait_for_https(session,'https://fixture.invalid')
+        diagnose.assert_not_called();sleep.assert_not_called()
+
+    def test_systemd_metadata_filters_unexpected_and_sensitive_values(self):
+        raw=b'ActiveState=failed\nSubState=fiction-secret\nResult=exit-code\nExecMainStatus=203\nNRestarts=2\nEnvironment=fiction-secret\n'
+        with patch.object(runner.subprocess,'run',return_value=subprocess.CompletedProcess([],0,stdout=raw)) as run:
+            data=runner.unit_diagnostic(runner.UNITS[0])
+        self.assertEqual(data,{'ActiveState':'failed','SubState':'unavailable','Result':'exit-code','ExecMainStatus':203,'NRestarts':2})
+        self.assertEqual(run.call_args.kwargs['stderr'],subprocess.DEVNULL)
+        with patch.object(runner.subprocess,'run',side_effect=subprocess.TimeoutExpired('fiction-secret',2)):
+            self.assertEqual(set(runner.unit_diagnostic(runner.UNITS[0]).values()),{'unavailable'})
+
+    def test_stopped_backend_diagnostic_is_sanitized_and_uses_expected_proxy_headers(self):
+        import requests
+        marker='fiction-cookie-token-body-environment-secret'
+        session=Mock();session.get.side_effect=requests.exceptions.ConnectionError(marker)
+        factory=Mock();factory.return_value.__enter__=Mock(return_value=session);factory.return_value.__exit__=Mock(return_value=False)
+        output=io.StringIO()
+        with patch('requests.Session',factory),patch.object(runner,'unit_diagnostic',return_value={'ActiveState':'failed'}),patch.object(runner,'local_port_listening',side_effect=lambda port:port==443),contextlib.redirect_stdout(output):
+            runner.readiness_diagnostic({'http_status':502,'body':marker,'cookie':marker})
+        data=json.loads(output.getvalue().split(' ',1)[1])
+        self.assertNotIn(marker,output.getvalue())
+        self.assertIsNone(data['gunicorn_http_status'])
+        self.assertEqual(data['https_last_probe'],{'http_status':502})
+        self.assertEqual(data['listening'],{'443':True,'8001':False})
+        self.assertFalse(session.trust_env)
+        args=session.get.call_args
+        self.assertEqual(args.args[0],'http://127.0.0.1:8001/api/auth/csrf/')
+        self.assertFalse(args.kwargs['allow_redirects'])
+        self.assertEqual(args.kwargs['headers'],{'Host':runner.HOST,'X-Forwarded-Proto':'https','X-Forwarded-For':'127.0.0.1','X-Real-IP':'127.0.0.1'})
+
+    def test_port_diagnostic_only_uses_fixed_loopback_ports(self):
+        with patch.object(runner.socket,'socket') as socket_factory:
+            probe=socket_factory.return_value.__enter__.return_value;probe.connect_ex.return_value=111
+            self.assertFalse(runner.local_port_listening(8001))
+            probe.connect_ex.assert_called_once_with(('127.0.0.1',8001))
+            with self.assertRaises(ValueError):runner.local_port_listening(5432)
+
     def test_prepare_reaches_site_package_loading_without_local_name_shadowing(self):
         class StopBeforeAnyDatabaseAccess(Exception):
             pass
