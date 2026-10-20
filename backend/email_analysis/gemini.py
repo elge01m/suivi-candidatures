@@ -31,6 +31,16 @@ candidature. Une invitation, un refus ou une offre peut proposer changement_etat
 sans inventer une date de candidature. Ne déduis aucune confirmation de réception
 du simple envoi d'une candidature : confirmation_reception reste null sans accusé.
 Toute information inconnue vaut null. N'invente aucun fait.
+informations_manquantes signale les informations utiles à compléter pour identifier
+ou réaliser l'action proposée, pas systématiquement tous les faits absents.
+Pour changement_etat ou confirmation_reception sur une candidature existante,
+une date_candidature inconnue reste null et ne doit pas automatiquement être signalée
+comme manquante : la date existante sera conservée. N'invente pas cette date.
+Signale employeur ou poste inconnus lorsqu'ils sont utiles à l'identification.
+Pour creation, signale employeur, poste et etat s'ils manquent ; signale aussi
+date_candidature si elle manque, sauf pour etat=a_preparer. Pour action=aucune,
+ne demande pas de compléter une candidature. La validation humaine vérifie
+séparément les champs requis de la candidature explicitement sélectionnée.
 Les huit états sont a_preparer, envoyee, entrevue, offre_recue, offre_acceptee,
 offre_declinee, refusee, retiree. Une confirmation explicite de réception n'est pas
 un nouvel état : propose confirmation_reception avec confirmation_reception=true,

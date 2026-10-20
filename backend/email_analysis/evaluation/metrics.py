@@ -3,6 +3,7 @@ import json
 import unicodedata
 from collections import Counter
 from itertools import combinations
+from ..name_matching import NAME_MATCHING_POLICY
 
 FIELDS = ('employeur', 'poste', 'date_candidature', 'etat', 'confirmation_reception')
 EDITABLE = ('action', *FIELDS)
@@ -57,7 +58,11 @@ def summarize(corpus, observations):
         wanted_found+=len(gold&actual);found+=len(actual);wanted+=len(gold)
     association_precision=wanted_found/found if found else None
     association_recall=wanted_found/wanted if wanted else None
-    return {'schema_valid':rate(len(valid),len(attempted)),
+    return {'extraction_representation':{'source':'original validated model fields',
+                'html_entities_decoded_for_extraction_scores':False,
+                'text_comparison':'NFC, whitespace and case normalization only'},
+        'association_input_normalization':NAME_MATCHING_POLICY,
+        'schema_valid':rate(len(valid),len(attempted)),
         'missing_fields_annotation':rate(sum(set(case['expected']['informations_manquantes'])==set(row['prediction'].get('informations_manquantes',[])) for case,row in valid),len(attempted)),
         'errors':dict(Counter(row.get('error_code','unknown') for _,row in attempted if row['status']=='failed')),
         'coverage':{'corpus_size':len(rows),'attempted':len(attempted),'completed':len(valid),

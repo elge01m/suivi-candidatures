@@ -1,0 +1,42 @@
+INF4173-SJ — PROTOCOLE 1.2 — NORMALISATION DES NOMS — 20 OCTOBRE 2026
+
+Correction limitée aux valeurs de recherche employeur/poste : un seul passage
+html.unescape (entités nommées, décimales ou hexadécimales), composition Unicode
+NFC et normalisation des espaces. Recherche exacte insensible à la casse.
+Les accents restent distinctifs ; aucun rapprochement flou, suppression de balises
+ou décodage récursif. Les valeurs nulles restent nulles. Aucune dépendance ajoutée.
+Les fiches existantes ne sont pas réécrites par la normalisation.
+
+Les noms originaux de l'extraction validée restent conservés tels quels dans
+la proposition chiffrée. Les valeurs normalisées servent seulement à rechercher
+les correspondances. Plusieurs couples exacts restent ambigus. Les partiels sont
+un repli. Aucune cible présélectionnée ; validation humaine obligatoire.
+
+Preuve F005
+Le texte fictif source contient les vrais accents. Les entités se trouvent dans
+les champs de sortie structurée enregistrés pour employeur/poste (et les autres
+champs éventuellement relevés dans le rapport). Le code de rapprochement ne les
+introduit pas : il les reçoit après validation JSON/Pydantic et déchiffrement.
+Le corps HTTP brut Gemini n'était pas archivé ; il ne peut pas être reconstitué
+exactement. Les sorties structurées originales disponibles sont intégralement
+préservées ; aucun nouveau stockage de corps HTTP n'est introduit par ce lot.
+
+Mesures distinctes
+- Extraction : comparer les valeurs originales, sans décoder leurs entités HTML.
+  La convention historique NFC/espaces/casse des métriques reste inchangée.
+  Les erreurs de représentation F005 restent donc comptées comme erreurs.
+- Rapprochement : mesurer les ensembles, niveaux et ambiguïtés après normalisation.
+  Les futurs rapports ajoutent matching_names et la politique de normalisation,
+  tout en gardant prediction comme sortie originale validée.
+- Les comparaisons hors ligne sur sorties figées ne sont pas de nouveaux essais
+  Gemini et ne doivent pas être présentées comme une amélioration du modèle.
+
+Conservation et future campagne
+Les campagnes protocoles 1.0 et 1.1, leurs annotations et leurs exports restent
+inchangés. Le nouveau rapport dérivé est distinct :
+docs/comparaison_normalisation_html_protocole_1_2_INF4173.json
+Le protocole devient 1.2 ; son empreinte inclut aussi name_matching.py.
+Nouveau run-id prévu : real-protocol-1-2. Aucun nouveau run n'est lancé.
+Ne pas modifier une ancienne empreinte pour contourner le refus de reprise.
+Les budgets partagés ne sont ni réinitialisés ni augmentés.
+Toute nouvelle campagne réelle nécessite une autorisation explicite.

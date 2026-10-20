@@ -301,7 +301,8 @@ class SentMessageAndAssociationTests(Base):
         before = bytes(p.encrypted_data)
         self.assertEqual(proposal_data(self.user, p.pk)['proposition']['niveau_association'], 'a_confirmer')
         second = self.candidature()
-        self.assertEqual(proposal_data(self.user, p.pk)['proposition']['niveau_association'], 'ambigu')
+        self.assertEqual(proposal_data(self.user, p.pk)['proposition']['niveau_association'], 'probable')
+        self.assertEqual(proposal_data(self.user, p.pk)['proposition']['candidatures_possibles'], [second.pk])
         self.assertIsNone(proposal_data(self.user, p.pk)['proposition']['cible_id'])
         other = self.candidature(employeur='Sans correspondance', poste='Distinct')
         p = correct_proposal(self.user, p.pk, {'action':'changement_etat', 'etat':'entrevue', 'cible_id':other.pk}, 1)
@@ -312,6 +313,98 @@ class SentMessageAndAssociationTests(Base):
         self.assertEqual(data['niveau_association'], 'aucune')
         self.assertEqual(data['cible_id'], other.pk)
         self.assertNotEqual(bytes(p.encrypted_data), before)  # Only explicit correction rewrites it.
+
+    def test_exact_pair_excludes_other_post_and_other_employer(self):
+        exact = self.candidature()
+        self.candidature(poste='Autre poste')
+        self.candidature(employeur='Autre employeur')
+        self.candidature(user=self.other)
+        p = self.proposal(action='changement_etat', employeur=FACTS['employeur'].lower(), poste=FACTS['poste'].upper())
+        data = proposal_data(self.user, p.pk)['proposition']
+        self.assertEqual(data['candidatures_possibles'], [exact.pk])
+        self.assertEqual(data['niveau_association'], 'probable')
+        self.assertFalse(data['ambiguite'])
+        self.assertIsNone(data['cible_id'])
+
+    def test_multiple_exact_pairs_remain_ambiguous_without_partial_matches(self):
+        first = self.candidature()
+        second = self.candidature(date_candidature=date(2026,10,13))
+        self.candidature(poste='Autre poste')
+        p = self.proposal(action='changement_etat')
+        data = proposal_data(self.user, p.pk)['proposition']
+        self.assertCountEqual(data['candidatures_possibles'], [first.pk, second.pk])
+        self.assertEqual(data['niveau_association'], 'ambigu')
+        self.assertIsNone(data['cible_id'])
+        self.problem('target_required', accept_proposal, self.user, p.pk, 1, confirm=True)
+
+    def test_foreign_exact_pair_does_not_hide_owned_partial_fallback(self):
+        owned = self.candidature(poste='Autre poste')
+        self.candidature(user=self.other)
+        p = self.proposal(action='changement_etat')
+        data = proposal_data(self.user, p.pk)['proposition']
+        self.assertEqual(data['candidatures_possibles'], [owned.pk])
+        self.assertEqual(data['niveau_association'], 'a_confirmer')
+        self.assertIsNone(data['cible_id'])
+
+    def test_entity_names_match_without_rewriting_original_extraction(self):
+        item = self.candidature(employeur='Boréal Fictif', poste='Développeur logiciel')
+        self.candidature(employeur='Boréal Fictif', poste='Autre poste')
+        self.candidature(user=self.other, employeur='Boréal Fictif', poste='Développeur logiciel')
+        variants = [
+            ('Bor&#233;al Fictif', 'D&#233;veloppeur logiciel'),
+            ('Bor&eacute;al Fictif', 'D&eacute;veloppeur logiciel'),
+            ('Bor&#xE9;al  Fictif', 'De\u0301veloppeur logiciel'),
+        ]
+        for index, (employeur, poste) in enumerate(variants):
+            with self.subTest(index=index):
+                p = self.run_analysis(self.make_message(self.connection, f'entity-{index}'),
+                    action='changement_etat', employeur=employeur, poste=poste).proposal
+                original = (bytes(p.encrypted_data), p.revision)
+                data = proposal_data(self.user, p.pk)['proposition']
+                self.assertEqual(data['employeur'], employeur)
+                self.assertEqual(data['poste'], poste)
+                self.assertEqual(data['candidatures_possibles'], [item.pk])
+                self.assertEqual(data['niveau_association'], 'probable')
+                self.assertIsNone(data['cible_id'])
+                self.problem('target_required', accept_proposal, self.user, p.pk, 1, confirm=True)
+                p.refresh_from_db()
+                self.assertEqual((bytes(p.encrypted_data), p.revision), original)
+
+    def test_entity_normalization_keeps_multiple_exact_pairs_ambiguous(self):
+        first = self.candidature(employeur='Boréal Fictif', poste='Développeur logiciel')
+        second = self.candidature(employeur='Boréal Fictif', poste='Développeur logiciel',date_candidature=date(2026,10,13))
+        self.candidature(employeur='Boréal Fictif', poste='Autre poste')
+        p = self.proposal(action='changement_etat', employeur='Bor&#233;al Fictif', poste='D&eacute;veloppeur logiciel')
+        data = proposal_data(self.user, p.pk)['proposition']
+        self.assertCountEqual(data['candidatures_possibles'], [first.pk, second.pk])
+        self.assertTrue(data['ambiguite'])
+        self.assertEqual(data['niveau_association'], 'ambigu')
+        self.assertIsNone(data['cible_id'])
+
+    def test_normalization_preserves_accents_and_does_not_strip_markup(self):
+        self.candidature(employeur='Boréal Fictif', poste='Développeur logiciel')
+        p = self.proposal(action='changement_etat', employeur='Boreal Fictif', poste='Autre poste')
+        self.assertEqual(proposal_data(self.user, p.pk)['proposition']['candidatures_possibles'], [])
+        other = self.run_analysis(self.make_message(self.connection, 'markup-literal'),
+            action='changement_etat', employeur='&lt;b&gt;Boréal Fictif&lt;/b&gt;', poste='Autre poste').proposal
+        self.assertEqual(proposal_data(self.user, other.pk)['proposition']['candidatures_possibles'], [])
+
+    def test_unknown_update_date_preserves_target_date_but_creation_still_requires_date(self):
+        item = self.candidature()
+        p = self.proposal(action='changement_etat', etat='entrevue', date_candidature=None)
+        p = correct_proposal(self.user, p.pk, {'action':'changement_etat', 'etat':'entrevue',
+            'date_candidature':None, 'cible_id':item.pk}, 1)
+        data = proposal_data(self.user, p.pk)['proposition']
+        self.assertIsNone(data['date_candidature'])
+        self.assertNotIn('date_candidature', data['informations_manquantes'])
+        accept_proposal(self.user, p.pk, 2, confirm=True)
+        item.refresh_from_db()
+        self.assertEqual(item.date_candidature, date(2026,10,12))
+        self.assertEqual(item.etat, 'entrevue')
+        creation = self.run_analysis(self.make_message(self.connection, 'new-creation-missing-date'),
+            date_candidature=None, informations_manquantes=['date_candidature']).proposal
+        self.problem('missing_fields', accept_proposal, self.user, creation.pk, 1, confirm=True)
+        self.assertEqual(Candidature.objects.count(), 1)
 
     def test_recomputed_suggestions_do_not_rewrite_accepted_proposals_or_repeat_analysis(self):
         item = self.candidature()
@@ -450,6 +543,8 @@ class AnalysisTests(Base):
         self.candidature()
         p = self.proposal(action='changement_etat')
         self.candidature(poste='Autre poste fictif')
+        self.assertFalse(proposal_data(self.user, p.pk)['proposition']['ambiguite'])
+        self.candidature(date_candidature=date(2026,10,13))
         self.assertTrue(proposal_data(self.user, p.pk)['proposition']['ambiguite'])
 
     def test_unique_candidate_also_requires_human_choice(self):
@@ -797,6 +892,9 @@ class AdapterTests(SimpleTestCase):
         self.assertEqual(kwargs['config'].tools, [])
         self.assertEqual(kwargs['config'].response_mime_type, 'application/json')
         self.assertIn('non fiable', kwargs['config'].system_instruction)
+        self.assertIn('pas systématiquement tous les faits absents', kwargs['config'].system_instruction)
+        self.assertIn('la date existante sera conservée', kwargs['config'].system_instruction)
+        self.assertIn('sauf pour etat=a_preparer', kwargs['config'].system_instruction)
 
     def test_real_sdk_response_types_are_parsed_without_network(self):
         self.client.models.generate_content.return_value = types.GenerateContentResponse(

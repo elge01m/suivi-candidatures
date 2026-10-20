@@ -1,0 +1,60 @@
+INF4173-SJ — PROTOCOLE D'ÉVALUATION 1.1 — 20 OCTOBRE 2026
+
+Objet : clarifier les informations manquantes et privilégier les associations
+exactes, sans modifier les annotations ou les observations réelles initiales.
+
+Convention du prompt
+Une information inconnue reste nulle. informations_manquantes ne recense pas
+systématiquement tous les faits absents ; elle signale les informations utiles
+pour identifier ou réaliser l'action proposée.
+Une mise à jour d'une candidature existante ne nécessite pas automatiquement
+de fournir à nouveau sa date. Une date inconnue reste nulle, sans prendre la
+date d'entrevue, d'échéance ou de réception comme date de candidature.
+Les employeur/poste inconnus utiles à l'identification restent signalés.
+Une création exige employeur, poste, état et date, sauf date facultative pour
+À préparer. La validation humaine contrôle toujours la cible et ses contraintes,
+notamment une date nécessaire pour faire évoluer une fiche À préparer.
+Le prompt clarifié ne remplace pas les validations serveur.
+
+Rapprochement serveur
+Quand employeur et poste sont connus, chercher d'abord leur couple exact sans
+distinction de casse, uniquement parmi les candidatures de l'utilisateur.
+Une correspondance exacte unique est probable ; plusieurs restent ambiguës.
+Les correspondances partielles par employeur OU poste sont utilisées uniquement
+en l'absence de couple exact. Une suggestion partielle unique est À confirmer ;
+plusieurs restent ambiguës. Aucune cible n'est présélectionnée et l'utilisateur
+peut choisir explicitement une autre candidature lui appartenant.
+
+Conservation de la référence initiale
+La campagne réelle real-corpus-v2 utilise le protocole 1.0 : six observations,
+six propositions en attente et leurs empreintes sont conservées intégralement.
+Les quatre signalements de date manquante demeurent des écarts aux annotations.
+Aucune annotation n'est modifiée pour correspondre aux réponses observées.
+Le corpus conserve son empreinte après la correction F025 déjà autorisée :
+c5c17914bfbbf0f8a0edc3d36c72921ba8b37bb375b91888537cba297383a1f6
+Le rapport simulé historique reste également inchangé et lié à son ancien corpus.
+
+Comparaison hors ligne
+docs/comparaison_associations_protocole_1_1_INF4173.json utilise les six mêmes
+extractions réelles enregistrées, sans rappel Gemini. Le nouveau rapprochement
+est exécuté en lecture seule dans la base d'évaluation, sans modifier ses lignes.
+Les scores concernent le post-traitement serveur de ces six cas uniquement ;
+ils ne mesurent pas un nouveau prompt Gemini ni les 40 courriels complets.
+Les champs informations_manquantes observés restent inchangés.
+Les suggestions peuvent être recalculées à la consultation : les exports originaux
+restent donc les preuves historiques, distinctes de ce rapport dérivé.
+
+Future campagne — NON LANCÉE
+Version de protocole : 1.1. Nouveau run-id prévu : real-protocol-1-1.
+L'empreinte inclut la version, le code, le prompt, le corpus, le modèle et le SDK.
+Un changement d'empreinte interdit la reprise du run-id initial. Ne pas modifier
+son empreinte stockée ni écraser ses rapports pour contourner ce contrôle.
+Un nouveau run-id n'autorise aucune remise à zéro des budgets : les appels déjà
+effectués dans la journée doivent rester comptabilisés. Le prompt plus long
+nécessite de recalculer les réservations avant toute autorisation réelle.
+Une nouvelle campagne requiert une autorisation explicite, des quotas vérifiés,
+des rapports séparés et la même isolation PostgreSQL. Les premiers six cas ont
+servi au diagnostic : ils ne doivent pas être décrits comme un jeu tenu à l'écart.
+Les 40 analyses initiales et les dix répétitions restent le protocole quantitatif ;
+les résultats de versions différentes ne sont pas agrégés comme une campagne unique.
+Aucune hausse de quota, nouvelle analyse réelle ou proposition acceptée par ce lot.

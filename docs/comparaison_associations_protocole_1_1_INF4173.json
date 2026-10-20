@@ -1,0 +1,227 @@
+{
+  "mode": "offline_server_postprocessing_of_frozen_real_extractions",
+  "not_a_new_gemini_measurement": true,
+  "original_protocol": "1.0",
+  "candidate_protocol": "1.1",
+  "original_run_id": "real-corpus-v2",
+  "future_run_id_reserved_not_started": "real-protocol-1-1",
+  "cases": 6,
+  "real_api_calls": 0,
+  "gmail_calls": 0,
+  "original_database_unchanged": true,
+  "original_files_unchanged": true,
+  "corpus_sha256": "c5c17914bfbbf0f8a0edc3d36c72921ba8b37bb375b91888537cba297383a1f6",
+  "original_artifact_sha256": {
+    "batch2-F002-command.log": "47c6a17e23c277ac1acd608d478c20cd74dbd045197df6706f7fee8a08b752f2",
+    "batch2-F003-command.log": "47c6a17e23c277ac1acd608d478c20cd74dbd045197df6706f7fee8a08b752f2",
+    "batch2-F004-command.log": "47c6a17e23c277ac1acd608d478c20cd74dbd045197df6706f7fee8a08b752f2",
+    "batch2-F005-command.log": "47c6a17e23c277ac1acd608d478c20cd74dbd045197df6706f7fee8a08b752f2",
+    "batch2-F006-command.log": "47c6a17e23c277ac1acd608d478c20cd74dbd045197df6706f7fee8a08b752f2",
+    "batch2-primary-after.json": "743cd260588782eb305fcf949b986ad4ec5e48b1d9f721aabe7cea8d72b6862b",
+    "batch2-primary-before.json": "743cd260588782eb305fcf949b986ad4ec5e48b1d9f721aabe7cea8d72b6862b",
+    "batch2-report.json": "24482e93c6196390c5ad377f09382d1052bc17f22815aaed99e2b73e33208b38",
+    "batch2-verification.json": "21ddcde86fd74720b182c55806debdba1934f9d863fd4b9c05f53a2579318877",
+    "batch2.started.json": "6a0c3e56e9dd3852a5c665754df50e7e2aaf0056222aa72766899ef9695dca3e",
+    "evaluation_real_v2.json": "c550ba568e8443e84e53630f734b97dd1ed28d535af94aff742e7a6d8e7d1754",
+    "first-call-command.log": "47c6a17e23c277ac1acd608d478c20cd74dbd045197df6706f7fee8a08b752f2",
+    "first-call-execution.json": "bd7dee8f9756abc71398f74d47aec30c6a024cf13ec741f32d2514fbf9008b7e",
+    "first-call-primary-after.json": "743cd260588782eb305fcf949b986ad4ec5e48b1d9f721aabe7cea8d72b6862b",
+    "first-call-primary-before.json": "743cd260588782eb305fcf949b986ad4ec5e48b1d9f721aabe7cea8d72b6862b",
+    "first-call-verification.json": "8090bd6faaf81229f5c3e0eafe35fc7f0443efbea295f58013920a7908125f60",
+    "first-call.started.json": "c1505d082a892f4bdc93ee27c87e5be5373a0d552957d580076c0d47f34f1e57",
+    "preparation-report.json": "7096ff7968c3779409071ab9fc9b3ba72756b2de15c625590b87a47b75f504f1",
+    "primary-after.json": "743cd260588782eb305fcf949b986ad4ec5e48b1d9f721aabe7cea8d72b6862b",
+    "primary-before.json": "743cd260588782eb305fcf949b986ad4ec5e48b1d9f721aabe7cea8d72b6862b"
+  },
+  "matching_code_sha256": "d7c048a5ff7ee3fe48d12ffff14f04b1310a89fba85571d4c83fca6b1a0c3850",
+  "association_exact_before": 4,
+  "association_exact_after": 6,
+  "prompt_change_not_tested_on_real_gemini": true,
+  "budgets_unchanged": [
+    {
+      "calls": 6,
+      "reserved_tokens": 42613
+    }
+  ],
+  "comparisons": [
+    {
+      "case_id": "F001",
+      "original_association": {
+        "candidates": [],
+        "level": "aucune",
+        "ambiguous": false,
+        "target": null
+      },
+      "offline_association_protocol_1_1": {
+        "candidates": [],
+        "level": "aucune",
+        "ambiguous": false,
+        "target": null
+      },
+      "expected_association": {
+        "candidates": [],
+        "level": "aucune",
+        "ambiguous": false
+      },
+      "exact_set_before": true,
+      "exact_set_after": true,
+      "missing_information_observed_unchanged": [],
+      "missing_information_expected": []
+    },
+    {
+      "case_id": "F002",
+      "original_association": {
+        "candidates": [],
+        "level": "aucune",
+        "ambiguous": false,
+        "target": null
+      },
+      "offline_association_protocol_1_1": {
+        "candidates": [],
+        "level": "aucune",
+        "ambiguous": false,
+        "target": null
+      },
+      "expected_association": {
+        "candidates": [],
+        "level": "aucune",
+        "ambiguous": false
+      },
+      "exact_set_before": true,
+      "exact_set_after": true,
+      "missing_information_observed_unchanged": [],
+      "missing_information_expected": []
+    },
+    {
+      "case_id": "F003",
+      "original_association": {
+        "candidates": [
+          "cobalt-qa"
+        ],
+        "level": "probable",
+        "ambiguous": false,
+        "target": null
+      },
+      "offline_association_protocol_1_1": {
+        "candidates": [
+          "cobalt-qa"
+        ],
+        "level": "probable",
+        "ambiguous": false,
+        "target": null
+      },
+      "expected_association": {
+        "candidates": [
+          "cobalt-qa"
+        ],
+        "level": "probable",
+        "ambiguous": false
+      },
+      "exact_set_before": true,
+      "exact_set_after": true,
+      "missing_information_observed_unchanged": [
+        "date_candidature"
+      ],
+      "missing_information_expected": []
+    },
+    {
+      "case_id": "F004",
+      "original_association": {
+        "candidates": [
+          "aurore-data",
+          "aurore-dev",
+          "boreal-dev"
+        ],
+        "level": "ambigu",
+        "ambiguous": true,
+        "target": null
+      },
+      "offline_association_protocol_1_1": {
+        "candidates": [
+          "aurore-dev"
+        ],
+        "level": "probable",
+        "ambiguous": false,
+        "target": null
+      },
+      "expected_association": {
+        "candidates": [
+          "aurore-dev"
+        ],
+        "level": "probable",
+        "ambiguous": false
+      },
+      "exact_set_before": false,
+      "exact_set_after": true,
+      "missing_information_observed_unchanged": [
+        "date_candidature"
+      ],
+      "missing_information_expected": []
+    },
+    {
+      "case_id": "F005",
+      "original_association": {
+        "candidates": [
+          "aurore-dev",
+          "boreal-dev"
+        ],
+        "level": "ambigu",
+        "ambiguous": true,
+        "target": null
+      },
+      "offline_association_protocol_1_1": {
+        "candidates": [
+          "boreal-dev"
+        ],
+        "level": "probable",
+        "ambiguous": false,
+        "target": null
+      },
+      "expected_association": {
+        "candidates": [
+          "boreal-dev"
+        ],
+        "level": "probable",
+        "ambiguous": false
+      },
+      "exact_set_before": false,
+      "exact_set_after": true,
+      "missing_information_observed_unchanged": [
+        "date_candidature"
+      ],
+      "missing_information_expected": []
+    },
+    {
+      "case_id": "F006",
+      "original_association": {
+        "candidates": [
+          "cobalt-qa"
+        ],
+        "level": "probable",
+        "ambiguous": false,
+        "target": null
+      },
+      "offline_association_protocol_1_1": {
+        "candidates": [
+          "cobalt-qa"
+        ],
+        "level": "probable",
+        "ambiguous": false,
+        "target": null
+      },
+      "expected_association": {
+        "candidates": [
+          "cobalt-qa"
+        ],
+        "level": "probable",
+        "ambiguous": false
+      },
+      "exact_set_before": true,
+      "exact_set_after": true,
+      "missing_information_observed_unchanged": [
+        "date_candidature"
+      ],
+      "missing_information_expected": []
+    }
+  ]
+}

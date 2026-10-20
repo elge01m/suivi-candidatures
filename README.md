@@ -144,6 +144,28 @@ les métriques et cinq cas répétés trois fois. Les
 **pas les performances réelles de Gemini**. Une campagne réelle nécessite un
 accord distinct, la revue des annotations et le contrôle des quotas.
 
+Le [protocole 1.1](docs/evaluation_protocole_1_1_INF4173.txt) clarifie les
+informations manquantes et privilégie les associations exactes. La
+[comparaison hors ligne](docs/comparaison_associations_protocole_1_1_INF4173.json)
+réutilise six extractions réelles conservées ; elle ne mesure pas le nouveau
+prompt sur Gemini. Toute future campagne utilise un nouveau run-id et des
+rapports distincts, après autorisation.
+
+Le [protocole 1.2](docs/evaluation_protocole_1_2_INF4173.txt) ajoute un décodage
+HTML limité aux noms de recherche, sans réécrire les extractions enregistrées.
+La [comparaison hors ligne dédiée](docs/comparaison_normalisation_html_protocole_1_2_INF4173.json)
+distingue les erreurs de sortie originale des associations après normalisation.
+
+Le [bilan actuel des campagnes et de la préparation GitHub](docs/preparation_github_INF4173.txt)
+complète ces preuves historiques : le protocole 1.2 compte 14 essais réels sur
+50 au 20 octobre 2026. Les rapports de préparation restent inchangés.
+
+Les chemins `D:/INF4173-SJ-tests/...` et autres chemins de traces Windows dans
+les documents désignent des emplacements locaux utilisés pour les validations.
+Ils ne sont ni publiés avec le dépôt ni accessibles depuis GitHub. Adaptez les
+chemins à votre environnement pour reproduire les tests ; leurs journaux et
+bases temporaires ne doivent pas être ajoutés à Git.
+
 Le [bilan technique](docs/bilan_livraison_INF4173.txt) distingue implémentation,
 tests isolés et validations restantes. Le plan original du 30 septembre reste
 inchangé localement dans `docs/plan_de_travail_INF4173.pdf`, exclu du dépôt car il
@@ -160,6 +182,12 @@ une dépendance Linux séparée dans `requirements-production.txt`.
 GitHub Actions est manuel (`workflow_dispatch`), sans déploiement, identité cloud
 ou secret applicatif. Actions figées par SHA. L'exécution distante et ses coûts
 éventuels restent à autoriser et vérifier.
+
+Le workflow CI exécute les tests backend PostgreSQL et frontend, TypeScript,
+lint, build et les contrôles de configuration. Il **n'exécute pas les tests
+navigateur E2E** : les validations Chrome documentées ont été réalisées
+localement, avec Gmail et Gemini simulés. Un workflow réussi ne prouvera donc
+pas une nouvelle validation navigateur, ni un déploiement Linux opérationnel.
 
 Restent à valider : Linux/Nginx/Gunicorn/systemd réels, certificat HTTPS,
 restauration d'exploitation, CI distante, autres navigateurs, quotas Google et

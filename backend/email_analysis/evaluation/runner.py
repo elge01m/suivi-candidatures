@@ -24,9 +24,12 @@ from ..errors import AnalysisProblem
 from ..gemini import ModelResult, SYSTEM
 from ..models import AnalysisBudget, CandidatureProposal, EmailAnalysis
 from ..schemas import Extraction
+from ..name_matching import NAME_MATCHING_POLICY, normalize_matching_name
 from ..services import SCHEMA_VERSION, analyze_message, proposal_data
 from .corpus import load_corpus
 from .metrics import summarize, variability
+
+PROTOCOL_VERSION = '1.2'
 
 
 def assert_isolated():
@@ -58,8 +61,8 @@ def evaluate(run_id, mode, *, allow_real=False, max_calls=1, provider=None):
         raise ValueError('Simulation provider is fixed and never performs network calls.')
     corpus=load_corpus()
     # A manifest bound to the local username prevents mixing versions/modes in one campaign.
-    code_paths=[Path(__file__).parents[1]/name for name in ('services.py','gemini.py','schemas.py')]+[Path(__file__),Path(__file__).with_name('metrics.py')]
-    fingerprint=hashlib.sha256((''.join(p.read_text(encoding='utf-8') for p in code_paths)+corpus['sha256']+settings.GEMINI_MODEL+version('google-genai')).encode()).hexdigest()
+    code_paths=[Path(__file__).parents[1]/name for name in ('services.py','gemini.py','schemas.py','name_matching.py')]+[Path(__file__),Path(__file__).with_name('metrics.py')]
+    fingerprint=hashlib.sha256((PROTOCOL_VERSION+''.join(p.read_text(encoding='utf-8') for p in code_paths)+corpus['sha256']+settings.GEMINI_MODEL+version('google-genai')).encode()).hexdigest()
     username=f'eval-{mode}-{run_id}'
     user,created=get_user_model().objects.get_or_create(username=username)
     if created:
@@ -107,6 +110,7 @@ def evaluate(run_id, mode, *, allow_real=False, max_calls=1, provider=None):
                     if job.status=='completed':
                         data=proposal_data(user,job.proposal.pk)['proposition']
                         row['prediction']={key:data.get(key) for key in case['expected']}
+                        row['matching_names']={key:normalize_matching_name(data.get(key)) for key in ('employeur','poste')}
                         row['association']={'candidates':[candidates[pk] for pk in data['candidatures_possibles'] if pk in candidates],
                             'level':data['niveau_association'],'ambiguous':data['ambiguite'],'target':data['cible_id']}
                     elif newly_attempted or job.status not in ('completed','failed'):
@@ -128,11 +132,12 @@ def evaluate(run_id, mode, *, allow_real=False, max_calls=1, provider=None):
     if original!=list(Candidature.objects.filter(utilisateur=user).values()) or CandidatureChange.objects.filter(utilisateur=user).exists() or CandidatureProposal.objects.filter(utilisateur=user).exclude(status='en_attente').exists():
         raise ValueError('Evaluation unexpectedly changed a candidature or accepted a proposal.')
     measured=mode=='real' and provider is None
-    return {'protocol_version':'1.0','mode':mode,'real_gemini_measurement':measured,
+    return {'protocol_version':PROTOCOL_VERSION,'mode':mode,'real_gemini_measurement':measured,
         'warning':'SIMULATION: annotation-derived responses and injected errors; not measured Gemini quality.' if mode=='simulated' else
             'INJECTED TEST PROVIDER: not a real Gemini measurement.' if provider is not None else 'REAL: only API observations are measurements; incomplete campaigns are not final results.',
         'run_id':run_id,'corpus_sha256':corpus['sha256'],'code_sha256':fingerprint,'prompt_sha256':hashlib.sha256(SYSTEM.encode()).hexdigest(),
         'model':settings.GEMINI_MODEL,'schema_version':SCHEMA_VERSION,'sdk_version':version('google-genai'),
+        'name_matching_policy':NAME_MATCHING_POLICY,
         'quota_limits':{'requests_per_day':settings.GEMINI_DAILY_REQUEST_LIMIT,'reserved_tokens_per_day':settings.GEMINI_DAILY_TOKEN_LIMIT,
             'requests_per_minute':settings.GEMINI_REQUESTS_PER_MINUTE},
         'clock':'virtual, five calls per virtual day' if mode=='simulated' else 'actual UTC clock; quota day America/Los_Angeles',

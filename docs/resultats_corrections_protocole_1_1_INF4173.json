@@ -1,0 +1,90 @@
+{
+  "work_session_date": "2026-10-20",
+  "protocol_version": "1.1",
+  "status": "implemented_and_isolated_validation_passed",
+  "real_gemini_calls": 0,
+  "real_gmail_calls": 0,
+  "migrations_added": 0,
+  "main_migrations_applied": 0,
+  "automatics_activated": false,
+  "new_real_campaign_started": false,
+  "future_run_id": "real-protocol-1-1",
+  "tests": {
+    "backend_postgresql_passed": 295,
+    "frontend_passed": 128,
+    "real_chrome_with_simulated_providers_passed": 15,
+    "runner_checks": {
+      "initdb": true,
+      "postgres-start": true,
+      "create-isolated-db": true,
+      "backend-tests": true,
+      "isolated-migrate": true,
+      "django-check": true,
+      "migration-drift": true,
+      "production-security": true,
+      "fixtures": true,
+      "browser-tests": true,
+      "frontend-tests": true,
+      "typescript-app": true,
+      "typescript-node": true,
+      "typescript-e2e": true,
+      "lint": true,
+      "build": true,
+      "postgres-stop": true
+    },
+    "artifacts_directory": "D:\\INF4173-SJ-tests\\lot6-20261020-004918-41ff5339"
+  },
+  "main_database": {
+    "fingerprints_identical": true,
+    "tables_compared": 20
+  },
+  "original_campaign": {
+    "run_id": "real-corpus-v2",
+    "protocol": "1.0",
+    "analyses_completed": 6,
+    "proposals_pending": 6,
+    "calls_persisted": 6,
+    "reserved_tokens_persisted": 42613,
+    "files_unchanged_by_sha256": true,
+    "database_read_only_comparison": true,
+    "annotations_unchanged": true,
+    "corpus_sha256": "c5c17914bfbbf0f8a0edc3d36c72921ba8b37bb375b91888537cba297383a1f6"
+  },
+  "offline_association_comparison": {
+    "exact_before": "4/6",
+    "exact_after": "6/6",
+    "input_predictions_unchanged": true,
+    "not_new_model_performance": true,
+    "source": "docs/comparaison_associations_protocole_1_1_INF4173.json"
+  },
+  "limits": [
+    "New prompt checked with mocked responses only; no real quality improvement claimed.",
+    "Original missing-information discrepancies retained unchanged.",
+    "Six cases used for diagnosis are not a held-out evaluation set.",
+    "Expected production warnings security.W005 and security.W021 remain."
+  ],
+  "initial_test_failures_resolved": {
+    "count": 2,
+    "causes": [
+      "Old ambiguity expectation contradicted the newly authorized exact-pair priority.",
+      "New date regression test accidentally reused a cached message; switched to a distinct fictitious message."
+    ],
+    "failed_run_artifacts": "D:/INF4173-SJ-tests/lot6-20261020-004642-a0c5db54"
+  },
+  "source_sha256": {
+    "backend/email_analysis/gemini.py": "9ec46e3c070ac73d83a148d7a719d0e0478307b5243c08347f9073c3b0f643fa",
+    "backend/email_analysis/services.py": "d7c048a5ff7ee3fe48d12ffff14f04b1310a89fba85571d4c83fca6b1a0c3850",
+    "backend/email_analysis/evaluation/runner.py": "211d35add60e6594c595189f327401643e36061ca5bc9ecb1bdf712c0bf13f8b",
+    "backend/email_analysis/tests.py": "24cb95135a1a03d14aefb1f6b2b9e1c8b590771e833160e8948c628b16efe34d",
+    "backend/email_analysis/test_evaluation.py": "8fc6faafef499844e5c1bc8d9da2370535504b0c648aff76d514904f463077e0",
+    "docs/evaluation_protocole_1_1_INF4173.txt": "1d04f2e091cebcc0a99e1a0e795d23d5706842b9a64edc4b5b53daca31b01299"
+  },
+  "test_artifact_sha256": {
+    "run-report.json": "4cd77659212f44ac5cecbe6394f8fac1482820ba70b1845b5eac388f639d6c25",
+    "backend-tests.log": "ef3e40fb7eccf5eb6f0c61a497f097670a1ab9af888ce57b7353da753bad2d75",
+    "browser-report.json": "fdc4d2f5e14b3a2cb89d1aa1dea276bb6832d401d51d8fab51fcbbd3eb4e7c61",
+    "frontend-tests.log": "b4e63a197b73161c7bc8fc368fcf3b61a9f606e2e0f1647bee063635246f3941",
+    "migration-drift.log": "93e6e2d5be3c054add80c0f19101608803f7ca8a7df1fa41f76bbb9a1f570f4a",
+    "production-security.log": "3a92e9cf63994d052386f5ed14653a3531e3715246d490cfcd4580c9a7170d0b"
+  }
+}

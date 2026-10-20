@@ -1,0 +1,77 @@
+INF4173-SJ — PRÉPARATION GITHUB PRIVÉ — ÉTAT DU 20 OCTOBRE 2026
+
+Ce document complète les preuves historiques sans les remplacer. Les mentions
+« future campagne » et « non lancée » des documents de préparation 1.1 et 1.2
+décrivent leur date de rédaction, avant les essais réels autorisés ensuite.
+
+Campagnes Gemini réelles, résultats distincts
+- Protocole 1.0, real-corpus-v2 : 6 essais terminés (F001 à F006).
+  Tokens mesurés : 4 230 en entrée, 716 en sortie.
+- Protocole 1.1, real-protocol-1-1 : 5 essais terminés
+  (F001 et F003 à F006 ; F002 non analysé dans cette campagne).
+  Tokens mesurés : 4 445 en entrée, 504 en sortie.
+- Protocole 1.2, real-protocol-1-2 : 14 essais sur les 50 prévus,
+  F001 à F014 terminés, sans répétition de variabilité encore réalisée.
+  Tokens mesurés : 12 393 en entrée, 1 406 en sortie.
+  Les 36 essais restants ne sont pas exécutés par cette préparation GitHub.
+
+Les trois campagnes utilisent exclusivement les messages fictifs du corpus
+dont l'empreinte SHA-256 est :
+c5c17914bfbbf0f8a0edc3d36c72921ba8b37bb375b91888537cba297383a1f6
+Elles ne constituent pas une campagne unique et leurs scores ne sont pas
+agrégés. Les cas utilisés pour les corrections ne sont pas un jeu tenu à l'écart.
+
+Résultats intermédiaires du protocole 1.2
+Les 14 JSON respectent le schéma ; pertinence, action, état, poste, date et
+confirmation de réception correspondent aux annotations sur ces 14 essais.
+Employeur et ensemble des associations : 12/14 ; informations manquantes : 13/14.
+F008 : employeur nul au lieu de Boréal Fictif, association ambiguë plutôt
+qu'unique. F009 : employeur nul au lieu d'Aurore Fictive, signalé manquant,
+association ambiguë plutôt qu'unique. Ces écarts restent conservés.
+Aucune cible présélectionnée, aucune proposition appliquée automatiquement.
+Ces mesures réelles partielles ne sont pas les résultats finaux du corpus.
+Les comparaisons hors ligne de normalisation et les tests à fournisseurs
+simulés sont des preuves séparées, sans nouvel appel Gemini.
+
+Les résultats ont été relus dans les exports persistants locaux, sans appel
+Gmail/Gemini et sans accès PostgreSQL pour rédiger ce document :
+evaluation_real_v2.json ;
+protocol-1-1/evaluation_real_protocol_1_1_selected_F003_F006.json ;
+protocol-1-2/evaluation_real_protocol_1_2.json.
+Ces exports se trouvent dans le dossier d'évaluation privé, hors du dépôt.
+Les chemins D: des rapports sont des références locales, pas des liens GitHub.
+Ils ne permettent pas à un tiers de consulter les traces ni les bases.
+Les preuves historiques et leurs empreintes ne sont pas modifiées.
+
+GitHub Actions
+.github/workflows/ci.yml ne se déclenche que par workflow_dispatch.
+Il prépare PostgreSQL éphémère, les tests backend/frontend, TypeScript, lint,
+build et les contrôles de production/Gunicorn. Aucune clé de fournisseur,
+connexion à la base principale, commande d'évaluation réelle, synchronisation
+ou étape de déploiement n'est prévue. Les fixtures et réponses fournisseurs
+sont fictives. Les téléchargements d'outils/dépendances nécessitent Internet.
+Les tests navigateur E2E ne sont pas exécutés par ce workflow. Leurs traces
+Chrome sont locales, avec fournisseurs simulés. La CI Linux distante reste
+à valider ; elle ne prouve ni HTTPS, ni systemd, ni déploiement effectif.
+Pour un dépôt privé, vérifier le quota Actions et les paramètres de facturation
+avant le lancement manuel. Aucun lancement ou dépôt distant n'est créé ici.
+
+Identité Git et anonymisation réalisée
+Après confirmation de l'adresse GitHub noreply exacte dans Settings / Emails,
+l'identité a été configurée uniquement pour ce dépôt. La configuration Git
+globale est restée inchangée.
+La réécriture locale du premier commit a été explicitement autorisée et réalisée
+le 20 octobre 2026 : auteur et committer utilisent l'identité GitHub noreply.
+Le message, les dates et les 170 fichiers originaux ont été conservés, avec
+l'arbre identique a12a223f1eb5950d14e10dd6e080ce863c013e11.
+Le commit résultant est a9baa1325ebf81d2c6602c4c8eceab92dfb1bf1f.
+Les modifications non commitées ont été préservées et l'ancienne adresse
+universitaire est absente de l'historique des branches, tags et remotes.
+Les reflogs, anciens objets et références internes Codex n'ont pas été purgés :
+il ne s'agit pas d'un effacement complet des traces locales.
+Aucune adresse personnelle, noreply ou nom d'utilisateur n'est inscrit ici.
+Aucun remote ni publication n'a été créé par cette opération. Toute publication
+reste soumise à une autorisation explicite distincte.
+
+Le PDF original privé, les .env, sauvegardes, clés, journaux et fichiers .local
+restent exclus. Les données PostgreSQL et les campagnes ne sont pas modifiées.

@@ -1,0 +1,380 @@
+{
+  "mode": "offline_normalized_association_comparison",
+  "not_new_gemini_measurements": true,
+  "original_protocol": "1.1",
+  "candidate_protocol": "1.2",
+  "original_run_id": "real-protocol-1-1",
+  "future_run_id_not_started": "real-protocol-1-2",
+  "real_gemini_calls": 0,
+  "gmail_calls": 0,
+  "matching_policy": "one HTML-unescape pass, NFC, collapsed whitespace, case-insensitive; accents preserved",
+  "response_inspection": {
+    "input_text_matches_annotated_utf8": true,
+    "entities_in_stored_validated_output_fields": [
+      "employeur",
+      "poste",
+      "justification"
+    ],
+    "raw_http_response_archived": false,
+    "original_structured_outputs_preserved": true
+  },
+  "original_database_rows_unchanged": true,
+  "original_result_files_unchanged": true,
+  "original_artifact_sha256": {
+    "association_comparison_protocol_1_1.json": "5ffeb15474bc7096ef68c44558dc7dffe2c8990ec89349832f1769a1dc504b5e",
+    "batch2-F002-command.log": "47c6a17e23c277ac1acd608d478c20cd74dbd045197df6706f7fee8a08b752f2",
+    "batch2-F003-command.log": "47c6a17e23c277ac1acd608d478c20cd74dbd045197df6706f7fee8a08b752f2",
+    "batch2-F004-command.log": "47c6a17e23c277ac1acd608d478c20cd74dbd045197df6706f7fee8a08b752f2",
+    "batch2-F005-command.log": "47c6a17e23c277ac1acd608d478c20cd74dbd045197df6706f7fee8a08b752f2",
+    "batch2-F006-command.log": "47c6a17e23c277ac1acd608d478c20cd74dbd045197df6706f7fee8a08b752f2",
+    "batch2-primary-after.json": "743cd260588782eb305fcf949b986ad4ec5e48b1d9f721aabe7cea8d72b6862b",
+    "batch2-primary-before.json": "743cd260588782eb305fcf949b986ad4ec5e48b1d9f721aabe7cea8d72b6862b",
+    "batch2-report.json": "24482e93c6196390c5ad377f09382d1052bc17f22815aaed99e2b73e33208b38",
+    "batch2-verification.json": "21ddcde86fd74720b182c55806debdba1934f9d863fd4b9c05f53a2579318877",
+    "batch2.started.json": "6a0c3e56e9dd3852a5c665754df50e7e2aaf0056222aa72766899ef9695dca3e",
+    "evaluation_real_v2.json": "c550ba568e8443e84e53630f734b97dd1ed28d535af94aff742e7a6d8e7d1754",
+    "first-call-command.log": "47c6a17e23c277ac1acd608d478c20cd74dbd045197df6706f7fee8a08b752f2",
+    "first-call-execution.json": "bd7dee8f9756abc71398f74d47aec30c6a024cf13ec741f32d2514fbf9008b7e",
+    "first-call-primary-after.json": "743cd260588782eb305fcf949b986ad4ec5e48b1d9f721aabe7cea8d72b6862b",
+    "first-call-primary-before.json": "743cd260588782eb305fcf949b986ad4ec5e48b1d9f721aabe7cea8d72b6862b",
+    "first-call-verification.json": "8090bd6faaf81229f5c3e0eafe35fc7f0443efbea295f58013920a7908125f60",
+    "first-call.started.json": "c1505d082a892f4bdc93ee27c87e5be5373a0d552957d580076c0d47f34f1e57",
+    "preparation-report.json": "7096ff7968c3779409071ab9fc9b3ba72756b2de15c625590b87a47b75f504f1",
+    "primary-after.json": "743cd260588782eb305fcf949b986ad4ec5e48b1d9f721aabe7cea8d72b6862b",
+    "primary-before.json": "743cd260588782eb305fcf949b986ad4ec5e48b1d9f721aabe7cea8d72b6862b",
+    "protocol-1-1\\evaluation_real_protocol_1_1.json": "83aa6e8079a3ec92a87e27c51c57858ec7d87832358c42357eb68b3fca40f5fe",
+    "protocol-1-1\\evaluation_real_protocol_1_1_selected_F003_F006.json": "6059929cb7233f7c8cb95e3f7bd4041158cf0833fd13ab4a44cd8705de981e5a",
+    "protocol-1-1\\first-trial-command.log": "47c6a17e23c277ac1acd608d478c20cd74dbd045197df6706f7fee8a08b752f2",
+    "protocol-1-1\\first-trial-execution.json": "0938dd49863ab9cc4410ec55fa8ba99454f5f5491d9e8d8424a471d1ee4c3abd",
+    "protocol-1-1\\first-trial-verification.json": "dd112bad64d4892197f99b27179d0cd898c2a1f0997d8f51f73cd7e3567e6758",
+    "protocol-1-1\\first-trial.started.json": "b5861b46c8a2f334cbcf69d6a9b9064e6a64c4ab1bb9524f7d08ff18104c5f3f",
+    "protocol-1-1\\main-after.json": "743cd260588782eb305fcf949b986ad4ec5e48b1d9f721aabe7cea8d72b6862b",
+    "protocol-1-1\\main-before.json": "743cd260588782eb305fcf949b986ad4ec5e48b1d9f721aabe7cea8d72b6862b",
+    "protocol-1-1\\original-campaign-after.json": "3e1f181b9c1aca8ac958c43923cc7d3c6875459ebb5c8ae5faf3390be1a39208",
+    "protocol-1-1\\original-campaign-before.json": "3e1f181b9c1aca8ac958c43923cc7d3c6875459ebb5c8ae5faf3390be1a39208",
+    "protocol-1-1\\selected-four-main-after.json": "743cd260588782eb305fcf949b986ad4ec5e48b1d9f721aabe7cea8d72b6862b",
+    "protocol-1-1\\selected-four-main-before.json": "743cd260588782eb305fcf949b986ad4ec5e48b1d9f721aabe7cea8d72b6862b",
+    "protocol-1-1\\selected-four-progress.json": "241d4a8a296af0b1ae81722358884c37678d8b0096513abd5bec8bf418cc0b30",
+    "protocol-1-1\\selected-four-verification.json": "1bd7d33472c04b2614c9127c7171593304559f99f93a24fba54d79f62a4ee70c",
+    "protocol-1-1\\selected-four.started.json": "35bcc977de051c73867ee7599b7e8c3d4e1e1748fa707025ea74d2ab1bfe3270"
+  },
+  "corpus_sha256": "c5c17914bfbbf0f8a0edc3d36c72921ba8b37bb375b91888537cba297383a1f6",
+  "completed_cases": 5,
+  "exact_associations_before": 4,
+  "exact_associations_after": 5,
+  "comparisons": [
+    {
+      "case_id": "F001",
+      "raw_names": {
+        "employeur": "Lanterne Fictive",
+        "poste": "Stagiaire backend"
+      },
+      "normalized_lookup_names": {
+        "employeur": "Lanterne Fictive",
+        "poste": "Stagiaire backend"
+      },
+      "association_before": {
+        "candidates": [],
+        "level": "aucune",
+        "ambiguous": false,
+        "target": null
+      },
+      "association_after_offline": {
+        "candidates": [],
+        "level": "aucune",
+        "ambiguous": false,
+        "target": null
+      },
+      "expected_association": {
+        "candidates": [],
+        "level": "aucune",
+        "ambiguous": false
+      },
+      "exact_before": true,
+      "exact_after": true
+    },
+    {
+      "case_id": "F003",
+      "raw_names": {
+        "employeur": "Cobalt Fictif",
+        "poste": "Testeur logiciel"
+      },
+      "normalized_lookup_names": {
+        "employeur": "Cobalt Fictif",
+        "poste": "Testeur logiciel"
+      },
+      "association_before": {
+        "candidates": [
+          "cobalt-qa"
+        ],
+        "level": "probable",
+        "ambiguous": false,
+        "target": null
+      },
+      "association_after_offline": {
+        "candidates": [
+          "cobalt-qa"
+        ],
+        "level": "probable",
+        "ambiguous": false,
+        "target": null
+      },
+      "expected_association": {
+        "candidates": [
+          "cobalt-qa"
+        ],
+        "level": "probable",
+        "ambiguous": false
+      },
+      "exact_before": true,
+      "exact_after": true
+    },
+    {
+      "case_id": "F004",
+      "raw_names": {
+        "employeur": "Aurore Fictive",
+        "poste": "D\u00e9veloppeur logiciel"
+      },
+      "normalized_lookup_names": {
+        "employeur": "Aurore Fictive",
+        "poste": "D\u00e9veloppeur logiciel"
+      },
+      "association_before": {
+        "candidates": [
+          "aurore-dev"
+        ],
+        "level": "probable",
+        "ambiguous": false,
+        "target": null
+      },
+      "association_after_offline": {
+        "candidates": [
+          "aurore-dev"
+        ],
+        "level": "probable",
+        "ambiguous": false,
+        "target": null
+      },
+      "expected_association": {
+        "candidates": [
+          "aurore-dev"
+        ],
+        "level": "probable",
+        "ambiguous": false
+      },
+      "exact_before": true,
+      "exact_after": true
+    },
+    {
+      "case_id": "F005",
+      "raw_names": {
+        "employeur": "Bor&#233;al Fictif",
+        "poste": "D&#233;veloppeur logiciel"
+      },
+      "normalized_lookup_names": {
+        "employeur": "Bor\u00e9al Fictif",
+        "poste": "D\u00e9veloppeur logiciel"
+      },
+      "association_before": {
+        "candidates": [],
+        "level": "aucune",
+        "ambiguous": false,
+        "target": null
+      },
+      "association_after_offline": {
+        "candidates": [
+          "boreal-dev"
+        ],
+        "level": "probable",
+        "ambiguous": false,
+        "target": null
+      },
+      "expected_association": {
+        "candidates": [
+          "boreal-dev"
+        ],
+        "level": "probable",
+        "ambiguous": false
+      },
+      "exact_before": false,
+      "exact_after": true
+    },
+    {
+      "case_id": "F006",
+      "raw_names": {
+        "employeur": "Cobalt Fictif",
+        "poste": "Testeur logiciel"
+      },
+      "normalized_lookup_names": {
+        "employeur": "Cobalt Fictif",
+        "poste": "Testeur logiciel"
+      },
+      "association_before": {
+        "candidates": [
+          "cobalt-qa"
+        ],
+        "level": "probable",
+        "ambiguous": false,
+        "target": null
+      },
+      "association_after_offline": {
+        "candidates": [
+          "cobalt-qa"
+        ],
+        "level": "probable",
+        "ambiguous": false,
+        "target": null
+      },
+      "expected_association": {
+        "candidates": [
+          "cobalt-qa"
+        ],
+        "level": "probable",
+        "ambiguous": false
+      },
+      "exact_before": true,
+      "exact_after": true
+    }
+  ],
+  "extraction_scores_unchanged": true,
+  "raw_extraction_metrics": {
+    "employeur": {
+      "all_attempted": {
+        "correct": 4,
+        "total": 5,
+        "rate": 0.8
+      },
+      "expected_non_null": {
+        "correct": 4,
+        "total": 5,
+        "rate": 0.8
+      },
+      "unknown_preserved": {
+        "correct": 0,
+        "total": 0,
+        "rate": null
+      },
+      "invented_when_unknown": 0
+    },
+    "poste": {
+      "all_attempted": {
+        "correct": 4,
+        "total": 5,
+        "rate": 0.8
+      },
+      "expected_non_null": {
+        "correct": 4,
+        "total": 5,
+        "rate": 0.8
+      },
+      "unknown_preserved": {
+        "correct": 0,
+        "total": 0,
+        "rate": null
+      },
+      "invented_when_unknown": 0
+    },
+    "date_candidature": {
+      "all_attempted": {
+        "correct": 5,
+        "total": 5,
+        "rate": 1.0
+      },
+      "expected_non_null": {
+        "correct": 1,
+        "total": 1,
+        "rate": 1.0
+      },
+      "unknown_preserved": {
+        "correct": 4,
+        "total": 4,
+        "rate": 1.0
+      },
+      "invented_when_unknown": 0
+    },
+    "etat": {
+      "all_attempted": {
+        "correct": 5,
+        "total": 5,
+        "rate": 1.0
+      },
+      "expected_non_null": {
+        "correct": 5,
+        "total": 5,
+        "rate": 1.0
+      },
+      "unknown_preserved": {
+        "correct": 0,
+        "total": 0,
+        "rate": null
+      },
+      "invented_when_unknown": 0
+    },
+    "confirmation_reception": {
+      "all_attempted": {
+        "correct": 5,
+        "total": 5,
+        "rate": 1.0
+      },
+      "expected_non_null": {
+        "correct": 0,
+        "total": 0,
+        "rate": null
+      },
+      "unknown_preserved": {
+        "correct": 5,
+        "total": 5,
+        "rate": 1.0
+      },
+      "invented_when_unknown": 0
+    }
+  },
+  "association_metrics_before": {
+    "exact_set": {
+      "correct": 4,
+      "total": 5,
+      "rate": 0.8
+    },
+    "precision_micro": 1.0,
+    "recall_micro": 0.75,
+    "f1_micro": 0.8571428571428571,
+    "ambiguity": {
+      "correct": 5,
+      "total": 5,
+      "rate": 1.0
+    },
+    "level": {
+      "correct": 4,
+      "total": 5,
+      "rate": 0.8
+    },
+    "automatic_target_violations": 0
+  },
+  "association_metrics_after_offline": {
+    "exact_set": {
+      "correct": 5,
+      "total": 5,
+      "rate": 1.0
+    },
+    "precision_micro": 1.0,
+    "recall_micro": 1.0,
+    "f1_micro": 1.0,
+    "ambiguity": {
+      "correct": 5,
+      "total": 5,
+      "rate": 1.0
+    },
+    "level": {
+      "correct": 5,
+      "total": 5,
+      "rate": 1.0
+    },
+    "automatic_target_violations": 0
+  },
+  "shared_budgets_unchanged": [
+    {
+      "calls": 11,
+      "reserved_tokens": 82157
+    }
+  ]
+}

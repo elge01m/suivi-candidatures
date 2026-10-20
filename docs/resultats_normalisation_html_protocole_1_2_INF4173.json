@@ -1,0 +1,109 @@
+{
+  "date": "2026-10-20",
+  "protocol": "1.2",
+  "status": "implemented_and_isolated_validation_passed",
+  "future_run_id_not_started": "real-protocol-1-2",
+  "real_gemini_calls": 0,
+  "gmail_calls": 0,
+  "main_database_writes": 0,
+  "automatics_activated": false,
+  "migrations_added": 0,
+  "tests": {
+    "backend_postgresql_passed": 300,
+    "frontend_passed": 128,
+    "chrome_simulated_providers_passed": 15,
+    "runner_checks": {
+      "initdb": true,
+      "postgres-start": true,
+      "create-isolated-db": true,
+      "backend-tests": true,
+      "isolated-migrate": true,
+      "django-check": true,
+      "migration-drift": true,
+      "production-security": true,
+      "fixtures": true,
+      "browser-tests": true,
+      "frontend-tests": true,
+      "typescript-app": true,
+      "typescript-node": true,
+      "typescript-e2e": true,
+      "lint": true,
+      "build": true,
+      "postgres-stop": true
+    },
+    "unexpected_5xx": 0,
+    "typescript_app_node_e2e": true,
+    "lint": true,
+    "build": true,
+    "artifacts_directory": "D:\\INF4173-SJ-tests\\lot6-20261020-021920-6c6d8a1a"
+  },
+  "main_database_unchanged": true,
+  "main_tables_compared": 20,
+  "original_campaign_files_unchanged": true,
+  "original_corpus_annotations_unchanged": true,
+  "corpus_sha256": "c5c17914bfbbf0f8a0edc3d36c72921ba8b37bb375b91888537cba297383a1f6",
+  "response_inspection": {
+    "input_text_matches_annotated_utf8": true,
+    "entities_in_stored_validated_output_fields": [
+      "employeur",
+      "poste",
+      "justification"
+    ],
+    "raw_http_response_archived": false,
+    "original_structured_outputs_preserved": true
+  },
+  "offline_comparison": {
+    "completed_cases": 5,
+    "exact_associations_before": 4,
+    "exact_associations_after": 5,
+    "raw_employer_correct": {
+      "correct": 4,
+      "total": 5,
+      "rate": 0.8
+    },
+    "raw_poste_correct": {
+      "correct": 4,
+      "total": 5,
+      "rate": 0.8
+    },
+    "raw_extraction_scores_unchanged": true,
+    "report": "docs/comparaison_normalisation_html_protocole_1_2_INF4173.json"
+  },
+  "quota_unchanged": [
+    {
+      "calls": 11,
+      "reserved_tokens": 82157
+    }
+  ],
+  "initial_e2e_failure": {
+    "directory": "D:/INF4173-SJ-tests/lot6-20261020-021321-4f328e0c",
+    "backend_tests_passed": 300,
+    "functional_browser_scenarios_passed": 15,
+    "failure": "Final zero-5xx assertion: one Vite proxy 502 on /api/analyses/; ECONNREFUSED 127.0.0.1:18000.",
+    "root_cause_not_established": true,
+    "resolution": "Unchanged full rerun passed; no assertion disabled and no production workaround introduced."
+  },
+  "limits": [
+    "No new Gemini measurement; normalization comparison reuses frozen extractions.",
+    "Original HTTP response bodies were not archived; available original validated structured outputs are preserved.",
+    "Normalization affects lookup values only, not stored model fields or existing candidature names.",
+    "Expected security.W005/W021 production warnings remain."
+  ],
+  "source_sha256": {
+    "backend/email_analysis/name_matching.py": "af734ea66d552d328bbaa67b810923149e1def19b38d6916c582708d56e899ea",
+    "backend/email_analysis/services.py": "e0eff3435522660b4eb67b43c1ee10816fc462617b34d9dac70c33812d2cb0fe",
+    "backend/email_analysis/evaluation/runner.py": "cfbbe8fad9277c96fbb72ed933f4766fb62eb9f33ad3479ec243656470bd4eae",
+    "backend/email_analysis/evaluation/metrics.py": "15e4602064f7aa752158262a10ef520d43c08c7574a0474281fe8994eba5cb02",
+    "backend/email_analysis/tests.py": "eacfcfadbacd26009bce657b3ecbb21f89d85e80ca1c640da8ddb7eada2d6f57",
+    "backend/email_analysis/test_evaluation.py": "ca6921b8edab082e707ee10e49dea4d952ec319aa3f182ccebc4adf4d902a6bc",
+    "docs/evaluation_protocole_1_2_INF4173.txt": "9d8a59f9d0919947fb6e35207a8ebeac644d47889b3c5a0bc4597428d2de0578"
+  },
+  "test_artifact_sha256": {
+    "run-report.json": "53b40afd82fb8809ce0921284ebc4d7c4df32e2c0d78c3b49c06ca791456cb90",
+    "browser-report.json": "a6c6543a7637b496d7a87c044e5c2592aba9a657f7572695fd80f0532a178e68",
+    "backend-tests.log": "4d9efa41cabee32d7c01ad672e78b78df875af030d6173dbd1c525b5794e2353",
+    "frontend-tests.log": "068d4cb98ad8cda47a2a9d7920cd3356e0f58893799ae952a039563e20f6f4d3",
+    "migration-drift.log": "93e6e2d5be3c054add80c0f19101608803f7ca8a7df1fa41f76bbb9a1f570f4a",
+    "production-security.log": "3a92e9cf63994d052386f5ed14653a3531e3715246d490cfcd4580c9a7170d0b"
+  }
+}

@@ -17,6 +17,7 @@ from .evaluation.corpus import load_corpus
 from .evaluation.metrics import summarize, variability
 from .evaluation.runner import evaluate, simulated_result
 from .models import AnalysisBudget, CandidatureProposal, EmailAnalysis
+from .name_matching import normalize_matching_name
 
 
 def gold_rows(corpus):
@@ -25,6 +26,26 @@ def gold_rows(corpus):
 
 
 class CorpusMetricTests(SimpleTestCase):
+    def test_name_normalization_is_single_pass_and_does_not_invent_values(self):
+        self.assertIsNone(normalize_matching_name(None))
+        self.assertIsNone(normalize_matching_name('  '))
+        self.assertEqual(normalize_matching_name('R&amp;D\u00a0Fictif'), 'R&D Fictif')
+        self.assertEqual(normalize_matching_name('&amp;#233;'), '&#233;')
+        self.assertEqual(normalize_matching_name('De\u0301veloppeur'), 'Développeur')
+        self.assertEqual(normalize_matching_name('Boreal'), 'Boreal')
+
+    def test_raw_extraction_error_remains_visible_when_normalized_matching_succeeds(self):
+        corpus=load_corpus(); rows=gold_rows(corpus)
+        row=next(r for r in rows if r['case_id']=='F005')
+        row['prediction']=dict(row['prediction'],employeur='Bor&#233;al Fictif',poste='D&#233;veloppeur logiciel')
+        row['matching_names']={key:normalize_matching_name(row['prediction'][key]) for key in ('employeur','poste')}
+        result=summarize(corpus,rows)
+        self.assertEqual(result['extraction']['employeur']['all_attempted']['correct'],39)
+        self.assertEqual(result['extraction']['poste']['all_attempted']['correct'],39)
+        self.assertEqual(result['association']['exact_set']['correct'],40)
+        self.assertFalse(result['extraction_representation']['html_entities_decoded_for_extraction_scores'])
+        self.assertEqual(row['prediction']['employeur'],'Bor&#233;al Fictif')
+
     def test_corpus_has_40_unique_fictional_emails_and_all_required_scenarios(self):
         corpus=load_corpus()
         self.assertEqual(len(corpus['cases']),40)
@@ -86,6 +107,7 @@ class EvaluationPipelineTests(TestCase):
         with patch('email_analysis.services.extract',side_effect=AssertionError('No real provider')):
             result=evaluate('sim-test','simulated')
             self.assertTrue(result['completed'])
+            self.assertEqual(result['protocol_version'], '1.2')
             self.assertFalse(result['real_gemini_measurement'])
             self.assertEqual(result['new_attempts_this_invocation'],50)
             self.assertTrue(result['gmail_id_replay_verified'])
@@ -98,6 +120,22 @@ class EvaluationPipelineTests(TestCase):
             self.assertEqual(cached['new_attempts_this_invocation'],0)
             self.assertEqual(cached['metrics'],result['metrics'])
             self.assertEqual(sum(AnalysisBudget.objects.values_list('calls',flat=True)),calls)
+
+    def test_changed_prompt_refuses_existing_campaign_without_rewriting_successes(self):
+        corpus=load_corpus()
+        provider=Mock(return_value=simulated_result(corpus['cases'][0],1,corpus))
+        evaluate('frozen-prompt','real',allow_real=True,max_calls=1,provider=provider)
+        job=EmailAnalysis.objects.get()
+        before=(job.status,job.attempts,bytes(job.proposal.encrypted_data),job.proposal.revision)
+        calls=sum(AnalysisBudget.objects.values_list('calls',flat=True))
+        provider.reset_mock()
+        with patch('email_analysis.evaluation.runner.PROTOCOL_VERSION','next-version'):
+            with self.assertRaisesMessage(ValueError,'Campaign fingerprint changed'):
+                evaluate('frozen-prompt','real',allow_real=True,max_calls=1,provider=provider)
+        provider.assert_not_called()
+        job.refresh_from_db()
+        self.assertEqual((job.status,job.attempts,bytes(job.proposal.encrypted_data),job.proposal.revision),before)
+        self.assertEqual(sum(AnalysisBudget.objects.values_list('calls',flat=True)),calls)
 
     def test_real_mode_is_explicit_bounded_and_injected_providers_are_never_labelled_real(self):
         with self.assertRaises(ValueError): evaluate('real-test','real')

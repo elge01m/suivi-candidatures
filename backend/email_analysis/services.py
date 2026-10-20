@@ -23,6 +23,7 @@ from gmail_integration.models import GmailConnection, GmailMessage
 from .errors import AnalysisProblem
 from .gemini import extract, reserve_size
 from .models import AnalysisBudget, CandidatureProposal, EmailAnalysis
+from .name_matching import normalize_matching_name
 from .schemas import DecisionData
 
 # Backward-compatible fields: keep completed analyses cached, never requeue old mail.
@@ -93,21 +94,29 @@ def _reserve(tokens):
 
 
 def _matches(user, data):
+    # Separate lookup values: original extracted fields remain intact/encrypted.
+    names = {field: normalize_matching_name(data.get(field)) for field in ('employeur', 'poste')}
     candidates = []
     records = []
     criteria = Q()
-    if data.get('employeur'):
-        criteria |= Q(employeur__iexact=data['employeur'])
-    if data.get('poste'):
-        criteria |= Q(poste__iexact=data['poste'])
-    if criteria:
-        records = list(Candidature.objects.filter(criteria, utilisateur=user).values_list('pk', 'employeur', 'poste')[:101])
+    if names['employeur']:
+        criteria |= Q(employeur__iexact=names['employeur'])
+    if names['poste']:
+        criteria |= Q(poste__iexact=names['poste'])
+    owned = Candidature.objects.filter(utilisateur=user)
+    if names['employeur'] and names['poste']:
+        records = list(owned.filter(employeur__iexact=names['employeur'], poste__iexact=names['poste'])
+                       .values_list('pk', 'employeur', 'poste')[:101])
+    # Partial matches are a fallback only; never dilute an exact pair.
+    if not records and criteria:
+        records = list(owned.filter(criteria).values_list('pk', 'employeur', 'poste')[:101])
+    if records:
         candidates = [row[0] for row in records]
     level = 'aucune'
     if len(candidates) > 1:
         level = 'ambigu'
     elif candidates:
-        exact = all(isinstance(data.get(field), str) and value.casefold() == data[field].casefold()
+        exact = all(names[field] is not None and value.casefold() == names[field].casefold()
                     for field, value in zip(('employeur', 'poste'), records[0][1:]))
         level = 'probable' if exact else 'a_confirmer'
     return {'candidatures_possibles': candidates[:100], 'ambiguite': len(candidates) > 1,

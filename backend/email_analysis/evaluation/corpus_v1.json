@@ -713,9 +713,9 @@
     },
     {
       "id": "F025",
-      "subject": "Brouillon de candidature",
-      "text": "Brouillon pour une future candidature chez Nacre Fictive au poste de Stagiaire réseau ; aucun envoi de candidature n’a eu lieu.",
-      "sent": true,
+      "subject": "Rappel de préparation de candidature",
+      "text": "Rappel fictif : vous devez encore préparer votre candidature chez Nacre Fictive au poste de Stagiaire réseau. Aucun dossier de candidature n’a encore été envoyé à cet employeur.",
+      "sent": false,
       "date_message": "2026-10-19T16:00:00+00:00",
       "tags": [
         "a_preparer"
@@ -735,7 +735,7 @@
         "level": "aucune",
         "ambiguous": false
       },
-      "annotation_reason": "Brouillon pour une future candidature chez Nacre Fictive au poste de Stagiaire réseau ; aucun envoi de candidature n’a eu lieu."
+      "annotation_reason": "Rappel reçu invitant à préparer une candidature, et non brouillon Gmail. Aucun envoi de candidature ni accusé de réception ; état a_preparer, date et confirmation nulles."
     },
     {
       "id": "F026",
