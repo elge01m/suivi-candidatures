@@ -189,6 +189,14 @@ navigateur E2E** : les validations Chrome documentées ont été réalisées
 localement, avec Gmail et Gemini simulés. Un workflow réussi ne prouvera donc
 pas une nouvelle validation navigateur, ni un déploiement Linux opérationnel.
 
+Un workflow manuel distinct, `.github/workflows/linux-https.yml`, prépare la
+validation éphémère Nginx/Gunicorn/systemd avec HTTPS exclusivement local,
+PostgreSQL fictif et fournisseurs simulés. Il reste à exécuter après autorisation.
+Son protocole et les vérifications locales figurent à la fin de la
+[procédure Linux](docs/deploiement_linux_INF4173.txt). Aucun service public,
+certificat public ou secret réel n'est nécessaire ; les minutes Actions du
+dépôt privé doivent rester dans le quota inclus.
+
 Restent à valider : Linux/Nginx/Gunicorn/systemd réels, certificat HTTPS,
 restauration d'exploitation, CI distante, autres navigateurs, quotas Google et
 campagne Gemini réelle. `check --deploy` conserve W005/W021 (HSTS sous-domaines

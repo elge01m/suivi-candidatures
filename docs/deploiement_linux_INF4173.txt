@@ -313,3 +313,100 @@ Résultats, empreintes du code et chemins des traces :
 docs/resultats_securite_deploiement_INF4173.json.
 Le préfixe lot6 des dossiers temporaires provient du lanceur réutilisé ; les
 vérifications et le présent bilan correspondent bien au lot 7.
+
+COMPLÉMENT — INTÉGRATION LINUX/HTTPS ÉPHÉMÈRE PRÉPARÉE — 20 OCTOBRE 2026
+
+Les preuves précédentes restent historiques. L'utilisateur a signalé une CI
+Ubuntu réussie sur ef10ab2 en 1 min 54 s ; ce complément ne prétend pas avoir
+reconsulté les journaux GitHub ni validé un serveur public permanent.
+
+.github/workflows/linux-https.yml est un second workflow, manuel uniquement,
+permissions contents:read et durée maximale 20 minutes. ci.yml reste inchangé.
+Il utilise une VM Ubuntu 24.04 standard, Python 3.13, Node 24.22.0, PostgreSQL
+18.6 jetable sur 127.0.0.1:55486 et un rôle applicatif sans privilèges globaux.
+Les mots de passe SQL publics sont uniquement ceux de la VM fictive. Aucun .env
+local n'est chargé. Aucun secret GitHub ou identifiant fournisseur n'est requis.
+
+Après installation des outils, tests/linux_https/run.py prépare une copie des
+seuls fichiers suivis sous /srv/inf4173-linux-test/current et une venv Linux
+créée directement à son chemin final. Le build React est copié séparément.
+Le service Nginx installé par le paquet est masqué avant installation ; seul
+le service de test écoute ensuite sur 127.0.0.1:80/443. Gunicorn reste sur
+127.0.0.1:8001. Les ports occupés interrompent la préparation.
+
+Une CA et un certificat d'un jour avec SAN candidatures.example.invalid sont
+générés dans /run/inf4173-linux-test. La confiance est fournie explicitement
+au client de test : aucune installation de CA globale, aucun verify=False,
+aucun ACME ou domaine public. Les tests prévus vérifient TLS 1.2/1.3, rejet
+d'une CA non approuvée et d'un mauvais nom, redirection HTTP, React/statics,
+cookies sécurisés et HttpOnly de session, rotation CSRF, refus des écritures
+sans CSRF et depuis une origine étrangère, session et déconnexion.
+
+Les modèles systemd web et worker sont copiés en unités inf4173-test-* ;
+compte, chemins et point d'entrée sont adaptés, restrictions conservées.
+Le point d'entrée tests/linux_https/entry.py charge production_settings,
+vérifie strictement la base/port/rôle fictifs et interdit les sockets sortantes
+non locales. Le vrai Gunicorn est démarré. Le worker utilise la vraie commande
+process_sync_jobs (invocation bornée à 5 secondes/1 compte dans ce test) mais
+GmailClient est remplacé par un double de 12 messages fictifs en deux pages.
+Tout appel à Gemini échoue volontairement. Les unités ne sont pas activées
+au démarrage. Le timer est vérifié statiquement, jamais installé ou déclenché.
+Ce scénario ne prétend donc pas valider le déclenchement réel du timer.
+
+Deux invocations distinctes du worker vérifient 10 puis 2 messages, sans
+navigateur, puis deux autres invocations vérifient les 12 doublons. Les textes
+sont chiffrés/déchiffrables, aucun message n'a de pièce jointe, aucune analyse
+ni proposition n'est produite. Les réglages Gmail planifié et Gemini restent
+faux, y compris pour les données fictives. Les demandes manuelles sont HTTP 202.
+
+La sauvegarde utilise deploy/postgres_archive.py sans changement : archive
+Fernet, vérification puis restauration complète dans restore_check_linux_https.
+Toutes les tables sont comparées par empreintes en mémoire, sauf blocked_code
+de SyncConfiguration dont la différence attendue restore_review est vérifiée.
+Permissions 0600, rôle applicatif non superutilisateur et déchiffrement des
+messages restaurés sont contrôlés. Clés et archives restent hors du dépôt.
+
+La dernière étape always() arrête toutes les unités de test même après l'échec
+d'un arrêt, retire leurs fichiers, la ligne hosts et les secrets temporaires,
+puis vérifie l'inactivité et les ports libérés. Une erreur de nettoyage fait
+échouer le bilan. La VM et PostgreSQL jetables sont détruits par GitHub ensuite.
+Un arrêt brutal de la VM ne garantit pas l'exécution de always() ; sa destruction
+reste la dernière barrière. Aucun fichier utilisateur ou sauvegarde existante
+n'est concerné. Les traces locales de diagnostic sur D: sont conservées.
+
+Les sorties du test distant sont limitées aux assertions, compteurs et positions
+de code en erreur, sans valeurs d'exception, corps HTTP, cookies ou journaux.
+Aucun upload d'artefact ni cache : ni clés, certificats, archives, dump ou base
+ne sont exportés. Le JSON final dans le journal Actions distingue explicitement
+la VM Linux réelle des frontières Gmail/Gemini simulées.
+
+Validations locales effectivement réalisées, sans accès PostgreSQL principal
+- 8 tests portables : refus d'environnement incorrect, blocage socket IPv4/IPv6
+  et connect_ex, connexion loopback autorisée, garde hors CI, nettoyage continu
+  après timeout d'une unité, workflow manuel et syntaxe des scripts.
+- YAML analysé avec PyYAML 6.0.3 déjà disponible hors venv ; les six scripts
+  run du workflow passent bash -n avec Git Bash installé. Aucun outil installé.
+- Worker fictif sur nouveau cluster PostgreSQL Windows 18 isolé : 10+2 messages
+  puis 12 doublons évités, chiffrement et absence d'analyse vérifiés.
+- Suite backend : 300 tests réussis sur ce cluster isolé. Une première exécution
+  avait échoué sur un test OAuth à cause d'une URL de production héritée du
+  lanceur local ; l'environnement du lanceur a été corrigé, sans modifier le
+  test ni le produit, puis la suite entière a réussi.
+- Exécution réussie : D:/INF4173-SJ-tests/linux-https-local-deltww64.
+  Exécution initiale conservée : D:/INF4173-SJ-tests/linux-https-local-wkr_zbxs.
+  Les deux clusters ont été arrêtés, aucune donnée principale consultée.
+
+Ces contrôles ne sont PAS une exécution Nginx/Gunicorn/systemd/TLS sur Windows.
+La validation dynamique Linux reste à autoriser et exécuter sur GitHub. Aucune
+mesure distante de durée n'est inventée ; prévoir environ 5–15 minutes selon
+les téléchargements, avec limite à 20 minutes et sans relance automatique.
+Pour un dépôt privé, minutes et stockage relèvent du quota inclus du compte :
+vérifier l'usage et un plafond bloquant avant lancement. Le workflow ne peut
+pas prouver lui-même le solde de facturation du compte. Aucun hébergement payant
+n'est créé, mais gratuité Actions non garantie en cas de quota dépassé.
+Référence : https://docs.github.com/en/billing/concepts/product-billing/github-actions
+
+La VM temporaire ne valide ni domaine/ACME public, renouvellement TLS, redémarrage
+complet du serveur, disponibilité permanente, OAuth réel, panne électrique ou
+sauvegarde hors serveur. W005/W021 restent attendus et non masqués. Les tests
+HTTP de cette infrastructure ne remplacent pas les scénarios Chrome du lot 6.

@@ -1,0 +1,58 @@
+name: Temporary Linux HTTPS integration (fiction only)
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: linux-https-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  integration:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:18.6
+        env:
+          POSTGRES_USER: sync_test_linux_admin
+          POSTGRES_PASSWORD: public-ephemeral-linux-password
+          POSTGRES_DB: postgres
+        ports:
+          - '127.0.0.1:55486:5432'
+        options: >-
+          --health-cmd "pg_isready -U sync_test_linux_admin -d postgres"
+          --health-interval 5s --health-timeout 5s --health-retries 12
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405
+        with:
+          python-version: '3.13'
+      - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238
+        with:
+          node-version: '24.22.0'
+          package-manager-cache: false
+      - name: Portable isolation and cleanup guards
+        run: python -B tests/linux_https/test_local.py
+      - name: Install disposable Linux tools
+        run: |
+          sudo systemctl mask nginx.service
+          sudo install -d /usr/share/postgresql-common/pgdg
+          sudo curl --fail --silent --show-error -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc https://www.postgresql.org/media/keys/ACCC4CF8.asc
+          echo 'deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt noble-pgdg main' | sudo tee /etc/apt/sources.list.d/pgdg.list >/dev/null
+          sudo apt-get update -qq
+          sudo apt-get install --yes --no-install-recommends nginx openssl postgresql-client-18
+      - name: Build fictional frontend
+        working-directory: frontend
+        run: |
+          npm ci
+          npm run build
+      - name: Prepare ephemeral environment
+        run: sudo env GITHUB_ACTIONS=true "$(command -v python)" -B tests/linux_https/run.py prepare
+      - name: Exercise production infrastructure locally
+        run: sudo env GITHUB_ACTIONS=true /srv/inf4173-linux-test/current/backend/.venv/bin/python -B tests/linux_https/run.py test
+      - name: Always stop temporary units and remove test credentials
+        if: always()
+        run: sudo env GITHUB_ACTIONS=true "$(command -v python)" -B tests/linux_https/run.py cleanup
+# No push/PR/schedule trigger, deployment, real credential, artifact upload or cache.
