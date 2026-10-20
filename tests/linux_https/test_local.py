@@ -7,8 +7,11 @@ import json
 import os
 from pathlib import Path
 import socket
+import ssl
 import subprocess
 import sys
+import shutil
+import tempfile
 import unittest
 from unittest.mock import patch, Mock
 
@@ -186,6 +189,82 @@ print('OK')'''
     def test_scripts_compile_and_generated_fake_payload_has_no_attachment(self):
         for path in HERE.glob('*.py'):ast.parse(path.read_text(encoding='utf-8'))
         self.assertNotIn('attachmentId',(HERE/'entry.py').read_text())
+
+
+class TemporaryCertificateTests(unittest.TestCase):
+    """Real certificate generation and strict TLS through MemoryBIO, no network."""
+    @classmethod
+    def setUpClass(cls):
+        candidates=[shutil.which('openssl'),'C:/Program Files/Git/usr/bin/openssl.exe',
+                    'C:/Program Files/Git/mingw64/bin/openssl.exe']
+        cls.openssl=next((str(p) for p in candidates if p and Path(p).is_file()),None)
+        if cls.openssl is None:raise RuntimeError('OpenSSL required for local certificate tests')
+        cls.temp=tempfile.TemporaryDirectory(prefix='inf4173-fiction-cert-tests-')
+        cls.addClassCleanup(cls.temp.cleanup)
+        cls.folder=Path(cls.temp.name)
+        # Execute the actual certificate-generation statements from prepare(),
+        # with only paths/command IO redirected to private temporary fixtures.
+        tree=ast.parse((HERE/'run.py').read_text(encoding='utf-8'))
+        prepare=next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=='prepare')
+        first=next(i for i,n in enumerate(prepare.body) if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='openssl' for t in n.targets))
+        last=next(i for i,n in enumerate(prepare.body[first+1:],first+1) if isinstance(n,ast.For))
+        generation=compile(ast.Module(body=prepare.body[first:last],type_ignores=[]),'actual-ca-generation','exec')
+        for kind in ('valid','missing_usage','other_ca'):
+            state=cls.folder/kind;state.mkdir()
+            def command(args, **kwargs):
+                args=list(map(str,args));args[0]=cls.openssl
+                if kind=='missing_usage' and args[1:3]==['req','-x509']:
+                    index=args.index('keyUsage=critical,keyCertSign,cRLSign')
+                    del args[index-1:index+1]
+                result=subprocess.run(args,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,timeout=30)
+                if result.returncode:raise RuntimeError('Fictional certificate generation failed')
+            def private_write(path,text):
+                path.write_text(text,encoding='utf-8');path.chmod(0o600)
+            exec(generation,{'STATE':state,'HOST':runner.HOST,'command':command,'private_write':private_write})
+            for path in state.iterdir():path.chmod(0o600)
+
+    def handshake(self,kind='valid',*,trusted='valid',hostname=None):
+        from urllib3.util.ssl_ import create_urllib3_context
+        client_context=create_urllib3_context()
+        self.assertTrue(client_context.verify_flags & ssl.VERIFY_X509_STRICT)
+        self.assertEqual(client_context.verify_mode,ssl.CERT_REQUIRED)
+        self.assertTrue(client_context.check_hostname)
+        client_context.load_verify_locations(cafile=str(self.folder/trusted/'ca.crt'))
+        server_context=ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+        server_context.load_cert_chain(str(self.folder/kind/'server.crt'),str(self.folder/kind/'server.key'))
+        ci,co,si,so=[ssl.MemoryBIO() for _ in range(4)]
+        peers=[client_context.wrap_bio(ci,co,server_hostname=hostname or runner.HOST),
+               server_context.wrap_bio(si,so,server_side=True)]
+        done=set()
+        for _ in range(30):
+            for index,peer in enumerate(peers):
+                try:peer.do_handshake();done.add(index)
+                except ssl.SSLWantReadError:pass
+            if co.pending:si.write(co.read())
+            if so.pending:ci.write(so.read())
+            if len(done)==2:return
+        self.fail('TLS handshake did not complete')
+
+    def test_ca_has_critical_certificate_signing_key_usage(self):
+        r=subprocess.run([self.openssl,'x509','-in',str(self.folder/'valid/ca.crt'),'-noout','-ext','keyUsage'],capture_output=True,text=True,timeout=10)
+        self.assertEqual(r.returncode,0)
+        self.assertIn('X509v3 Key Usage: critical',r.stdout)
+        self.assertIn('Certificate Sign',r.stdout)
+        self.assertIn('CRL Sign',r.stdout)
+
+    def test_valid_chain_passes_strict_tls(self):
+        self.handshake()
+
+    def test_ca_without_key_usage_is_rejected_by_strict_tls(self):
+        with self.assertRaises(ssl.SSLCertVerificationError) as caught:
+            self.handshake('missing_usage',trusted='missing_usage')
+        self.assertEqual(caught.exception.verify_code,92)
+
+    def test_unrecognized_authority_is_rejected(self):
+        with self.assertRaises(ssl.SSLCertVerificationError):self.handshake(trusted='other_ca')
+
+    def test_wrong_hostname_is_rejected(self):
+        with self.assertRaises(ssl.SSLCertVerificationError):self.handshake(hostname='wrong.example.invalid')
 
 
 if __name__=='__main__':unittest.main()

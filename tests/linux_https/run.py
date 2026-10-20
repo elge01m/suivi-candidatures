@@ -117,7 +117,8 @@ def prepare():
     # Local CA + server certificate, no ACME/DNS/public certificate service.
     openssl=['openssl','req','-x509','-newkey','rsa:2048','-nodes','-days','1']
     command(openssl+['-keyout',STATE/'ca.key','-out',STATE/'ca.crt','-subj','/CN=INF4173 fictional local CA',
-                     '-addext','basicConstraints=critical,CA:TRUE'])
+                     '-addext','basicConstraints=critical,CA:TRUE',
+                     '-addext','keyUsage=critical,keyCertSign,cRLSign'])
     command(['openssl','req','-newkey','rsa:2048','-nodes','-keyout',STATE/'server.key','-out',STATE/'server.csr','-subj','/CN='+HOST])
     private_write(STATE/'server.ext','subjectAltName=DNS:'+HOST+'\nbasicConstraints=critical,CA:FALSE\nextendedKeyUsage=serverAuth\n')
     command(['openssl','x509','-req','-in',STATE/'server.csr','-CA',STATE/'ca.crt','-CAkey',STATE/'ca.key',
